@@ -16,7 +16,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Product Information</h6>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" id="product-form">
                     @csrf
                     
                     <div class="row">
@@ -58,7 +58,7 @@
                     
                     <div class="mb-3">
                         <label for="full_description" class="form-label">Full Description *</label>
-                        <textarea class="form-control tinymce-editor @error('full_description') is-invalid @enderror" 
+                        <textarea class="form-control summernote @error('full_description') is-invalid @enderror" 
                                   id="full_description" name="full_description">{{ old('full_description') }}</textarea>
                         @error('full_description')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -270,7 +270,25 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
+    // Initialize Summernote
+    $(document).ready(function() {
+        $('.summernote').summernote({
+            height: 200,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
+
     // Image preview
     document.getElementById('images').addEventListener('change', function(e) {
         const preview = document.getElementById('imagePreview');

@@ -118,7 +118,7 @@
                 <div class="d-grid gap-2 mb-3">
                     <form action="{{ route('admin.feedback.update-status', $feedback) }}" method="POST">
                         @csrf
-                        @method('PATCH')
+                        @method('POST')
                         <input type="hidden" name="status" value="in_progress">
                         <button type="submit" class="btn btn-warning w-100">
                             <i class="fas fa-spinner me-2"></i> Mark as In Progress
@@ -127,7 +127,7 @@
                     
                     <form action="{{ route('admin.feedback.update-status', $feedback) }}" method="POST">
                         @csrf
-                        @method('PATCH')
+                        @method('POST')
                         <input type="hidden" name="status" value="resolved">
                         <button type="submit" class="btn btn-success w-100">
                             <i class="fas fa-check me-2"></i> Mark as Resolved
@@ -136,7 +136,7 @@
                     
                     <form action="{{ route('admin.feedback.update-status', $feedback) }}" method="POST">
                         @csrf
-                        @method('PATCH')
+                        @method('POST')
                         <input type="hidden" name="status" value="closed">
                         <button type="submit" class="btn btn-secondary w-100">
                             <i class="fas fa-times me-2"></i> Close Feedback
