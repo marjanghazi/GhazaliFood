@@ -72,3 +72,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     // Add more admin routes here
 });
+// Include admin routes
+require __DIR__.'/admin.php';

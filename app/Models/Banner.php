@@ -31,8 +31,8 @@ class Banner extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 'active')
-                    ->where('start_date', '<=', now())
-                    ->where('end_date', '>=', now());
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now());
     }
 
     public function scopePosition($query, $position)
@@ -43,5 +43,9 @@ class Banner extends Model
     public function getImageUrlAttribute()
     {
         return $this->banner_image ? asset('storage/' . $this->banner_image) : null;
+    }
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

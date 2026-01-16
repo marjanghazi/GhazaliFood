@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class CouponRestriction extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'status',
-        'created_by'
+        'coupon_id',
+        'restriction_type',
+        'entity_id'
     ];
 
-    public function users()
+    public function coupon()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(Coupon::class);
     }
 }

@@ -70,4 +70,8 @@ class Product extends Model
         }
         return 0;
     }
+    public function orders()
+    {
+        return $this->hasManyThrough(Order::class, OrderItem::class, 'product_id', 'id', 'id', 'order_id');
+    }
 }

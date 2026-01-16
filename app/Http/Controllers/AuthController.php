@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            
+
             // Update last login
             Auth::user()->update(['last_login_at' => now()]);
 
@@ -42,7 +42,6 @@ class AuthController extends Controller
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
-
     public function showRegister()
     {
         return view('auth.register');
@@ -110,7 +109,7 @@ class AuthController extends Controller
 
         // Find user
         $user = User::where('email', $request->email)->first();
-        
+
         if (!$user) {
             return redirect()->back()
                 ->withErrors(['email' => 'Email address not found.'])
@@ -119,7 +118,7 @@ class AuthController extends Controller
 
         // Generate reset token
         $token = Str::random(60);
-        
+
         // Save token to user
         $user->remember_token = $token;
         $user->save();
@@ -140,7 +139,7 @@ class AuthController extends Controller
 
         // ========== EMAIL SENDING CODE (FOR PRODUCTION) ==========
         // Uncomment this section when you want to send actual emails
-        
+
         /*
         try {
             Mail::send('emails.password-reset', [
@@ -170,7 +169,7 @@ class AuthController extends Controller
 
         // Find user by token
         $user = User::where('remember_token', $token)->first();
-        
+
         if (!$user) {
             return redirect()->route('password.request')
                 ->withErrors(['token' => 'Invalid or expired reset token.']);
@@ -180,7 +179,7 @@ class AuthController extends Controller
         if ($user->updated_at && $user->updated_at->diffInHours(now()) > 1) {
             $user->remember_token = null;
             $user->save();
-            
+
             return redirect()->route('password.request')
                 ->withErrors(['token' => 'Reset token has expired. Please request a new one.']);
         }
@@ -210,8 +209,8 @@ class AuthController extends Controller
 
         // Find user by email and token
         $user = User::where('email', $request->email)
-                    ->where('remember_token', $request->token)
-                    ->first();
+            ->where('remember_token', $request->token)
+            ->first();
 
         if (!$user) {
             return back()->withErrors([
@@ -241,8 +240,8 @@ class AuthController extends Controller
     public function validateResetToken(Request $request)
     {
         $user = User::where('remember_token', $request->token)
-                    ->where('email', $request->email)
-                    ->first();
+            ->where('email', $request->email)
+            ->first();
 
         if ($user) {
             return response()->json(['valid' => true]);
