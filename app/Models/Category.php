@@ -73,4 +73,8 @@ class Category extends Model
     {
         return $this->parent ? $this->parent->name : 'None';
     }
+    public function activeProducts()
+    {
+        return $this->products()->where('status', 'published');
+    }
 }
