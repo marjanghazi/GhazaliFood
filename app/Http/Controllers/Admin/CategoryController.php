@@ -15,9 +15,10 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with(['creator', 'parent'])
+            ->withCount(['products'])
             ->latest()
             ->paginate(20);
-        
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -27,7 +28,7 @@ class CategoryController extends Controller
     public function create()
     {
         $categories = Category::where('status', 'active')->get();
-        
+
         return view('admin.categories.create', compact('categories'));
     }
 
@@ -68,8 +69,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $category->load(['creator', 'parent', 'products']);
-        
+        $category->load(['creator', 'parent', 'products', 'children']);
+
         return view('admin.categories.show', compact('category'));
     }
 
@@ -81,7 +82,7 @@ class CategoryController extends Controller
         $categories = Category::where('status', 'active')
             ->where('id', '!=', $category->id)
             ->get();
-        
+
         return view('admin.categories.edit', compact('category', 'categories'));
     }
 
