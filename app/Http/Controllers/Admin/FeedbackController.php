@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Response;
 
 class FeedbackController extends Controller
 {
@@ -16,6 +16,33 @@ class FeedbackController extends Controller
             ->paginate(20);
         
         return view('admin.feedback.index', compact('feedbacks'));
+    }
+
+    public function create()
+    {
+        $admins = \App\Models\User::whereIn('role_id', [1, 2, 3])->get();
+        return view('admin.feedback.create', compact('admins'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'subject' => 'required|string|max:200',
+            'message' => 'required|string',
+            'feedback_type' => 'required|in:general,complaint,suggestion,support,other',
+            'priority' => 'required|in:low,medium,high,urgent'
+        ]);
+
+        $validated['ip_address'] = $request->ip();
+        $validated['user_agent'] = $request->userAgent();
+
+        Feedback::create($validated);
+
+        return redirect()->route('admin.feedback.index')
+            ->with('success', 'Feedback created successfully!');
     }
 
     public function show(Feedback $feedback)
@@ -41,8 +68,14 @@ class FeedbackController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:new,in_progress,resolved,closed',
             'priority' => 'required|in:low,medium,high,urgent',
-            'assigned_to' => 'nullable|exists:users,id'
+            'assigned_to' => 'nullable|exists:users,id',
+            'response' => 'nullable|string'
         ]);
+
+        if ($request->has('response') && $request->response) {
+            $validated['responded_by'] = auth()->id();
+            $validated['responded_at'] = now();
+        }
 
         $feedback->update($validated);
 
@@ -75,12 +108,6 @@ class FeedbackController extends Controller
             'status' => 'resolved'
         ]);
 
-        // Send email response if requested
-        if ($request->has('send_email') && $request->send_email) {
-            // You would implement email sending here
-            // Mail::to($feedback->email)->send(new FeedbackResponse($feedback));
-        }
-
         return redirect()->route('admin.feedback.show', $feedback)
             ->with('success', 'Response sent successfully!');
     }
@@ -95,32 +122,41 @@ class FeedbackController extends Controller
 
     public function export()
     {
-        $feedbacks = Feedback::all();
+        $feedbacks = Feedback::with(['assignedTo', 'respondedBy'])->get();
         
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="feedback-' . date('Y-m-d') . '.csv"',
+            'Content-Disposition' => 'attachment; filename="feedback-export-' . date('Y-m-d') . '.csv"',
         ];
 
         $callback = function() use ($feedbacks) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['Name', 'Email', 'Subject', 'Type', 'Status', 'Priority', 'Date']);
+            // Add UTF-8 BOM for Excel compatibility
+            fwrite($file, "\xEF\xBB\xBF");
+            
+            fputcsv($file, ['ID', 'Name', 'Email', 'Phone', 'Subject', 'Message', 'Type', 'Status', 'Priority', 'Assigned To', 'Response', 'Responded At', 'Created At']);
             
             foreach ($feedbacks as $feedback) {
                 fputcsv($file, [
+                    $feedback->id,
                     $feedback->name,
                     $feedback->email,
+                    $feedback->phone ?? 'N/A',
                     $feedback->subject,
+                    $feedback->message,
                     ucfirst($feedback->feedback_type),
                     ucfirst($feedback->status),
                     ucfirst($feedback->priority),
-                    $feedback->created_at->format('Y-m-d')
+                    $feedback->assignedTo->name ?? 'Not Assigned',
+                    $feedback->response ?? 'No Response',
+                    $feedback->responded_at ? $feedback->responded_at->format('Y-m-d H:i:s') : 'N/A',
+                    $feedback->created_at->format('Y-m-d H:i:s')
                 ]);
             }
             
             fclose($file);
         };
 
-        return response()->stream($callback, 200, $headers);
+        return Response::stream($callback, 200, $headers);
     }
 }

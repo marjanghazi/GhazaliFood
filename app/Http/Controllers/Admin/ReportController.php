@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Response;
 
 class ReportController extends Controller
 {
@@ -16,12 +17,14 @@ class ReportController extends Controller
     {
         // Monthly sales data for chart
         $monthlySales = $this->getMonthlySales();
-        $topProducts = Product::withCount(['orders'])
-            ->orderBy('orders_count', 'desc')
+        $topProducts = Product::with(['category'])
+            ->withCount(['orderItems'])
+            ->orderBy('order_items_count', 'desc')
             ->limit(5)
             ->get();
         
-        $recentOrders = Order::latest()
+        $recentOrders = Order::with(['user'])
+            ->latest()
             ->limit(10)
             ->get();
         
@@ -33,7 +36,8 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', Carbon::now()->subMonth()->format('Y-m-d'));
         $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
         
-        $orders = Order::whereBetween('created_at', [$startDate, $endDate])
+        $orders = Order::whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+            ->with(['user'])
             ->get();
         
         $totalSales = $orders->sum('total_amount');
@@ -43,13 +47,13 @@ class ReportController extends Controller
         // Daily sales breakdown
         $dailySales = $orders->groupBy(function($order) {
             return $order->created_at->format('Y-m-d');
-        })->map(function($dayOrders) {
+        })->map(function($dayOrders, $date) {
             return [
-                'date' => $dayOrders->first()->created_at->format('M d'),
+                'date' => Carbon::parse($date)->format('M d'),
                 'sales' => $dayOrders->sum('total_amount'),
                 'orders' => $dayOrders->count()
             ];
-        });
+        })->values();
         
         return view('admin.reports.sales', compact(
             'orders', 'totalSales', 'totalOrders', 'averageOrder', 
@@ -59,13 +63,16 @@ class ReportController extends Controller
 
     public function products(Request $request)
     {
-        $products = Product::with(['category', 'reviews'])
-            ->withCount(['orders'])
-            ->orderBy('orders_count', 'desc')
+        $products = Product::with(['category'])
+            ->withCount(['orderItems'])
+            ->withSum('orderItems', 'quantity')
+            ->orderBy('order_items_count', 'desc')
             ->paginate(20);
         
-        $totalRevenue = Product::with(['orders'])->get()->sum(function($product) {
-            return $product->orders->sum('total_price');
+        $totalRevenue = Product::with(['orderItems'])->get()->sum(function($product) {
+            return $product->orderItems->sum(function($item) {
+                return $item->price * $item->quantity;
+            });
         });
         
         return view('admin.reports.products', compact('products', 'totalRevenue'));
@@ -116,7 +123,7 @@ class ReportController extends Controller
             
             $sales[] = [
                 'month' => $date->format('M'),
-                'sales' => $monthSales
+                'sales' => $monthSales ?: 0
             ];
         }
         
@@ -128,7 +135,9 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', Carbon::now()->subMonth()->format('Y-m-d'));
         $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
         
-        $orders = Order::whereBetween('created_at', [$startDate, $endDate])->get();
+        $orders = Order::whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+            ->with(['items'])
+            ->get();
         
         $headers = [
             'Content-Type' => 'text/csv',
@@ -137,6 +146,9 @@ class ReportController extends Controller
 
         $callback = function() use ($orders) {
             $file = fopen('php://output', 'w');
+            // Add UTF-8 BOM for Excel compatibility
+            fwrite($file, "\xEF\xBB\xBF");
+            
             fputcsv($file, ['Order #', 'Date', 'Customer', 'Items', 'Subtotal', 'Tax', 'Shipping', 'Discount', 'Total', 'Status']);
             
             foreach ($orders as $order) {
@@ -157,6 +169,6 @@ class ReportController extends Controller
             fclose($file);
         };
 
-        return response()->stream($callback, 200, $headers);
+        return Response::stream($callback, 200, $headers);
     }
 }

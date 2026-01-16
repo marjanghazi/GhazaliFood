@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
 
 class SettingController extends Controller
 {
@@ -25,7 +26,7 @@ class SettingController extends Controller
             'review_approval_required' => config('app.review_approval_required', true),
             'low_stock_threshold' => config('app.low_stock_threshold', 10),
         ];
-        
+
         return view('admin.settings.index', compact('settings'));
     }
 
@@ -47,10 +48,10 @@ class SettingController extends Controller
             'low_stock_threshold' => 'required|integer|min:1'
         ]);
 
-        // Update config values (in a real app, you'd save to database)
         foreach ($validated as $key => $value) {
-            // This is a simplified approach
-            // In production, use database settings table
+            if (is_bool($value)) {
+                $value = $value ? 'true' : 'false';
+            }
             Cache::forever('setting_' . $key, $value);
         }
 
@@ -73,7 +74,6 @@ class SettingController extends Controller
             'support_email' => 'nullable|email'
         ]);
 
-        // Update email settings
         foreach ($validated as $key => $value) {
             Cache::forever('email_' . $key, $value);
         }
@@ -95,7 +95,6 @@ class SettingController extends Controller
             'bank_details' => 'nullable|string'
         ]);
 
-        // Update payment settings
         foreach ($validated as $key => $value) {
             Cache::forever('payment_' . $key, $value);
         }
@@ -106,31 +105,40 @@ class SettingController extends Controller
 
     public function backupDatabase()
     {
-        // This is a simplified backup function
-        // In production, use proper backup package like spatie/laravel-backup
-        
+        // Ensure backup directory exists
+        $backupDir = storage_path('app/backups');
+        if (!file_exists($backupDir)) {
+            mkdir($backupDir, 0755, true);
+        }
+
         $backupFile = 'backup-' . date('Y-m-d-H-i-s') . '.sql';
+        $fullPath = $backupDir . '/' . $backupFile;
+        
         $command = sprintf(
-            'mysqldump -u%s -p%s %s > %s',
+            'mysqldump -u%s -p%s %s > %s 2>&1',
             config('database.connections.mysql.username'),
             config('database.connections.mysql.password'),
             config('database.connections.mysql.database'),
-            storage_path('app/backups/' . $backupFile)
+            $fullPath
         );
-        
-        exec($command);
-        
-        return response()->download(storage_path('app/backups/' . $backupFile))
-            ->deleteFileAfterSend(true);
+
+        exec($command, $output, $returnVar);
+
+        if ($returnVar === 0 && file_exists($fullPath)) {
+            return response()->download($fullPath)->deleteFileAfterSend(true);
+        }
+
+        return redirect()->route('admin.settings.index')
+            ->with('error', 'Database backup failed. Please check your MySQL configuration.');
     }
 
     public function clearCache()
     {
-        \Artisan::call('cache:clear');
-        \Artisan::call('config:clear');
-        \Artisan::call('view:clear');
-        \Artisan::call('route:clear');
-        
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
+
         return redirect()->route('admin.settings.index')
             ->with('success', 'Cache cleared successfully!');
     }

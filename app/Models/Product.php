@@ -70,8 +70,16 @@ class Product extends Model
         }
         return 0;
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function orders()
     {
-        return $this->hasManyThrough(Order::class, OrderItem::class, 'product_id', 'id', 'id', 'order_id');
+        return $this->belongsToMany(Order::class, 'order_items')
+            ->withPivot('quantity', 'price', 'total')
+            ->withTimestamps();
     }
 }

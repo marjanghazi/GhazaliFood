@@ -19,9 +19,11 @@ class Category extends Model
         'type',
         'status',
         'meta_title',
-        'meta_description'
+        'meta_description',
+        'created_by'
     ];
 
+    // Relationships
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
@@ -37,8 +39,38 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
-    public function activeProducts()
+    public function creator()
     {
-        return $this->hasMany(Product::class)->where('status', 'published');
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('type', 'featured');
+    }
+
+    public function scopePopular($query)
+    {
+        return $query->where('type', 'popular');
+    }
+
+    // Accessors
+    public function getImageUrlAttribute()
+    {
+        if ($this->category_image) {
+            return asset('storage/' . $this->category_image);
+        }
+        return asset('images/default-category.jpg');
+    }
+
+    public function getParentNameAttribute()
+    {
+        return $this->parent ? $this->parent->name : 'None';
     }
 }
