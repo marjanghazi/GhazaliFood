@@ -20,12 +20,32 @@ class BlogController extends Controller
             ->limit(5)
             ->get();
 
+        // Get categories with post counts
         $categories = Blog::published()
             ->select('category')
-            ->distinct()
-            ->pluck('category');
+            ->selectRaw('COUNT(*) as post_count')
+            ->groupBy('category')
+            ->orderBy('post_count', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'name' => $item->category,
+                    'slug' => strtolower(str_replace(' ', '-', $item->category)),
+                    'posts_count' => $item->post_count
+                ];
+            });
 
-        return view('blog', compact('blogs', 'recentPosts', 'categories'));
+        // Get total posts count
+        $totalPosts = Blog::published()->count();
+
+        // Get featured blog if needed
+        $featuredBlog = Blog::published()
+            ->with('author')
+            ->orderBy('view_count', 'desc')
+            ->orderBy('published_at', 'desc')
+            ->first();
+
+        return view('blog', compact('blogs', 'recentPosts', 'categories', 'totalPosts', 'featuredBlog'));
     }
 
     public function show($slug)
