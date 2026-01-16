@@ -6,247 +6,199 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
+    // Show Login Form
     public function showLogin()
     {
-        return view('auth.login');
+        return view('auth.login', [
+            'title' => 'Login - Nuts & Berries'
+        ]);
     }
 
+    // Handle Login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials, $request->remember)) {
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-
-            // Update last login
-            Auth::user()->update(['last_login_at' => now()]);
-
-            // Redirect based on role
-            if (Auth::user()->isAdmin()) {
-                return redirect()->route('admin.dashboard');
+            
+            // Redirect based on user role
+            if (Auth::user()->role_id == 1) { // Admin
+                return redirect()->intended(route('admin.dashboard'));
             }
-
-            return redirect()->intended('/');
+            
+            return redirect()->intended(route('home'))->with('success', 'Welcome back!');
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
+
+    // Show Registration Form
     public function showRegister()
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'title' => 'Register - Nuts & Berries'
+        ]);
     }
 
+    // Handle Registration
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'phone' => 'nullable|string|max:20'
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => 'nullable|string|max:20',
+            'agree_terms' => 'required|accepted'
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
-            'role_id' => 4, // Customer role
-            'status' => 'active',
-            'remember_token' => null
+            'role_id' => 3, // Default customer role
+            'status' => 'active'
         ]);
+
+        event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect('/')->with('success', 'Registration successful! Welcome to Ghazali Food.');
+        return redirect(route('home'))->with('success', 'Account created successfully! Welcome to Nuts & Berries!');
     }
 
+    // Handle Logout
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('success', 'You have been logged out successfully.');
     }
 
-    // ================ PASSWORD RESET METHODS ================
-
-    public function showLinkRequestForm()
+    // Show Forgot Password Form
+    public function showForgotPassword()
     {
-        return view('auth.passwords.email');
-    }
-
-    public function sendResetLinkEmail(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email'
-        ], [
-            'email.exists' => 'We couldn\'t find an account with that email address.'
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        // Find user
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
-            return redirect()->back()
-                ->withErrors(['email' => 'Email address not found.'])
-                ->withInput();
-        }
-
-        // Generate reset token
-        $token = Str::random(60);
-
-        // Save token to user
-        $user->remember_token = $token;
-        $user->save();
-
-        // Generate reset URL
-        $resetUrl = route('password.reset', ['token' => $token, 'email' => $user->email]);
-
-        // For now, we'll return success with demo link
-        // In production, you would send an email here
-        return back()->with([
-            'status' => 'Password reset link has been generated!',
-            'demo_info' => '<div class="alert alert-info mt-3">
-                <strong>For demo purposes only:</strong> 
-                <a href="' . $resetUrl . '" class="alert-link">Click here to reset password</a>
-                <br><small>In production, this link would be sent to your email.</small>
-            </div>'
-        ]);
-
-        // ========== EMAIL SENDING CODE (FOR PRODUCTION) ==========
-        // Uncomment this section when you want to send actual emails
-
-        /*
-        try {
-            Mail::send('emails.password-reset', [
-                'user' => $user,
-                'resetUrl' => $resetUrl
-            ], function ($message) use ($user) {
-                $message->to($user->email)
-                        ->subject('Password Reset Request - Ghazali Food');
-            });
-            
-            return back()->with('status', 'Password reset link sent to your email!');
-        } catch (\Exception $e) {
-            return back()->withErrors([
-                'email' => 'Failed to send email. Please try again later.'
-            ]);
-        }
-        */
-    }
-
-    public function showResetForm(Request $request, $token = null)
-    {
-        // Validate token
-        if (!$token) {
-            return redirect()->route('password.request')
-                ->withErrors(['token' => 'Reset token is required.']);
-        }
-
-        // Find user by token
-        $user = User::where('remember_token', $token)->first();
-
-        if (!$user) {
-            return redirect()->route('password.request')
-                ->withErrors(['token' => 'Invalid or expired reset token.']);
-        }
-
-        // Check if token is older than 1 hour (optional)
-        if ($user->updated_at && $user->updated_at->diffInHours(now()) > 1) {
-            $user->remember_token = null;
-            $user->save();
-
-            return redirect()->route('password.request')
-                ->withErrors(['token' => 'Reset token has expired. Please request a new one.']);
-        }
-
-        return view('auth.passwords.reset')->with([
-            'token' => $token,
-            'email' => $request->email ?? $user->email
+        return view('auth.forgot-password', [
+            'title' => 'Forgot Password - Nuts & Berries'
         ]);
     }
 
-    public function reset(Request $request)
+    // Send Password Reset Link
+    public function sendResetLink(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    }
+
+    // Show Reset Password Form
+    public function showResetPassword(Request $request)
+    {
+        return view('auth.reset-password', [
+            'title' => 'Reset Password - Nuts & Berries',
+            'token' => $request->token,
+            'email' => $request->email
+        ]);
+    }
+
+    // Handle Password Reset
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-        ], [
-            'password.min' => 'Password must be at least 8 characters.',
-            'password.confirmed' => 'Password confirmation does not match.'
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
 
-        // Find user by email and token
-        $user = User::where('email', $request->email)
-            ->where('remember_token', $request->token)
-            ->first();
+                $user->save();
 
-        if (!$user) {
-            return back()->withErrors([
-                'email' => 'Invalid token or email address.'
-            ])->withInput();
-        }
+                event(new PasswordReset($user));
+            }
+        );
 
-        // Update password
-        $user->password = Hash::make($request->password);
-        $user->remember_token = null; // Clear the token after use
-        $user->save();
-
-        // Optionally login the user automatically
-        // Auth::login($user);
-
-        return redirect()->route('login')
-            ->with('success', 'Password reset successfully! You can now login with your new password.');
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
 
-    // ================ ADDITIONAL HELPER METHODS ================
-
-    public function showResetSuccess()
+    // Show User Profile
+    public function profile()
     {
-        return view('auth.passwords.reset-success');
+        return view('auth.profile', [
+            'title' => 'My Profile - Nuts & Berries',
+            'user' => Auth::user()
+        ]);
     }
 
-    public function validateResetToken(Request $request)
+    // Update User Profile
+    public function updateProfile(Request $request)
     {
-        $user = User::where('remember_token', $request->token)
-            ->where('email', $request->email)
-            ->first();
+        $user = Auth::user();
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500'
+        ]);
 
-        if ($user) {
-            return response()->json(['valid' => true]);
-        }
+        $user->update($request->only('name', 'email', 'phone', 'address'));
 
-        return response()->json(['valid' => false], 404);
+        return back()->with('success', 'Profile updated successfully!');
+    }
+
+    // Show User Orders
+    public function orders()
+    {
+        $orders = Auth::user()->orders()->latest()->paginate(10);
+        
+        return view('auth.orders', [
+            'title' => 'My Orders - Nuts & Berries',
+            'orders' => $orders
+        ]);
+    }
+
+    // Show Order Details
+    public function orderDetails($id)
+    {
+        $order = Auth::user()->orders()->with('items.product')->findOrFail($id);
+        
+        return view('auth.order-details', [
+            'title' => 'Order #' . $order->order_number . ' - Nuts & Berries',
+            'order' => $order
+        ]);
     }
 }

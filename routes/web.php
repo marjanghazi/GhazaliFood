@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PolicyController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -17,6 +18,7 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 // Shop Routes
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{slug}', [ShopController::class, 'show'])->name('shop.show');
+Route::get('/categories', [ShopController::class, 'categories'])->name('categories.index');
 
 // Blog Routes
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
@@ -27,50 +29,74 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact.index
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Cart Routes
-Route::prefix('cart')->group(function () {
-    Route::get('/', [CartController::class, 'index'])->name('cart');
-    Route::post('/add', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::post('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::post('/clear', [CartController::class, 'clear'])->name('cart.clear');
-    Route::get('/count', [CartController::class, 'getCartCount'])->name('cart.count');
+Route::prefix('cart')->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::put('/update/{id}', [CartController::class, 'update'])->name('update');
+    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::get('/count', [CartController::class, 'count'])->name('count');
 });
 
 // Wishlist Routes
-Route::prefix('wishlist')->group(function () {
-    Route::get('/', [WishlistController::class, 'index'])->name('wishlist');
-    Route::post('/add', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::post('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
-    Route::post('/move-to-cart/{id}', [WishlistController::class, 'moveToCart'])->name('wishlist.move');
+Route::prefix('wishlist')->name('wishlist.')->middleware('auth')->group(function () {
+    Route::get('/', [WishlistController::class, 'index'])->name('index');
+    Route::post('/toggle', [WishlistController::class, 'toggle'])->name('toggle');
+    Route::post('/add', [WishlistController::class, 'store'])->name('add');
+    Route::delete('/remove/{id}', [WishlistController::class, 'destroy'])->name('remove');
+    Route::get('/count', [WishlistController::class, 'count'])->name('count');
 });
 
-// Authentication Routes - Use your custom controllers
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+});
+Route::prefix('policies')->name('policies.')->group(function () {
+    Route::get('/privacy', [PolicyController::class, 'privacy'])->name('privacy');
+    Route::get('/terms', [PolicyController::class, 'terms'])->name('terms');
+    Route::get('/shipping', [PolicyController::class, 'shipping'])->name('shipping');
+    Route::get('/refund', [PolicyController::class, 'refund'])->name('refund');
+    Route::get('/cookies', [PolicyController::class, 'cookies'])->name('cookies');
+});
+// Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Password Reset Routes
-Route::get('/forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [AuthController::class, 'reset'])->name('password.update');
+// User Profile Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile.edit');
+    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/orders', [AuthController::class, 'orders'])->name('orders.index');
+    Route::get('/orders/{id}', [AuthController::class, 'orderDetails'])->name('orders.show');
+});
+
+// Policy Pages Routes
+Route::prefix('policies')->name('policies.')->group(function () {
+    Route::get('/privacy', [PolicyController::class, 'privacy'])->name('privacy');
+    Route::get('/terms', [PolicyController::class, 'terms'])->name('terms');
+    Route::get('/shipping', [PolicyController::class, 'shipping'])->name('shipping');
+    Route::get('/refund', [PolicyController::class, 'refund'])->name('refund');
+    Route::get('/cookies', [PolicyController::class, 'cookies'])->name('cookies');
+});
 
 // Checkout Route (temporary)
 Route::get('/checkout', function () {
     return view('checkout');
 })->name('checkout');
 
-// Protected Routes
-Route::middleware(['auth'])->group(function () {
-    // Add more protected routes here
-});
-
 // Admin Routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     // Add more admin routes here
 });
-// Include admin routes
-require __DIR__.'/admin.php';
+
+// Fallback Route for 404
+Route::fallback(function () {
+    return view('errors.404');
+});
