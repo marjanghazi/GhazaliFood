@@ -22,12 +22,12 @@ class ReportController extends Controller
             ->orderBy('order_items_count', 'desc')
             ->limit(5)
             ->get();
-        
+
         $recentOrders = Order::with(['user'])
             ->latest()
             ->limit(10)
             ->get();
-        
+
         return view('admin.reports.index', compact('monthlySales', 'topProducts', 'recentOrders'));
     }
 
@@ -35,32 +35,38 @@ class ReportController extends Controller
     {
         $startDate = $request->input('start_date', Carbon::now()->subMonth()->format('Y-m-d'));
         $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
-        
+
         $orders = Order::whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->with(['user'])
             ->get();
-        
+
         $totalSales = $orders->sum('total_amount');
         $totalOrders = $orders->count();
         $averageOrder = $totalOrders > 0 ? $totalSales / $totalOrders : 0;
-        
+        $uniqueCustomers = $orders->unique('customer_email')->count();
+
         // Daily sales breakdown
-        $dailySales = $orders->groupBy(function($order) {
+        $dailySales = $orders->groupBy(function ($order) {
             return $order->created_at->format('Y-m-d');
-        })->map(function($dayOrders, $date) {
+        })->map(function ($dayOrders, $date) {
             return [
                 'date' => Carbon::parse($date)->format('M d'),
                 'sales' => $dayOrders->sum('total_amount'),
                 'orders' => $dayOrders->count()
             ];
         })->values();
-        
+
         return view('admin.reports.sales', compact(
-            'orders', 'totalSales', 'totalOrders', 'averageOrder', 
-            'dailySales', 'startDate', 'endDate'
+            'orders',
+            'totalSales',
+            'totalOrders',
+            'averageOrder',
+            'dailySales',
+            'startDate',
+            'endDate',
+            'uniqueCustomers'
         ));
     }
-
     public function products(Request $request)
     {
         $products = Product::with(['category'])
@@ -68,13 +74,13 @@ class ReportController extends Controller
             ->withSum('orderItems', 'quantity')
             ->orderBy('order_items_count', 'desc')
             ->paginate(20);
-        
-        $totalRevenue = Product::with(['orderItems'])->get()->sum(function($product) {
-            return $product->orderItems->sum(function($item) {
+
+        $totalRevenue = Product::with(['orderItems'])->get()->sum(function ($product) {
+            return $product->orderItems->sum(function ($item) {
                 return $item->price * $item->quantity;
             });
         });
-        
+
         return view('admin.reports.products', compact('products', 'totalRevenue'));
     }
 
@@ -85,15 +91,18 @@ class ReportController extends Controller
             ->withSum('orders', 'total_amount')
             ->orderBy('orders_sum_total_amount', 'desc')
             ->paginate(20);
-        
+
         $totalCustomers = User::where('role_id', 4)->count();
         $activeCustomers = User::where('role_id', 4)->where('status', 'active')->count();
         $newCustomers = User::where('role_id', 4)
             ->where('created_at', '>=', Carbon::now()->subMonth())
             ->count();
-        
+
         return view('admin.reports.customers', compact(
-            'customers', 'totalCustomers', 'activeCustomers', 'newCustomers'
+            'customers',
+            'totalCustomers',
+            'activeCustomers',
+            'newCustomers'
         ));
     }
 
@@ -102,13 +111,13 @@ class ReportController extends Controller
         $coupons = Coupon::with(['creator'])
             ->orderBy('used_count', 'desc')
             ->paginate(20);
-        
+
         $totalCoupons = Coupon::count();
         $activeCoupons = Coupon::where('is_active', true)
             ->where('start_date', '<=', now())
             ->where('expiry_date', '>=', now())
             ->count();
-        
+
         return view('admin.reports.coupons', compact('coupons', 'totalCoupons', 'activeCoupons'));
     }
 
@@ -120,13 +129,13 @@ class ReportController extends Controller
             $monthSales = Order::whereYear('created_at', $date->year)
                 ->whereMonth('created_at', $date->month)
                 ->sum('total_amount');
-            
+
             $sales[] = [
                 'month' => $date->format('M'),
                 'sales' => $monthSales ?: 0
             ];
         }
-        
+
         return $sales;
     }
 
@@ -134,23 +143,23 @@ class ReportController extends Controller
     {
         $startDate = $request->input('start_date', Carbon::now()->subMonth()->format('Y-m-d'));
         $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
-        
+
         $orders = Order::whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->with(['items'])
             ->get();
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="sales-report-' . date('Y-m-d') . '.csv"',
         ];
 
-        $callback = function() use ($orders) {
+        $callback = function () use ($orders) {
             $file = fopen('php://output', 'w');
             // Add UTF-8 BOM for Excel compatibility
             fwrite($file, "\xEF\xBB\xBF");
-            
+
             fputcsv($file, ['Order #', 'Date', 'Customer', 'Items', 'Subtotal', 'Tax', 'Shipping', 'Discount', 'Total', 'Status']);
-            
+
             foreach ($orders as $order) {
                 fputcsv($file, [
                     $order->order_number,
@@ -165,7 +174,7 @@ class ReportController extends Controller
                     ucfirst($order->order_status)
                 ]);
             }
-            
+
             fclose($file);
         };
 
