@@ -3,7 +3,10 @@
 @section('title', 'About Us | Premium Dry Fruits Store | Nuts & Berries')
 
 @section('hero')
-<!-- Hero Section -->
+<!-- ==========================================================================
+   Hero Section
+   ========================================================================== -->
+
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center min-vh-70">
@@ -38,7 +41,10 @@
 @endsection
 
 @section('content')
-<!-- Our Journey -->
+<!-- ==========================================================================
+   Our Journey Section
+   ========================================================================== -->
+
 <section class="py-5">
     <div class="container">
         <div class="row align-items-center mb-5">
@@ -80,7 +86,10 @@
     </div>
 </section>
 
-<!-- Mission & Vision -->
+<!-- ==========================================================================
+   Mission & Vision Section
+   ========================================================================== -->
+
 <section class="features-section py-5 bg-light">
     <div class="container">
         <div class="section-header mb-5">
@@ -133,7 +142,10 @@
     </div>
 </section>
 
-<!-- Our Values -->
+<!-- ==========================================================================
+   Our Values Section
+   ========================================================================== -->
+
 <section class="py-5" id="values">
     <div class="container">
         <div class="section-header mb-5">
@@ -223,7 +235,10 @@
     </div>
 </section>
 
-<!-- Stats Section -->
+<!-- ==========================================================================
+   Stats Section
+   ========================================================================== -->
+
 <section class="py-5 bg-light">
     <div class="container">
         <div class="stats-grid">
@@ -254,7 +269,10 @@
     </div>
 </section>
 
-<!-- Team Section -->
+<!-- ==========================================================================
+   Team Section
+   ========================================================================== -->
+
 <section class="py-5">
     <div class="container">
         <div class="section-header mb-5">
@@ -334,7 +352,10 @@
     </div>
 </section>
 
-<!-- Testimonials -->
+<!-- ==========================================================================
+   Testimonials Section
+   ========================================================================== -->
+
 <section class="testimonials-section py-5 bg-light">
     <div class="container">
         <div class="section-header mb-5">
@@ -415,7 +436,10 @@
     </div>
 </section>
 
-<!-- Newsletter Section -->
+<!-- ==========================================================================
+   Newsletter Section
+   ========================================================================== -->
+
 <section class="newsletter-section py-5">
     <div class="container">
         <div class="row align-items-center">
@@ -449,8 +473,15 @@
 @endsection
 
 @push('styles')
+<!-- ==========================================================================
+   Custom Styles for About Page
+   ========================================================================== -->
+
 <style>
-/* Story Section */
+/* ==========================================================================
+   Story Section Styles
+   ========================================================================== */
+
 .story-image {
     position: relative;
 }
@@ -467,7 +498,10 @@
     box-shadow: var(--shadow-md);
 }
 
-/* Values Grid */
+/* ==========================================================================
+   Values Grid Styles
+   ========================================================================== */
+
 .values-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -508,7 +542,10 @@
     color: var(--primary-color);
 }
 
-/* Stats Grid */
+/* ==========================================================================
+   Stats Grid Styles
+   ========================================================================== */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -538,7 +575,10 @@
     font-size: var(--text-sm);
 }
 
-/* Team Grid */
+/* ==========================================================================
+   Team Grid Styles
+   ========================================================================== */
+
 .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -630,7 +670,34 @@
     line-height: 1.5;
 }
 
-/* Responsive Adjustments */
+/* ==========================================================================
+   Newsletter Form Styles
+   ========================================================================== */
+
+.newsletter-form .form-control {
+    padding: 12px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--surface-color);
+    color: var(--text-primary);
+    width: 100%;
+    transition: var(--transition-normal);
+}
+
+.newsletter-form .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.form-text {
+    font-size: var(--text-sm);
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
 @media (max-width: 768px) {
     .values-grid {
         grid-template-columns: 1fr;
@@ -669,7 +736,10 @@
     }
 }
 
-/* Animations */
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -697,9 +767,16 @@
 @endpush
 
 @push('scripts')
+<!-- ==========================================================================
+   Custom JavaScript for About Page
+   ========================================================================== -->
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Intersection Observer for animations
+    // ==========================================================================
+    // Intersection Observer for Animations
+    // ==========================================================================
+    
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '50px'
@@ -718,7 +795,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.story-content > *, .feature-card, .value-card, .stat-card, .team-card')
         .forEach(el => observer.observe(el));
 
-    // Newsletter form submission
+    // ==========================================================================
+    // Newsletter Form Submission
+    // ==========================================================================
+    
     const newsletterForm = document.querySelector('.newsletter-form');
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', async function(e) {
@@ -758,7 +838,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Team card hover effect enhancement
+    // ==========================================================================
+    // Team Card Hover Effect Enhancement
+    // ==========================================================================
+    
     document.querySelectorAll('.team-card').forEach(card => {
         card.addEventListener('mouseenter', function() {
             this.style.zIndex = '10';
@@ -769,7 +852,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Stat counters animation (if you want to add counting animation)
+    // ==========================================================================
+    // Stat Counters Animation
+    // ==========================================================================
+    
     const statNumbers = document.querySelectorAll('.stat-number');
     const observerStats = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -801,37 +887,51 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Toast function (reuse from main.js)
+// ==========================================================================
+// Toast Notification Function
+// ==========================================================================
+
 function showToast(message, type = 'info', duration = 3000) {
     const container = document.getElementById('toastContainer');
     if (!container) return;
     
     const toast = document.createElement('div');
-    toast.className = `toast show align-items-center text-white bg-${type === 'error' ? 'danger' : type} border-0`;
-    toast.setAttribute('role', 'alert');
-    toast.setAttribute('aria-live', 'assertive');
-    toast.setAttribute('aria-atomic', 'true');
-    
-    const icon = type === 'success' ? 'fa-check-circle' : 
-                 type === 'error' ? 'fa-exclamation-circle' : 
-                 type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
-    
+    toast.className = `toast toast-${type}`;
     toast.innerHTML = `
-        <div class="d-flex">
-            <div class="toast-body">
-                <i class="fas ${icon} me-2"></i>
-                ${message}
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <div class="toast-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 
+                         type === 'error' ? 'fa-exclamation-circle' : 
+                         type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
         </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
     `;
     
     container.appendChild(toast);
     
-    // Remove toast after duration
+    // Show toast
     setTimeout(() => {
-        toast.remove();
+        toast.classList.add('show');
+    }, 10);
+    
+    // Auto remove after duration
+    const autoRemove = setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
     }, duration);
+    
+    // Close button
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+        clearTimeout(autoRemove);
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    });
 }
 </script>
 @endpush
