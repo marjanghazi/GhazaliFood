@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,15 +30,11 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
     @stack('styles')
 </head>
-
 <body>
     <!-- Announcement Bar -->
     @php
@@ -53,7 +48,7 @@
     @endphp
 
     @if($announcementEnabled && ($announcements->count() > 0 || $defaultMessage))
-        <div class="announcement-bar-wrapper" id="announcementBar">
+        <div class="announcement-bar" id="announcementBar">
             <div class="container">
                 <div class="announcement-content">
                     @if($announcements->count() > 0)
@@ -93,22 +88,12 @@
         </div>
     @endif
 
-    <!-- Theme Controls -->
-    <div class="theme-controls">
-        <button class="theme-switcher" id="themeToggle" aria-label="Toggle theme">
-            <span class="theme-icon">
-                <i class="fas fa-sun"></i>
-                <i class="fas fa-moon"></i>
-            </span>
-        </button>
-    </div>
-
     <!-- Main Header -->
-    <header class="header" id="mainHeader">
+    <header class="main-header" id="mainHeader">
         <div class="container">
-            <nav class="navbar">
+            <div class="header-container">
                 <!-- Mobile Toggle -->
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <button class="mobile-toggle" id="mobileToggle">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -120,25 +105,33 @@
                         <i class="fas fa-seedling"></i>
                     </div>
                     <div class="logo-text">
-                        <span>Nuts & Berries</span>
-                        <small>Premium Dry Fruits</small>
+                        <h1>Ghazali Food</h1>
                     </div>
                 </a>
 
-                <!-- Navigation -->
-                <div class="nav-main" id="navMain">
-                    <!-- Mobile Close -->
-                    <button class="mobile-close" id="mobileClose" aria-label="Close navigation">
+                <!-- Main Navigation -->
+                <nav class="main-nav" id="mainNav">
+                    <!-- Mobile Close Button -->
+                    <button class="mobile-close" id="mobileClose">
                         <i class="fas fa-times"></i>
                     </button>
 
-                    <ul class="nav-links">
-                        <li><a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a></li>
-                        <li><a href="{{ route('shop.index') }}" class="nav-link {{ request()->is('shop*') ? 'active' : '' }}">Shop</a></li>
+                    <!-- Navigation Links -->
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('shop.index') }}" class="nav-link {{ request()->is('shop*') ? 'active' : '' }}">
+                                Shop
+                            </a>
+                        </li>
                         
-                        <!-- Dynamic Categories Dropdown -->
+                        <!-- Categories Dropdown -->
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle">
                                 Categories <i class="fas fa-chevron-down ms-1"></i>
                             </a>
                             <div class="dropdown-menu">
@@ -154,19 +147,20 @@
                                 @endphp
                                 
                                 @foreach($categories as $category)
-                                    <div class="dropdown-item-group">
+                                    <div class="dropdown-group">
                                         <a href="{{ route('shop.index', ['category' => $category->slug]) }}" 
                                            class="dropdown-item">
+                                            <i class="fas fa-chevron-right me-2"></i>
                                             {{ $category->name }}
                                             @if($category->children->count() > 0)
-                                                <i class="fas fa-chevron-right float-end"></i>
+                                                <i class="fas fa-chevron-right float-end mt-1"></i>
                                             @endif
                                         </a>
                                         @if($category->children->count() > 0)
-                                            <div class="dropdown-submenu">
+                                            <div class="submenu">
                                                 @foreach($category->children as $child)
                                                     <a href="{{ route('shop.index', ['category' => $child->slug]) }}" 
-                                                       class="dropdown-item">
+                                                       class="submenu-item">
                                                         {{ $child->name }}
                                                     </a>
                                                 @endforeach
@@ -177,114 +171,153 @@
                                 
                                 @if($categories->count() > 0)
                                     <div class="dropdown-divider"></div>
-                                    <a href="{{ route('categories.index') }}" class="dropdown-item text-center">
-                                        View All <i class="fas fa-arrow-right ms-2"></i>
+                                    <a href="{{ route('categories.index') }}" class="dropdown-view-all">
+                                        View All Categories <i class="fas fa-arrow-right ms-2"></i>
                                     </a>
                                 @endif
                             </div>
                         </li>
                         
-                        <li><a href="{{ route('blog.index') }}" class="nav-link {{ request()->is('blog*') ? 'active' : '' }}">Blog</a></li>
-                        <li><a href="{{ route('about') }}" class="nav-link {{ request()->is('about') ? 'active' : '' }}">About</a></li>
-                        <li><a href="{{ route('contact.index') }}" class="nav-link {{ request()->is('contact*') ? 'active' : '' }}">Contact</a></li>
+                        <li class="nav-item">
+                            <a href="{{ route('blog.index') }}" class="nav-link {{ request()->is('blog*') ? 'active' : '' }}">
+                                Blog
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('about') }}" class="nav-link {{ request()->is('about') ? 'active' : '' }}">
+                                About
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('contact.index') }}" class="nav-link {{ request()->is('contact*') ? 'active' : '' }}">
+                                Contact
+                            </a>
+                        </li>
                     </ul>
 
                     <!-- Search Box -->
-                    <div class="search-box">
+                    <div class="search-container">
                         <form action="{{ route('shop.index') }}" method="GET" class="search-form">
-                            <input type="text" 
-                                   name="search" 
-                                   class="search-input" 
-                                   placeholder="Search dry fruits..."
-                                   value="{{ request('search') }}"
-                                   aria-label="Search products">
-                            <button type="submit" class="search-btn" aria-label="Search">
-                                <i class="fas fa-search"></i>
-                            </button>
-                            <button type="button" class="search-clear" aria-label="Clear search">
-                                <i class="fas fa-times"></i>
-                            </button>
+                            <div class="search-wrapper">
+                                <input type="text" 
+                                       name="search" 
+                                       class="search-input" 
+                                       placeholder="Search dry fruits..."
+                                       value="{{ request('search') }}"
+                                       aria-label="Search products">
+                                <button type="submit" class="search-btn" aria-label="Search">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                @if(request('search'))
+                                    <a href="{{ route('shop.index') }}" class="search-clear" aria-label="Clear search">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                @endif
+                            </div>
                         </form>
                     </div>
-                </div>
+                </nav>
 
-                <!-- Action Buttons -->
-                <div class="nav-actions">
-                    <!-- Search Toggle for Mobile -->
-                    <button class="search-toggle d-md-none" id="searchToggle" aria-label="Toggle search">
+                <!-- Header Actions -->
+                <div class="header-actions">
+                    <!-- Mobile Search Toggle -->
+                    <button class="search-toggle" id="searchToggle">
                         <i class="fas fa-search"></i>
                     </button>
 
                     <!-- Wishlist -->
                     @auth
-                        <a href="{{ route('wishlist') }}" class="nav-action-btn" aria-label="Wishlist">
+                        <a href="{{ route('wishlist') }}" class="action-btn" aria-label="Wishlist">
                             <i class="fas fa-heart"></i>
                             @php
                                 $wishlistCount = App\Models\Wishlist::getCount();
                             @endphp
                             @if($wishlistCount > 0)
-                                <span class="badge-count">{{ $wishlistCount }}</span>
+                                <span class="badge">{{ $wishlistCount }}</span>
                             @endif
                         </a>
                     @endauth
 
                     <!-- Cart -->
-                    <a href="{{ route('cart.index') }}" class="nav-action-btn cart-btn" aria-label="Shopping cart">
+                    <a href="{{ route('cart.index') }}" class="action-btn cart-btn" aria-label="Shopping cart">
                         <i class="fas fa-shopping-cart"></i>
                         @php
-                            $cartCount = \App\Helpers\CartHelper::getCount();
+                            $cartCount = 0;
+                            if(session()->has('cart')) {
+                                $cartItems = session()->get('cart', []);
+                                foreach($cartItems as $item) {
+                                    $cartCount += $item['quantity'] ?? 1;
+                                }
+                            }
                         @endphp
                         @if($cartCount > 0)
-                            <span class="badge-count">{{ $cartCount }}</span>
+                            <span class="badge">{{ $cartCount }}</span>
                         @endif
                     </a>
 
-                    <!-- User Menu -->
+                    <!-- User Account -->
                     @auth
-                        <div class="dropdown user-dropdown">
-                            <button class="nav-action-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <div class="user-dropdown">
+                            <button class="action-btn dropdown-toggle" type="button">
                                 <i class="fas fa-user"></i>
                             </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-user-cog me-2"></i>Profile</a></li>
-                                <li><a class="dropdown-item" href="{{ route('orders.index') }}"><i class="fas fa-history me-2"></i>Orders</a></li>
-                                <li><a class="dropdown-item" href="{{ route('wishlist') }}"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
+                            <div class="dropdown-menu user-menu">
+                                <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                                    <i class="fas fa-user-cog"></i>
+                                    <span>Profile</span>
+                                </a>
+                                <a href="{{ route('orders.index') }}" class="dropdown-item">
+                                    <i class="fas fa-history"></i>
+                                    <span>Orders</span>
+                                </a>
+                                <a href="{{ route('wishlist') }}" class="dropdown-item">
+                                    <i class="fas fa-heart"></i>
+                                    <span>Wishlist</span>
+                                </a>
                                 @if(Auth::user()->isAdmin())
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="fas fa-cog me-2"></i>Dashboard</a></li>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item">
+                                        <i class="fas fa-cog"></i>
+                                        <span>Dashboard</span>
+                                    </a>
                                 @endif
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
+                                <div class="dropdown-divider"></div>
+                                <form method="POST" action="{{ route('logout') }}" class="dropdown-item">
+                                    @csrf
+                                    <button type="submit" class="logout-btn">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="nav-action-btn" aria-label="Login">
+                        <a href="{{ route('login') }}" class="action-btn" aria-label="Login">
                             <i class="fas fa-user"></i>
                         </a>
                     @endauth
+
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <i class="fas fa-sun light-icon"></i>
+                        <i class="fas fa-moon dark-icon"></i>
+                    </button>
                 </div>
-            </nav>
+            </div>
         </div>
     </header>
 
     <!-- Mobile Search Overlay -->
     <div class="mobile-search-overlay" id="mobileSearchOverlay">
-        <div class="container">
+        <div class="search-overlay-container">
             <form action="{{ route('shop.index') }}" method="GET" class="mobile-search-form">
                 <input type="text" 
                        name="search" 
-                       class="form-control" 
+                       class="mobile-search-input" 
                        placeholder="Search almonds, cashews, raisins..."
                        autofocus
                        aria-label="Mobile search">
-                <button type="submit" class="search-submit" aria-label="Search">
+                <button type="submit" class="mobile-search-btn" aria-label="Search">
                     <i class="fas fa-search"></i>
                 </button>
                 <button type="button" class="search-close" id="mobileSearchClose" aria-label="Close search">
@@ -301,117 +334,129 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="main-footer">
         <div class="container">
-            <div class="row g-4">
+            <div class="footer-grid">
                 <!-- Company Info -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-section">
-                        <a href="{{ url('/') }}" class="logo mb-3">
-                            <div class="logo-icon">
-                                <i class="fas fa-seedling"></i>
-                            </div>
-                            <div class="logo-text">
-                                <span>Nuts & Berries</span>
-                                <small>Premium Dry Fruits</small>
-                            </div>
-                        </a>
-                        <p class="text-muted">Premium quality dry fruits, nuts, and berries. 100% natural, organic, and sourced from the finest orchards worldwide.</p>
-                        <div class="social-links mt-3">
-                            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-link" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
-                            <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <div class="footer-section">
+                    <a href="{{ url('/') }}" class="footer-logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-seedling"></i>
                         </div>
+                        <div class="logo-text">
+                            <h3>Nuts & Berries</h3>
+                            <p>Premium Dry Fruits</p>
+                        </div>
+                    </a>
+                    <p class="footer-description">
+                        Premium quality dry fruits, nuts, and berries. 100% natural, organic, 
+                        and sourced from the finest orchards worldwide.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Pinterest">
+                            <i class="fab fa-pinterest"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Quick Links -->
-                <div class="col-lg-2 col-md-6">
-                    <div class="footer-section">
-                        <h5>Quick Links</h5>
-                        <ul class="footer-links">
-                            <li><a href="{{ url('/') }}">Home</a></li>
-                            <li><a href="{{ route('shop.index') }}">Shop All</a></li>
-                            <li><a href="{{ route('shop.index', ['new_arrival' => true]) }}">New Arrivals</a></li>
-                            <li><a href="{{ route('shop.index', ['featured' => true]) }}">Featured</a></li>
-                            <li><a href="{{ route('shop.index', ['sale' => true]) }}">On Sale</a></li>
-                        </ul>
-                    </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ url('/') }}">Home</a></li>
+                        <li><a href="{{ route('shop.index') }}">Shop All</a></li>
+                        <li><a href="{{ route('shop.index', ['new_arrival' => true]) }}">New Arrivals</a></li>
+                        <li><a href="{{ route('shop.index', ['featured' => true]) }}">Featured</a></li>
+                        <li><a href="{{ route('shop.index', ['sale' => true]) }}">On Sale</a></li>
+                    </ul>
                 </div>
 
                 <!-- Categories -->
-                <div class="col-lg-2 col-md-6">
-                    <div class="footer-section">
-                        <h5>Categories</h5>
-                        <ul class="footer-links">
-                            @php
-                                $footerCategories = App\Models\Category::whereNull('parent_id')
-                                    ->active()
-                                    ->orderBy('display_order')
-                                    ->limit(6)
-                                    ->get();
-                            @endphp
-                            @foreach($footerCategories as $category)
-                                <li><a href="{{ route('shop.index', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Categories</h4>
+                    <ul class="footer-links">
+                        @php
+                            $footerCategories = App\Models\Category::whereNull('parent_id')
+                                ->active()
+                                ->orderBy('display_order')
+                                ->limit(6)
+                                ->get();
+                        @endphp
+                        @foreach($footerCategories as $category)
+                            <li>
+                                <a href="{{ route('shop.index', ['category' => $category->slug]) }}">
+                                    {{ $category->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
 
                 <!-- Contact & Newsletter -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-section">
-                        <h5>Stay Connected</h5>
-                        <p class="text-muted mb-3">Subscribe for exclusive offers and updates</p>
-                        
-                        <form class="newsletter-form mb-4">
-                            <div class="input-group">
-                                <input type="email" 
-                                       class="form-control" 
-                                       placeholder="Your email address"
-                                       required
-                                       aria-label="Email for newsletter">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
-                        </form>
+                <div class="footer-section">
+                    <h4 class="footer-title">Stay Connected</h4>
+                    <p class="footer-text">Subscribe for exclusive offers and updates</p>
+                    
+                    <form class="newsletter-form">
+                        <div class="newsletter-group">
+                            <input type="email" 
+                                   class="newsletter-input" 
+                                   placeholder="Your email address"
+                                   required
+                                   aria-label="Email for newsletter">
+                            <button type="submit" class="newsletter-btn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
 
-                        <div class="contact-info">
-                            <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Nut Street, Dry Fruits City</p>
-                            <p class="mb-2"><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
-                            <p class="mb-0"><i class="fas fa-envelope me-2"></i> info@nutsandberries.com</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>123 Nut Street, Dry Fruits City</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@nutsandberries.com</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="footer-bottom mt-5 pt-4 border-top">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <p class="mb-0 text-muted">&copy; {{ date('Y') }} Nuts & Berries. All rights reserved.</p>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="payment-methods text-md-end">
-                            <i class="fab fa-cc-visa me-2" aria-label="Visa"></i>
-                            <i class="fab fa-cc-mastercard me-2" aria-label="Mastercard"></i>
-                            <i class="fab fa-cc-amex me-2" aria-label="American Express"></i>
-                            <i class="fab fa-cc-paypal me-2" aria-label="PayPal"></i>
-                            <i class="fab fa-cc-apple-pay" aria-label="Apple Pay"></i>
-                        </div>
-                    </div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    &copy; {{ date('Y') }} Nuts & Berries. All rights reserved.
                 </div>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <div class="footer-links-bottom">
-                            <a href="{{ route('policies.privacy') }}" class="text-muted me-3">Privacy Policy</a>
-                            <a href="{{ route('policies.terms') }}" class="text-muted me-3">Terms of Service</a>
-                            <a href="{{ route('policies.shipping') }}" class="text-muted me-3">Shipping Policy</a>
-                            <a href="{{ route('policies.refund') }}" class="text-muted">Refund Policy</a>
-                        </div>
-                    </div>
+                
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa" aria-label="Visa"></i>
+                    <i class="fab fa-cc-mastercard" aria-label="Mastercard"></i>
+                    <i class="fab fa-cc-amex" aria-label="American Express"></i>
+                    <i class="fab fa-cc-paypal" aria-label="PayPal"></i>
+                    <i class="fab fa-cc-apple-pay" aria-label="Apple Pay"></i>
+                </div>
+                
+                <div class="footer-links-bottom">
+                    <a href="{{ route('policies.privacy') }}">Privacy Policy</a>
+                    <a href="{{ route('policies.terms') }}">Terms of Service</a>
+                    <a href="{{ route('policies.shipping') }}">Shipping Policy</a>
+                    <a href="{{ route('policies.refund') }}">Refund Policy</a>
                 </div>
             </div>
         </div>
@@ -423,124 +468,240 @@
     </button>
 
     <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JS -->
+    <!-- JavaScript -->
     <script src="{{ asset('js/main.js') }}"></script>
 
     @stack('scripts')
 
     <script>
         // Announcement Bar
-        const announcementBar = document.getElementById('announcementBar');
-        const announcementToggle = document.getElementById('announcementToggle');
-        
-        if (announcementBar && announcementToggle) {
-            // Check localStorage for collapsed state
-            const isCollapsed = localStorage.getItem('announcementCollapsed') === 'true';
+        document.addEventListener('DOMContentLoaded', function() {
+            const announcementBar = document.getElementById('announcementBar');
+            const announcementToggle = document.getElementById('announcementToggle');
             
-            if (isCollapsed) {
-                announcementBar.classList.add('collapsed');
-                announcementToggle.innerHTML = '<i class="fas fa-chevron-down"></i>';
-            }
-            
-            announcementToggle.addEventListener('click', () => {
-                announcementBar.classList.toggle('collapsed');
-                const isNowCollapsed = announcementBar.classList.contains('collapsed');
-                localStorage.setItem('announcementCollapsed', isNowCollapsed);
-                announcementToggle.innerHTML = isNowCollapsed 
-                    ? '<i class="fas fa-chevron-down"></i>' 
-                    : '<i class="fas fa-chevron-up"></i>';
-            });
-            
-            // Handle close buttons for individual announcements
-            document.querySelectorAll('.announcement-close').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    if (id) {
-                        // Store in localStorage that this announcement is closed
-                        const closedAnnouncements = JSON.parse(localStorage.getItem('closedAnnouncements') || '[]');
-                        if (!closedAnnouncements.includes(id)) {
-                            closedAnnouncements.push(id);
-                            localStorage.setItem('closedAnnouncements', JSON.stringify(closedAnnouncements));
-                        }
-                    }
-                    this.closest('.announcement-item').style.display = 'none';
+            if (announcementBar && announcementToggle) {
+                const isCollapsed = localStorage.getItem('announcementCollapsed') === 'true';
+                
+                if (isCollapsed) {
+                    announcementBar.classList.add('collapsed');
+                    announcementToggle.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                }
+                
+                announcementToggle.addEventListener('click', () => {
+                    announcementBar.classList.toggle('collapsed');
+                    const isNowCollapsed = announcementBar.classList.contains('collapsed');
+                    localStorage.setItem('announcementCollapsed', isNowCollapsed);
+                    announcementToggle.innerHTML = isNowCollapsed 
+                        ? '<i class="fas fa-chevron-down"></i>' 
+                        : '<i class="fas fa-chevron-up"></i>';
                 });
+                
+                // Handle close buttons
+                document.querySelectorAll('.announcement-close').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        if (id) {
+                            const closedAnnouncements = JSON.parse(localStorage.getItem('closedAnnouncements') || '[]');
+                            if (!closedAnnouncements.includes(id)) {
+                                closedAnnouncements.push(id);
+                                localStorage.setItem('closedAnnouncements', JSON.stringify(closedAnnouncements));
+                            }
+                        }
+                        this.closest('.announcement-item').style.display = 'none';
+                    });
+                });
+            }
+
+            // Mobile Navigation
+            const mobileToggle = document.getElementById('mobileToggle');
+            const mobileClose = document.getElementById('mobileClose');
+            const mainNav = document.getElementById('mainNav');
+            
+            if (mobileToggle && mainNav) {
+                mobileToggle.addEventListener('click', () => {
+                    mainNav.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+                
+                if (mobileClose) {
+                    mobileClose.addEventListener('click', () => {
+                        mainNav.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+            }
+
+            // Mobile Search
+            const searchToggle = document.getElementById('searchToggle');
+            const mobileSearchClose = document.getElementById('mobileSearchClose');
+            const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
+            
+            if (searchToggle && mobileSearchOverlay) {
+                searchToggle.addEventListener('click', () => {
+                    mobileSearchOverlay.classList.add('active');
+                });
+                
+                if (mobileSearchClose) {
+                    mobileSearchClose.addEventListener('click', () => {
+                        mobileSearchOverlay.classList.remove('active');
+                    });
+                }
+            }
+
+            // Clear search input
+            document.querySelectorAll('.search-clear').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const searchForm = this.closest('.search-form');
+                    if (searchForm) {
+                        searchForm.querySelector('.search-input').value = '';
+                        searchForm.submit();
+                    }
+                });
+            });
+
+            // Back to Top
+            const backToTop = document.getElementById('backToTop');
+            if (backToTop) {
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 300) {
+                        backToTop.classList.add('visible');
+                    } else {
+                        backToTop.classList.remove('visible');
+                    }
+                });
+                
+                backToTop.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', currentTheme);
+                
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+
+            // User dropdown
+            const userDropdown = document.querySelector('.user-dropdown .dropdown-toggle');
+            if (userDropdown) {
+                userDropdown.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.nextElementSibling.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.user-dropdown')) {
+                        document.querySelectorAll('.user-menu').forEach(menu => {
+                            menu.classList.remove('show');
+                        });
+                    }
+                });
+            }
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (mainNav && mainNav.classList.contains('active')) {
+                    if (!e.target.closest('#mainNav') && !e.target.closest('#mobileToggle')) {
+                        mainNav.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                }
+                
+                if (mobileSearchOverlay && mobileSearchOverlay.classList.contains('active')) {
+                    if (!e.target.closest('#mobileSearchOverlay') && !e.target.closest('#searchToggle')) {
+                        mobileSearchOverlay.classList.remove('active');
+                    }
+                }
+            });
+
+            // Close on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (mainNav && mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                    
+                    if (mobileSearchOverlay && mobileSearchOverlay.classList.contains('active')) {
+                        mobileSearchOverlay.classList.remove('active');
+                    }
+                    
+                    document.querySelectorAll('.user-menu').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+                }
+            });
+
+            // Update active nav link on page load
+            function updateActiveNav() {
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            updateActiveNav();
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) return;
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            // Auto remove after 5 seconds
+            const autoRemove = setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+            
+            // Close button
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
             });
         }
-
-        // Mobile Navigation
-        document.getElementById('mobileToggle').addEventListener('click', function() {
-            document.getElementById('navMain').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-
-        document.getElementById('mobileClose').addEventListener('click', function() {
-            document.getElementById('navMain').classList.remove('active');
-            document.body.style.overflow = '';
-        });
-
-        // Mobile Search
-        document.getElementById('searchToggle')?.addEventListener('click', function() {
-            document.getElementById('mobileSearchOverlay').classList.add('active');
-        });
-
-        document.getElementById('mobileSearchClose')?.addEventListener('click', function() {
-            document.getElementById('mobileSearchOverlay').classList.remove('active');
-        });
-
-        // Clear search input
-        document.querySelectorAll('.search-clear').forEach(button => {
-            button.addEventListener('click', function() {
-                const searchInput = this.closest('.search-form').querySelector('.search-input');
-                searchInput.value = '';
-                searchInput.focus();
-            });
-        });
-
-        // Back to Top
-        const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        });
-
-        backToTop.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.matches('.dropdown-toggle')) {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    menu.classList.remove('show');
-                });
-            }
-        });
-
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        
-        themeToggle.addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
     </script>
 </body>
 </html>
