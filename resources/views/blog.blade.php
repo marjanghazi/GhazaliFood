@@ -4,31 +4,38 @@
 
 @section('hero')
 <!-- Hero Section -->
-<section class="hero-section">
+<section class="hero-section blog-hero">
     <div class="container">
         <div class="row align-items-center min-vh-70">
             <div class="col-lg-6">
-                <h1 class="hero-title animate-slide-up">The Nuts & Berries Blog</h1>
-                <p class="hero-subtitle animate-slide-up delay-1">
-                    Discover delicious recipes, health benefits, and expert tips
-                    for incorporating premium dry fruits into your daily life.
-                </p>
-                <div class="hero-buttons animate-slide-up delay-2">
-                    <a href="#latest-posts" class="btn btn-primary btn-lg">
-                        Read Articles <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
-                    <a href="#newsletter" class="btn btn-outline btn-lg">
-                        Subscribe
-                    </a>
+                <div class="hero-content animate-slide-up">
+                    <div class="hero-badge animate-bounce">
+                        <i class="fas fa-newspaper me-2"></i> Latest Insights
+                    </div>
+                    <h1 class="hero-title">The Nuts & Berries Blog</h1>
+                    <p class="hero-subtitle">
+                        Discover delicious recipes, health benefits, and expert tips
+                        for incorporating premium dry fruits into your daily life.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#latest-posts" class="btn btn-primary btn-lg">
+                            <i class="fas fa-book-open me-2"></i> Read Articles
+                        </a>
+                        <a href="#newsletter" class="btn btn-outline btn-lg">
+                            <i class="fas fa-envelope me-2"></i> Subscribe
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                        alt="Premium Dry Fruits Blog"
-                        class="img-fluid rounded-3">
-                    <div class="hero-badge animate-bounce">
-                        <i class="fas fa-heart me-2"></i> Healthy Living
+                <div class="hero-image-wrapper">
+                    <div class="hero-image">
+                        <img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Premium Dry Fruits Blog"
+                            class="img-fluid rounded-3">
+                        <div class="hero-image-badge">
+                            <i class="fas fa-heart me-2"></i> Healthy Living
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,59 +48,141 @@
 <!-- Blog Content -->
 <section class="py-5" id="latest-posts">
     <div class="container">
+        <!-- Page Header -->
+        <div class="page-header mb-5">
+            <h2 class="page-title">Latest Articles</h2>
+            <p class="page-subtitle">Expert insights on dry fruits, nutrition, and healthy living</p>
+            
+            <!-- Quick Stats -->
+            <div class="quick-stats mt-4">
+                <div class="stat-item">
+                    <i class="fas fa-newspaper stat-icon"></i>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ $totalPosts ?? 0 }}</span>
+                        <span class="stat-label">Total Articles</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users stat-icon"></i>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ $authorsCount ?? 5 }}+</span>
+                        <span class="stat-label">Expert Writers</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-tags stat-icon"></i>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ count($categories ?? []) }}</span>
+                        <span class="stat-label">Categories</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <!-- Blog Posts -->
             <div class="col-lg-8">
-                <div class="section-header mb-5">
-                    <h2 class="section-title">Latest Articles</h2>
-                    <p class="text-muted">Expert insights on dry fruits, nutrition, and healthy living</p>
-                </div>
-
-                <div class="blog-grid">
-                    @foreach($blogs as $blog)
-                    <div class="blog-card">
-                        <div class="blog-image">
-                            <img src="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' }}"
-                                alt="{{ $blog->title }}">
-                            <div class="blog-category">
-                                {{ $blog->category }}
+                <!-- Filter Bar -->
+                <div class="filter-bar mb-4">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-6">
+                            <div class="view-options">
+                                <button class="view-option active" data-view="grid">
+                                    <i class="fas fa-th-large"></i>
+                                </button>
+                                <button class="view-option" data-view="list">
+                                    <i class="fas fa-list"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="blog-content">
-                            <div class="blog-meta">
-                                <span class="blog-date">
-                                    <i class="far fa-calendar me-1"></i>
-                                    {{ $blog->published_at->format('M d, Y') }}
-                                </span>
-                                <span class="blog-read-time">
-                                    <i class="far fa-clock me-1"></i>
-                                    {{ $blog->read_time ?? '5' }} min read
-                                </span>
+                        <div class="col-md-6">
+                            <div class="sort-options">
+                                <select class="form-select" id="sort-articles">
+                                    <option value="latest">Latest First</option>
+                                    <option value="popular">Most Popular</option>
+                                    <option value="trending">Trending</option>
+                                </select>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <h3 class="blog-title">
-                                <a href="{{ route('blog.show', $blog->slug) }}">
-                                    {{ Str::limit($blog->title, 70) }}
-                                </a>
-                            </h3>
-
-                            <p class="blog-excerpt">
-                                {{ Str::limit($blog->brief_description, 120) }}
-                            </p>
-
-                            <div class="blog-footer">
-                                <div class="blog-author">
-                                    <img src="{{ $blog->author->avatar_url ?? 'https://i.pravatar.cc/40?img=' . $blog->author_id }}"
-                                        class="blog-author-avatar"
-                                        alt="{{ $blog->author->name }}">
-                                    <div class="blog-author-info">
-                                        <span class="blog-author-name">{{ $blog->author->name }}</span>
-                                        <span class="blog-author-title">{{ $blog->author->title ?? 'Nutrition Expert' }}</span>
-                                    </div>
+                <!-- Blog Grid/List -->
+                <div class="blog-container grid-view" id="blogContainer">
+                    @foreach($blogs as $blog)
+                    <div class="blog-card">
+                        <div class="blog-card-inner">
+                            <div class="blog-image">
+                                <img src="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80' }}"
+                                    alt="{{ $blog->title }}">
+                                <div class="blog-image-overlay">
+                                    <a href="{{ route('blog.show', $blog->slug) }}" class="btn btn-primary btn-sm">
+                                        Read Article
+                                    </a>
                                 </div>
-                                <a href="{{ route('blog.show', $blog->slug) }}" class="blog-read-more">
-                                    Read More <i class="fas fa-arrow-right ms-1"></i>
-                                </a>
+                                <div class="blog-category">
+                                    {{ $blog->category }}
+                                </div>
+                                @if($blog->is_featured ?? false)
+                                <div class="blog-featured">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                @endif
+                            </div>
+                            
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <span class="blog-date">
+                                        <i class="far fa-calendar me-1"></i>
+                                        {{ $blog->published_at->format('M d, Y') }}
+                                    </span>
+                                    <span class="blog-read-time">
+                                        <i class="far fa-clock me-1"></i>
+                                        {{ $blog->read_time ?? '5' }} min read
+                                    </span>
+                                    @if($blog->views_count ?? 0 > 0)
+                                    <span class="blog-views">
+                                        <i class="far fa-eye me-1"></i>
+                                        {{ $blog->views_count ?? 0 }}
+                                    </span>
+                                    @endif
+                                </div>
+
+                                <h3 class="blog-title">
+                                    <a href="{{ route('blog.show', $blog->slug ) }}">
+                                        {{ Str::limit($blog->title, 70) }}
+                                    </a>
+                                </h3>
+
+                                <p class="blog-excerpt">
+                                    {{ Str::limit($blog->brief_description, 120) }}
+                                </p>
+
+                                <div class="blog-tags">
+                                    @php
+                                        $tags = explode(',', $blog->tags ?? '');
+                                    @endphp
+                                    @foreach(array_slice($tags, 0, 3) as $tag)
+                                        @if(trim($tag))
+                                        <span class="blog-tag">{{ trim($tag) }}</span>
+                                        @endif
+                                    @endforeach
+                                </div>
+
+                                <div class="blog-footer">
+                                    <div class="blog-author">
+                                        <img src="{{ $blog->author->avatar_url ?? 'https://i.pravatar.cc/40?img=' . $blog->author_id }}"
+                                            class="blog-author-avatar"
+                                            alt="{{ $blog->author->name }}">
+                                        <div class="blog-author-info">
+                                            <span class="blog-author-name">{{ $blog->author->name }}</span>
+                                            <span class="blog-author-title">{{ $blog->author->title ?? 'Nutrition Expert' }}</span>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('blog.show', $blog->slug) }}" class="blog-read-more">
+                                        Continue Reading <i class="fas fa-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,52 +191,74 @@
 
                 <!-- Pagination -->
                 @if($blogs->hasPages())
-                <div class="blog-pagination mt-5">
-                    {{ $blogs->links('vendor.pagination.custom') }}
+                <div class="pagination-wrapper mt-5">
+                    <div class="pagination-container">
+                        <div class="pagination-info">
+                            <span class="pagination-text">
+                                Showing {{ $blogs->firstItem() }}-{{ $blogs->lastItem() }} 
+                                of {{ $blogs->total() }} articles
+                            </span>
+                        </div>
+                        <div class="pagination-links">
+                            {{ $blogs->onEachSide(1)->links('vendor.pagination.custom') }}
+                        </div>
+                    </div>
                 </div>
                 @endif
             </div>
 
             <!-- Sidebar -->
             <div class="col-lg-4">
-                <div class="sidebar">
+                <div class="blog-sidebar">
                     <!-- Search -->
-                    <div class="sidebar-widget">
-                        <h4 class="sidebar-title">Search Articles</h4>
+                    <div class="sidebar-widget search-widget">
+                        <h4 class="widget-title">
+                            <i class="fas fa-search me-2"></i> Search Articles
+                        </h4>
                         <form action="{{ route('blog.index') }}" method="GET" class="blog-search-form">
                             <div class="input-group">
                                 <input type="text"
                                     class="form-control"
                                     name="search"
-                                    placeholder="Search articles..."
-                                    value="{{ request('search') }}">
+                                    placeholder="Search for articles..."
+                                    value="{{ request('search') }}"
+                                    aria-label="Search articles">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
+                            </div>
+                            <div class="search-suggestions mt-2">
+                                <small class="text-muted">Try: recipes, health benefits, cooking tips</small>
                             </div>
                         </form>
                     </div>
 
                     <!-- Categories -->
-                    <!-- Categories -->
-                    <div class="sidebar-widget">
-                        <h4 class="sidebar-title">Categories</h4>
-                        <div class="sidebar-categories">
+                    <div class="sidebar-widget categories-widget">
+                        <h4 class="widget-title">
+                            <i class="fas fa-folder me-2"></i> Categories
+                        </h4>
+                        <div class="categories-list">
                             <a href="{{ route('blog.index') }}"
-                                class="sidebar-category {{ !request('category') ? 'active' : '' }}">
-                                All Articles
+                                class="category-item {{ !request('category') ? 'active' : '' }}">
+                                <div class="category-content">
+                                    <i class="fas fa-th-large me-2"></i>
+                                    <span class="category-name">All Articles</span>
+                                </div>
                                 <span class="category-count">{{ $totalPosts ?? 0 }}</span>
                             </a>
                             @foreach($categories as $category)
                             @php
-                            // Determine if current category is array or object
-                            $categoryName = is_array($category) ? $category['name'] : $category;
-                            $categorySlug = is_array($category) ? $category['slug'] : strtolower(str_replace(' ', '-', $category));
-                            $categoryCount = is_array($category) ? $category['posts_count'] : 0;
+                                $categoryName = is_array($category) ? $category['name'] : $category;
+                                $categorySlug = is_array($category) ? $category['slug'] : strtolower(str_replace(' ', '-', $category));
+                                $categoryCount = is_array($category) ? $category['posts_count'] : 0;
                             @endphp
                             <a href="{{ route('blog.index', ['category' => $categorySlug]) }}"
-                                class="sidebar-category {{ request('category') == $categorySlug ? 'active' : '' }}">
-                                {{ $categoryName }}
+                                class="category-item {{ request('category') == $categorySlug ? 'active' : '' }}">
+                                <div class="category-content">
+                                    <i class="fas fa-folder me-2"></i>
+                                    <span class="category-name">{{ $categoryName }}</span>
+                                </div>
                                 <span class="category-count">{{ $categoryCount }}</span>
                             </a>
                             @endforeach
@@ -155,11 +266,13 @@
                     </div>
 
                     <!-- Recent Posts -->
-                    <div class="sidebar-widget">
-                        <h4 class="sidebar-title">Recent Articles</h4>
-                        <div class="sidebar-recent-posts">
+                    <div class="sidebar-widget recent-posts-widget">
+                        <h4 class="widget-title">
+                            <i class="fas fa-history me-2"></i> Recent Articles
+                        </h4>
+                        <div class="recent-posts-list">
                             @foreach($recentPosts as $recent)
-                            <div class="recent-post">
+                            <div class="recent-post-item">
                                 <a href="{{ route('blog.show', $recent->slug) }}" class="recent-post-link">
                                     <div class="recent-post-image">
                                         <img src="{{ $recent->featured_image ? asset('storage/' . $recent->featured_image) : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80' }}"
@@ -167,9 +280,15 @@
                                     </div>
                                     <div class="recent-post-content">
                                         <h6 class="recent-post-title">{{ Str::limit($recent->title, 50) }}</h6>
-                                        <span class="recent-post-date">
-                                            {{ $recent->published_at->format('M d, Y') }}
-                                        </span>
+                                        <div class="recent-post-meta">
+                                            <span class="recent-post-date">
+                                                <i class="far fa-calendar me-1"></i>
+                                                {{ $recent->published_at->format('M d') }}
+                                            </span>
+                                            <span class="recent-post-category">
+                                                {{ $recent->category }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </a>
                             </div>
@@ -177,35 +296,19 @@
                         </div>
                     </div>
 
-                    <!-- Popular Tags -->
-                    <div class="sidebar-widget">
-                        <h4 class="sidebar-title">Popular Topics</h4>
-                        <div class="sidebar-tags">
-                            @php
-                            $tags = ['Recipes', 'Health Benefits', 'Nutrition', 'Cooking Tips', 'Wellness',
-                            'Almonds', 'Walnuts', 'Pistachios', 'Dates', 'Apricots', 'Organic',
-                            'Healthy Snacks', 'Superfoods', 'Heart Health', 'Weight Management'];
-                            @endphp
-                            @foreach($tags as $tag)
-                            <a href="{{ route('blog.index', ['tag' => $tag]) }}"
-                                class="sidebar-tag {{ request('tag') == $tag ? 'active' : '' }}">
-                                {{ $tag }}
-                            </a>
-                            @endforeach
-                        </div>
-                    </div>
-
                     <!-- Newsletter -->
-                    <div class="sidebar-widget" id="newsletter">
-                        <div class="sidebar-newsletter">
-                            <div class="newsletter-icon">
-                                <i class="fas fa-newspaper"></i>
+                    <div class="sidebar-widget newsletter-widget" id="newsletter">
+                        <div class="newsletter-card">
+                            <div class="newsletter-header">
+                                <div class="newsletter-icon">
+                                    <i class="fas fa-paper-plane"></i>
+                                </div>
+                                <h5>Subscribe to Our Blog</h5>
                             </div>
-                            <h5>Subscribe to Our Blog</h5>
-                            <p class="text-muted">
+                            <p class="newsletter-text">
                                 Get the latest articles, recipes, and health tips delivered to your inbox.
                             </p>
-                            <form class="sidebar-newsletter-form">
+                            <form class="newsletter-form" id="sidebar-newsletter-form">
                                 <div class="form-group">
                                     <input type="email"
                                         class="form-control"
@@ -213,53 +316,105 @@
                                         required>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fas fa-paper-plane me-2"></i> Subscribe
+                                    <i class="fas fa-paper-plane me-2"></i> Subscribe Now
                                 </button>
-                                <p class="form-text text-muted mt-2">
-                                    We respect your privacy. Unsubscribe at any time.
+                                <p class="newsletter-disclaimer">
+                                    <i class="fas fa-lock me-1"></i> We respect your privacy. Unsubscribe at any time.
                                 </p>
                             </form>
                         </div>
                     </div>
 
+                    <!-- Popular Tags -->
+                    <div class="sidebar-widget tags-widget">
+                        <h4 class="widget-title">
+                            <i class="fas fa-tags me-2"></i> Popular Topics
+                        </h4>
+                        <div class="tags-cloud">
+                            @php
+                                $tags = ['Recipes', 'Health Benefits', 'Nutrition', 'Cooking Tips', 'Wellness',
+                                'Almonds', 'Walnuts', 'Pistachios', 'Dates', 'Apricots', 'Organic',
+                                'Healthy Snacks', 'Superfoods', 'Heart Health', 'Weight Management'];
+                            @endphp
+                            @foreach($tags as $tag)
+                            <a href="{{ route('blog.index', ['tag' => $tag]) }}"
+                                class="tag-item {{ request('tag') == $tag ? 'active' : '' }}">
+                                {{ $tag }}
+                            </a>
+                            @endforeach
+                        </div>
+                    </div>
+
                     <!-- Featured Products -->
-                    <div class="sidebar-widget">
-                        <h4 class="sidebar-title">Featured Products</h4>
-                        <div class="sidebar-products">
-                            <div class="sidebar-product">
-                                <div class="sidebar-product-image">
-                                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                        alt="Premium Almonds">
-                                </div>
-                                <div class="sidebar-product-content">
-                                    <h6 class="sidebar-product-title">California Almonds</h6>
-                                    <div class="sidebar-product-price">$24.99</div>
-                                </div>
+                    <div class="sidebar-widget products-widget">
+                        <h4 class="widget-title">
+                            <i class="fas fa-gift me-2"></i> Featured Products
+                        </h4>
+                        <div class="products-list">
+                            <div class="product-item">
+                                <a href="#" class="product-link">
+                                    <div class="product-image">
+                                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                                            alt="Premium Almonds">
+                                    </div>
+                                    <div class="product-content">
+                                        <h6 class="product-title">California Almonds</h6>
+                                        <div class="product-price">$24.99</div>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="sidebar-product">
-                                <div class="sidebar-product-image">
-                                    <img src="https://images.unsplash.com/photo-1598965675045-45c0c0f58c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                        alt="Turkish Apricots">
-                                </div>
-                                <div class="sidebar-product-content">
-                                    <h6 class="sidebar-product-title">Turkish Apricots</h6>
-                                    <div class="sidebar-product-price">$18.99</div>
-                                </div>
+                            <div class="product-item">
+                                <a href="#" class="product-link">
+                                    <div class="product-image">
+                                        <img src="https://images.unsplash.com/photo-1598965675045-45c0c0f58c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                                            alt="Turkish Apricots">
+                                    </div>
+                                    <div class="product-content">
+                                        <h6 class="product-title">Turkish Apricots</h6>
+                                        <div class="product-price">$18.99</div>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="sidebar-product">
-                                <div class="sidebar-product-image">
-                                    <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
-                                        alt="Iranian Pistachios">
-                                </div>
-                                <div class="sidebar-product-content">
-                                    <h6 class="sidebar-product-title">Iranian Pistachios</h6>
-                                    <div class="sidebar-product-price">$29.99</div>
-                                </div>
+                            <div class="product-item">
+                                <a href="#" class="product-link">
+                                    <div class="product-image">
+                                        <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                                            alt="Iranian Pistachios">
+                                    </div>
+                                    <div class="product-content">
+                                        <h6 class="product-title">Iranian Pistachios</h6>
+                                        <div class="product-price">$29.99</div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
-                        <div class="text-center mt-3">
-                            <a href="{{ route('shop.index') }}" class="btn btn-outline btn-sm">
-                                Shop All Products <i class="fas fa-arrow-right ms-1"></i>
+                        <div class="widget-footer">
+                            <a href="{{ route('shop.index') }}" class="btn btn-outline btn-sm w-100">
+                                <i class="fas fa-store me-2"></i> Shop All Products
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Social Follow -->
+                    <div class="sidebar-widget social-widget">
+                        <h4 class="widget-title">
+                            <i class="fas fa-share-alt me-2"></i> Follow Us
+                        </h4>
+                        <div class="social-links">
+                            <a href="#" class="social-link facebook" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-link instagram" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="social-link twitter" aria-label="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-link pinterest" aria-label="Pinterest">
+                                <i class="fab fa-pinterest-p"></i>
+                            </a>
+                            <a href="#" class="social-link youtube" aria-label="YouTube">
+                                <i class="fab fa-youtube"></i>
                             </a>
                         </div>
                     </div>
@@ -271,44 +426,45 @@
 
 <!-- Featured Article -->
 @if($featuredBlog)
-<section class="py-5 bg-light">
+<section class="featured-article-section py-5">
     <div class="container">
         <div class="section-header mb-5">
             <h2 class="section-title">Featured Article</h2>
-            <p class="text-muted">Don't miss our most popular post</p>
+            <p class="section-subtitle">Don't miss our most popular post</p>
         </div>
 
-        <div class="featured-article">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="featured-article-image">
-                        <img src="{{ $featuredBlog->featured_image ? asset('storage/' . $featuredBlog->featured_image) : 'https://images.unsplash.com/photo-1490818387583-1baba5e638af?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}"
-                            alt="{{ $featuredBlog->title }}">
-                        <div class="featured-badge">Featured</div>
+        <div class="featured-article-card">
+            <div class="featured-article-wrapper">
+                <div class="featured-article-image">
+                    <img src="{{ $featuredBlog->featured_image ? asset('storage/' . $featuredBlog->featured_image) : 'https://images.unsplash.com/photo-1490818387583-1baba5e638af?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}"
+                        alt="{{ $featuredBlog->title }}">
+                    <div class="featured-badge">
+                        <i class="fas fa-star me-2"></i> Featured
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="featured-article-content">
-                        <div class="featured-category">
-                            {{ $featuredBlog->category }}
-                        </div>
-                        <h3 class="featured-title">{{ $featuredBlog->title }}</h3>
-                        <p class="featured-excerpt">
-                            {{ Str::limit($featuredBlog->brief_description, 200) }}
-                        </p>
-                        <div class="featured-meta">
-                            <div class="featured-author">
-                                <img src="{{ $featuredBlog->author->avatar_url ?? 'https://i.pravatar.cc/40?img=' . $featuredBlog->author_id }}"
-                                    alt="{{ $featuredBlog->author->name }}">
-                                <div>
-                                    <div class="author-name">{{ $featuredBlog->author->name }}</div>
-                                    <div class="article-date">{{ $featuredBlog->published_at->format('F d, Y') }}</div>
+                <div class="featured-article-content">
+                    <div class="featured-category">
+                        {{ $featuredBlog->category }}
+                    </div>
+                    <h3 class="featured-title">{{ $featuredBlog->title }}</h3>
+                    <p class="featured-excerpt">
+                        {{ Str::limit($featuredBlog->brief_description, 200) }}
+                    </p>
+                    <div class="featured-meta">
+                        <div class="featured-author">
+                            <img src="{{ $featuredBlog->author->avatar_url ?? 'https://i.pravatar.cc/40?img=' . $featuredBlog->author_id }}"
+                                alt="{{ $featuredBlog->author->name }}">
+                            <div>
+                                <div class="author-name">{{ $featuredBlog->author->name }}</div>
+                                <div class="article-date">
+                                    <i class="far fa-calendar me-1"></i>
+                                    {{ $featuredBlog->published_at->format('F d, Y') }}
                                 </div>
                             </div>
-                            <a href="{{ route('blog.show', $featuredBlog->slug) }}" class="btn btn-primary">
-                                Read Full Article
-                            </a>
                         </div>
+                        <a href="{{ route('blog.show', $featuredBlog->slug) }}" class="btn btn-primary btn-lg">
+                            Read Full Article <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -320,28 +476,28 @@
 <!-- Newsletter Section -->
 <section class="newsletter-section py-5">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h2 class="text-white mb-3">Never Miss an Update</h2>
-                <p class="text-white mb-0">
+        <div class="newsletter-container">
+            <div class="newsletter-content">
+                <h2 class="newsletter-title">Never Miss an Update</h2>
+                <p class="newsletter-text">
                     Subscribe to our newsletter for exclusive recipes, health tips,
                     special offers, and the latest articles from our blog.
                 </p>
             </div>
-            <div class="col-lg-6">
-                <form class="newsletter-form">
-                    <div class="form-group">
+            <div class="newsletter-form-wrapper">
+                <form class="newsletter-form" id="main-newsletter-form">
+                    <div class="input-group">
                         <input type="email"
                             class="form-control"
                             placeholder="Enter your email address"
                             required
                             aria-label="Email for newsletter">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            Subscribe <i class="fas fa-paper-plane ms-2"></i>
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-light btn-lg mt-3">
-                        Subscribe <i class="fas fa-paper-plane ms-2"></i>
-                    </button>
-                    <p class="form-text text-white mt-2">
-                        We respect your privacy. Unsubscribe at any time.
+                    <p class="newsletter-disclaimer">
+                        <i class="fas fa-lock me-1"></i> We respect your privacy. Unsubscribe at any time.
                     </p>
                 </form>
             </div>
@@ -352,28 +508,241 @@
 
 @push('styles')
 <style>
-    /* Blog Grid */
-    .blog-grid {
-        display: grid;
-        gap: var(--space-xl);
+    /* Blog Hero Section */
+    .blog-hero {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+        position: relative;
+        overflow: hidden;
+        padding: var(--space-2xl) 0;
     }
 
+    .blog-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(17, 80, 40, 0.1) 0%, transparent 40%);
+    }
+
+    .hero-content .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: white;
+        padding: 8px 16px;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        margin-bottom: var(--space-lg);
+        font-size: var(--text-sm);
+    }
+
+    .hero-content .hero-title {
+        color: white;
+        font-size: var(--text-4xl);
+        margin-bottom: var(--space-md);
+    }
+
+    .hero-content .hero-subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: var(--text-lg);
+        margin-bottom: var(--space-xl);
+        line-height: 1.6;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: var(--space-md);
+    }
+
+    .hero-image-wrapper {
+        position: relative;
+    }
+
+    .hero-image {
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-xl);
+        position: relative;
+    }
+
+    .hero-image img {
+        width: 100%;
+        height: auto;
+        transition: transform 0.6s ease;
+    }
+
+    .hero-image:hover img {
+        transform: scale(1.05);
+    }
+
+    .hero-image-badge {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background: var(--gradient-gold);
+        color: var(--text-primary);
+        padding: 8px 16px;
+        border-radius: var(--radius-full);
+        font-weight: 700;
+        box-shadow: var(--shadow-lg);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    /* Page Header */
+    .page-header {
+        text-align: center;
+        padding-bottom: var(--space-lg);
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .page-title {
+        font-size: var(--text-3xl);
+        color: var(--text-primary);
+        margin-bottom: var(--space-sm);
+    }
+
+    .page-subtitle {
+        color: var(--text-secondary);
+        font-size: var(--text-lg);
+    }
+
+    .quick-stats {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-xl);
+        margin-top: var(--space-lg);
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-bottom: var(--space-xs);
+    }
+
+    .stat-number {
+        display: block;
+        font-size: var(--text-2xl);
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .stat-label {
+        display: block;
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+        background: var(--surface-color);
+        padding: var(--space-md);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+    }
+
+    .view-options {
+        display: flex;
+        gap: var(--space-xs);
+    }
+
+    .view-option {
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition-normal);
+    }
+
+    .view-option:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .view-option.active {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+    .sort-options .form-select {
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 10px 16px;
+        border-radius: var(--radius-md);
+        font-weight: 500;
+    }
+
+    /* Blog Container */
+    .blog-container {
+        transition: all 0.3s ease;
+    }
+
+    .grid-view {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--space-lg);
+    }
+
+    .list-view .blog-card {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .list-view .blog-image {
+        flex: 0 0 300px;
+        height: auto;
+    }
+
+    .list-view .blog-content {
+        flex: 1;
+    }
+
+    /* Blog Card */
     .blog-card {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .blog-card-inner {
         background: var(--surface-color);
         border-radius: var(--radius-lg);
         overflow: hidden;
         box-shadow: var(--shadow-md);
-        transition: var(--transition-normal);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: 1px solid var(--border-color);
     }
 
-    .blog-card:hover {
+    .blog-card:hover .blog-card-inner {
         transform: translateY(-5px);
         box-shadow: var(--shadow-xl);
+        border-color: var(--accent-color);
     }
 
     .blog-image {
         position: relative;
-        height: 250px;
+        height: 220px;
         overflow: hidden;
     }
 
@@ -385,7 +754,25 @@
     }
 
     .blog-card:hover .blog-image img {
-        transform: scale(1.05);
+        transform: scale(1.1);
+    }
+
+    .blog-image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent, rgba(17, 80, 40, 0.8));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: var(--transition-normal);
+    }
+
+    .blog-card:hover .blog-image-overlay {
+        opacity: 1;
     }
 
     .blog-category {
@@ -394,10 +781,26 @@
         left: 20px;
         background: var(--gradient-primary);
         color: white;
-        padding: 6px 12px;
+        padding: 6px 16px;
         border-radius: var(--radius-full);
         font-size: var(--text-sm);
         font-weight: 600;
+        z-index: 2;
+    }
+
+    .blog-featured {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--gradient-gold);
+        color: var(--text-primary);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
     }
 
     .blog-content {
@@ -406,10 +809,12 @@
 
     .blog-meta {
         display: flex;
-        gap: var(--space-lg);
+        align-items: center;
+        gap: var(--space-md);
         margin-bottom: var(--space-sm);
         font-size: var(--text-sm);
         color: var(--text-muted);
+        flex-wrap: wrap;
     }
 
     .blog-meta i {
@@ -436,6 +841,29 @@
         color: var(--text-secondary);
         margin-bottom: var(--space-lg);
         line-height: 1.6;
+        font-size: var(--text-base);
+    }
+
+    .blog-tags {
+        display: flex;
+        gap: var(--space-xs);
+        flex-wrap: wrap;
+        margin-bottom: var(--space-lg);
+    }
+
+    .blog-tag {
+        background: var(--background-color);
+        color: var(--text-secondary);
+        padding: 4px 10px;
+        border-radius: var(--radius-full);
+        font-size: var(--text-xs);
+        font-weight: 500;
+        transition: var(--transition-fast);
+    }
+
+    .blog-tag:hover {
+        background: var(--primary-color);
+        color: white;
     }
 
     .blog-footer {
@@ -457,6 +885,7 @@
         height: 40px;
         border-radius: 50%;
         object-fit: cover;
+        border: 2px solid var(--border-color);
     }
 
     .blog-author-info {
@@ -480,45 +909,51 @@
         font-weight: 600;
         font-size: var(--text-sm);
         transition: var(--transition-fast);
+        display: flex;
+        align-items: center;
     }
 
     .blog-read-more:hover {
         color: var(--primary-dark);
+        transform: translateX(5px);
     }
 
     /* Pagination */
-    .blog-pagination {
-        text-align: center;
+    .pagination-wrapper {
+        background: var(--surface-color);
+        padding: var(--space-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
     }
 
-    .blog-pagination .pagination {
+    .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--space-md);
+    }
+
+    .pagination-info {
+        flex-shrink: 0;
+    }
+
+    .pagination-text {
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .pagination-links {
+        flex: 1;
+        display: flex;
         justify-content: center;
     }
 
-    .blog-pagination .page-item .page-link {
-        border: 2px solid var(--border-color);
-        color: var(--primary-color);
-        margin: 0 4px;
-        border-radius: var(--radius-md);
-        transition: var(--transition-fast);
-    }
-
-    .blog-pagination .page-item.active .page-link {
-        background: var(--gradient-primary);
-        border-color: var(--primary-color);
-        color: white;
-    }
-
-    .blog-pagination .page-item .page-link:hover {
-        background: var(--primary-light);
-        border-color: var(--primary-color);
-        color: white;
-    }
-
     /* Sidebar */
-    .sidebar {
+    .blog-sidebar {
         position: sticky;
-        top: 100px;
+        top: calc(var(--header-height) + var(--space-lg));
     }
 
     .sidebar-widget {
@@ -527,41 +962,54 @@
         padding: var(--space-lg);
         margin-bottom: var(--space-lg);
         box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        transition: var(--transition-normal);
     }
 
-    .sidebar-title {
+    .sidebar-widget:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .widget-title {
         font-size: var(--text-lg);
         color: var(--primary-color);
         margin-bottom: var(--space-md);
         padding-bottom: var(--space-sm);
         border-bottom: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
     }
 
-    /* Search Form */
-    .blog-search-form .input-group {
+    /* Search Widget */
+    .search-widget .input-group {
         border-radius: var(--radius-md);
         overflow: hidden;
     }
 
-    .blog-search-form .form-control {
+    .search-widget .form-control {
         border: 2px solid var(--border-color);
         border-right: none;
     }
 
-    .blog-search-form .btn {
+    .search-widget .btn {
         border: 2px solid var(--primary-color);
         background: var(--primary-color);
         color: white;
     }
 
-    /* Categories */
-    .sidebar-categories {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-sm);
+    .search-suggestions {
+        font-size: var(--text-sm);
     }
 
-    .sidebar-category {
+    /* Categories Widget */
+    .categories-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+
+    .category-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -570,13 +1018,23 @@
         color: var(--text-secondary);
         text-decoration: none;
         transition: var(--transition-fast);
+        border-left: 3px solid transparent;
     }
 
-    .sidebar-category:hover,
-    .sidebar-category.active {
+    .category-item:hover,
+    .category-item.active {
         background: var(--primary-light);
         color: white;
-        padding-left: var(--space-md);
+        border-left-color: var(--accent-color);
+    }
+
+    .category-content {
+        display: flex;
+        align-items: center;
+    }
+
+    .category-name {
+        font-weight: 500;
     }
 
     .category-count {
@@ -586,18 +1044,31 @@
         border-radius: var(--radius-full);
         font-size: var(--text-xs);
         font-weight: 600;
+        min-width: 30px;
+        text-align: center;
     }
 
-    .sidebar-category.active .category-count {
+    .category-item:hover .category-count,
+    .category-item.active .category-count {
         background: white;
         color: var(--primary-color);
     }
 
-    /* Recent Posts */
-    .sidebar-recent-posts {
+    /* Recent Posts Widget */
+    .recent-posts-list {
         display: flex;
         flex-direction: column;
         gap: var(--space-md);
+    }
+
+    .recent-post-item {
+        padding-bottom: var(--space-md);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .recent-post-item:last-child {
+        padding-bottom: 0;
+        border-bottom: none;
     }
 
     .recent-post-link {
@@ -612,8 +1083,8 @@
     }
 
     .recent-post-image {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
         flex-shrink: 0;
         border-radius: var(--radius-md);
         overflow: hidden;
@@ -632,47 +1103,44 @@
     .recent-post-title {
         color: var(--text-primary);
         font-size: var(--text-sm);
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         line-height: 1.4;
+        font-weight: 600;
     }
 
-    .recent-post-date {
+    .recent-post-meta {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
         font-size: var(--text-xs);
         color: var(--text-muted);
     }
 
-    /* Tags */
-    .sidebar-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--space-xs);
-    }
-
-    .sidebar-tag {
-        padding: 6px 12px;
+    .recent-post-category {
         background: var(--border-color);
-        color: var(--text-secondary);
-        border-radius: var(--radius-md);
-        text-decoration: none;
-        font-size: var(--text-sm);
-        transition: var(--transition-fast);
-    }
-
-    .sidebar-tag:hover,
-    .sidebar-tag.active {
-        background: var(--gradient-primary);
-        color: white;
+        color: var(--text-muted);
+        padding: 2px 8px;
+        border-radius: var(--radius-sm);
+        font-size: 11px;
     }
 
     /* Newsletter Widget */
-    .sidebar-newsletter {
+    .newsletter-card {
         text-align: center;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        border-radius: var(--radius-lg);
+        padding: var(--space-xl);
+        color: white;
+    }
+
+    .newsletter-header {
+        margin-bottom: var(--space-md);
     }
 
     .newsletter-icon {
         width: 60px;
         height: 60px;
-        background: var(--gradient-primary);
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -682,74 +1150,192 @@
         font-size: 1.5rem;
     }
 
-    .sidebar-newsletter h5 {
+    .newsletter-card h5 {
         margin-bottom: var(--space-sm);
-        color: var(--primary-color);
+        color: white;
     }
 
-    .sidebar-newsletter-form .form-control {
-        margin-bottom: var(--space-sm);
+    .newsletter-text {
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: var(--space-lg);
+        line-height: 1.5;
     }
 
-    /* Featured Products */
-    .sidebar-products {
+    .newsletter-form .form-control {
+        margin-bottom: var(--space-sm);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .newsletter-form .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .newsletter-disclaimer {
+        font-size: var(--text-xs);
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: var(--space-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Tags Widget */
+    .tags-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+    }
+
+    .tag-item {
+        padding: 6px 12px;
+        background: var(--border-color);
+        color: var(--text-secondary);
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        font-size: var(--text-sm);
+        transition: var(--transition-fast);
+    }
+
+    .tag-item:hover,
+    .tag-item.active {
+        background: var(--gradient-primary);
+        color: white;
+    }
+
+    /* Products Widget */
+    .products-list {
         display: flex;
         flex-direction: column;
         gap: var(--space-md);
     }
 
-    .sidebar-product {
+    .product-item {
+        padding-bottom: var(--space-md);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .product-item:last-child {
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .product-link {
         display: flex;
-        align-items: center;
         gap: var(--space-sm);
-        padding: var(--space-sm);
-        border-radius: var(--radius-md);
-        background: var(--background-color);
+        text-decoration: none;
         transition: var(--transition-fast);
     }
 
-    .sidebar-product:hover {
+    .product-link:hover {
         transform: translateX(5px);
-        box-shadow: var(--shadow-sm);
     }
 
-    .sidebar-product-image {
-        width: 50px;
-        height: 50px;
+    .product-image {
+        width: 60px;
+        height: 60px;
+        flex-shrink: 0;
         border-radius: var(--radius-md);
         overflow: hidden;
-        flex-shrink: 0;
     }
 
-    .sidebar-product-image img {
+    .product-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
 
-    .sidebar-product-title {
-        font-size: var(--text-sm);
-        margin-bottom: 2px;
-        color: var(--text-primary);
+    .product-content {
+        flex: 1;
     }
 
-    .sidebar-product-price {
+    .product-title {
+        color: var(--text-primary);
+        font-size: var(--text-sm);
+        margin-bottom: 4px;
         font-weight: 600;
+    }
+
+    .product-price {
+        font-weight: 700;
         color: var(--primary-color);
         font-size: var(--text-sm);
     }
 
-    /* Featured Article */
-    .featured-article {
+    .widget-footer {
+        margin-top: var(--space-lg);
+    }
+
+    /* Social Widget */
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-sm);
+    }
+
+    .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        transition: var(--transition-normal);
+        font-size: 16px;
+    }
+
+    .social-link.facebook { background: #1877f2; }
+    .social-link.instagram { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); }
+    .social-link.twitter { background: #1da1f2; }
+    .social-link.pinterest { background: #e60023; }
+    .social-link.youtube { background: #ff0000; }
+
+    .social-link:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Featured Article Section */
+    .featured-article-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, var(--surface-color) 100%);
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: var(--space-xl);
+    }
+
+    .section-title {
+        font-size: var(--text-3xl);
+        color: var(--text-primary);
+        margin-bottom: var(--space-sm);
+    }
+
+    .section-subtitle {
+        color: var(--text-secondary);
+        font-size: var(--text-lg);
+    }
+
+    .featured-article-card {
         background: var(--surface-color);
         border-radius: var(--radius-xl);
         overflow: hidden;
         box-shadow: var(--shadow-xl);
+        border: 1px solid var(--border-color);
+    }
+
+    .featured-article-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
     }
 
     .featured-article-image {
         position: relative;
-        height: 400px;
+        min-height: 400px;
     }
 
     .featured-article-image img {
@@ -764,15 +1350,16 @@
         right: 20px;
         background: var(--gradient-gold);
         color: var(--primary-dark);
-        padding: 8px 16px;
+        padding: 8px 20px;
         border-radius: var(--radius-full);
         font-weight: 700;
         box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: center;
     }
 
     .featured-article-content {
         padding: var(--space-xl);
-        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -793,6 +1380,7 @@
         font-size: var(--text-3xl);
         margin-bottom: var(--space-md);
         line-height: 1.3;
+        color: var(--text-primary);
     }
 
     .featured-excerpt {
@@ -821,6 +1409,7 @@
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+        border: 2px solid var(--border-color);
     }
 
     .author-name {
@@ -831,106 +1420,119 @@
     .article-date {
         font-size: var(--text-sm);
         color: var(--text-muted);
+        display: flex;
+        align-items: center;
     }
 
-    /* Responsive Design */
-    @media (max-width: 992px) {
-        .sidebar {
-            position: static;
-            margin-top: var(--space-xl);
-        }
-
-        .featured-article-image {
-            height: 300px;
-        }
-
-        .featured-title {
-            font-size: var(--text-2xl);
-        }
+    /* Newsletter Section */
+    .newsletter-section {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 50%, var(--accent-color) 100%);
+        position: relative;
+        overflow: hidden;
     }
 
-    @media (max-width: 768px) {
-        .blog-grid {
-            gap: var(--space-lg);
-        }
-
-        .blog-image {
-            height: 200px;
-        }
-
-        .blog-title {
-            font-size: var(--text-lg);
-        }
-
-        .blog-footer {
-            flex-direction: column;
-            gap: var(--space-md);
-            align-items: flex-start;
-        }
-
-        .blog-read-more {
-            align-self: flex-end;
-        }
-
-        .featured-article-content {
-            padding: var(--space-lg);
-        }
-
-        .featured-meta {
-            flex-direction: column;
-            align-items: flex-start;
-        }
+    .newsletter-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
     }
 
-    @media (max-width: 576px) {
-        .blog-meta {
-            flex-direction: column;
-            gap: var(--space-xs);
-        }
+    .newsletter-container {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-xl);
+    }
 
-        .featured-title {
-            font-size: var(--text-xl);
-        }
+    .newsletter-content {
+        flex: 1;
+    }
 
-        .featured-excerpt {
-            font-size: var(--text-base);
-        }
+    .newsletter-title {
+        color: white;
+        font-size: var(--text-2xl);
+        font-weight: 700;
+        margin-bottom: var(--space-sm);
+    }
 
-        .sidebar-product {
-            flex-direction: column;
-            text-align: center;
-        }
+    .newsletter-text {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: var(--text-lg);
+        line-height: 1.5;
+    }
+
+    .newsletter-form-wrapper {
+        flex: 1;
+        max-width: 500px;
+    }
+
+    .newsletter-form .input-group {
+        display: flex;
+        gap: var(--space-sm);
+    }
+
+    .newsletter-form .form-control {
+        flex: 1;
+        padding: 16px 24px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-full);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: var(--text-base);
+        transition: var(--transition-normal);
+    }
+
+    .newsletter-form .form-control:focus {
+        outline: none;
+        border-color: white;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .newsletter-form .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
     }
 
     /* Animations */
-    @keyframes fadeInUp {
+    @keyframes fadeIn {
         from {
             opacity: 0;
             transform: translateY(20px);
         }
-
         to {
             opacity: 1;
             transform: translateY(0);
         }
     }
 
-    .blog-card,
-    .sidebar-widget,
-    .featured-article {
-        animation: fadeInUp 0.6s ease-out;
+    .animate-slide-up {
+        animation: slideUp 0.8s ease;
     }
 
-    .blog-card:nth-child(2) {
-        animation-delay: 0.1s;
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    .blog-card:nth-child(3) {
+    .delay-1 {
         animation-delay: 0.2s;
     }
 
-    .blog-card:nth-child(4) {
-        animation-delay: 0.3s;
+    .delay-2 {
+        animation-delay: 0.4s;
     }
 
     /* Loading States */
@@ -944,9 +1546,141 @@
         0% {
             background-position: -1000px 0;
         }
-
         100% {
             background-position: 1000px 0;
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .grid-view {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+        
+        .featured-article-wrapper {
+            gap: var(--space-lg);
+        }
+    }
+
+    @media (max-width: 992px) {
+        .blog-sidebar {
+            position: static;
+            margin-top: var(--space-xl);
+        }
+        
+        .featured-article-wrapper {
+            grid-template-columns: 1fr;
+        }
+        
+        .featured-article-image {
+            min-height: 300px;
+        }
+        
+        .hero-content .hero-title {
+            font-size: var(--text-3xl);
+        }
+        
+        .newsletter-container {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .newsletter-form-wrapper {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .grid-view {
+            grid-template-columns: 1fr;
+        }
+        
+        .list-view .blog-card {
+            flex-direction: column;
+        }
+        
+        .list-view .blog-image {
+            flex: 0 0 200px;
+        }
+        
+        .hero-content .hero-title {
+            font-size: var(--text-2xl);
+        }
+        
+        .hero-content .hero-subtitle {
+            font-size: var(--text-base);
+        }
+        
+        .hero-buttons {
+            flex-direction: column;
+        }
+        
+        .hero-buttons .btn {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .featured-title {
+            font-size: var(--text-2xl);
+        }
+        
+        .quick-stats {
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+        
+        .filter-bar {
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .pagination-container {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-content .hero-title {
+            font-size: var(--text-xl);
+        }
+        
+        .hero-content .hero-subtitle {
+            font-size: var(--text-sm);
+        }
+        
+        .page-title {
+            font-size: var(--text-2xl);
+        }
+        
+        .page-subtitle {
+            font-size: var(--text-base);
+        }
+        
+        .featured-title {
+            font-size: var(--text-xl);
+        }
+        
+        .featured-excerpt {
+            font-size: var(--text-base);
+        }
+        
+        .featured-meta {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .featured-meta .btn {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .newsletter-form .input-group {
+            flex-direction: column;
+        }
+        
+        .newsletter-form .btn {
+            width: 100%;
         }
     }
 </style>
@@ -955,7 +1689,35 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Blog search form submission with validation
+        // View toggle functionality
+        const viewOptions = document.querySelectorAll('.view-option');
+        const blogContainer = document.getElementById('blogContainer');
+        
+        viewOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const viewType = this.dataset.view;
+                
+                // Update active state
+                viewOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update view
+                blogContainer.classList.remove('grid-view', 'list-view');
+                blogContainer.classList.add(`${viewType}-view`);
+            });
+        });
+
+        // Sort functionality
+        const sortSelect = document.getElementById('sort-articles');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', function() {
+                const sortValue = this.value;
+                // In a real app, this would trigger an AJAX request or page reload
+                showToast(`Sorting articles by: ${this.options[this.selectedIndex].text}`, 'info');
+            });
+        }
+
+        // Search form enhancement
         const searchForm = document.querySelector('.blog-search-form');
         if (searchForm) {
             searchForm.addEventListener('submit', function(e) {
@@ -968,8 +1730,8 @@
             });
         }
 
-        // Newsletter form submission
-        const newsletterForms = document.querySelectorAll('.newsletter-form, .sidebar-newsletter-form');
+        // Newsletter forms
+        const newsletterForms = document.querySelectorAll('.newsletter-form');
         newsletterForms.forEach(form => {
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -1002,12 +1764,19 @@
             });
         });
 
-        // Blog category filtering
-        const categoryLinks = document.querySelectorAll('.sidebar-category');
+        // Category filtering with animation
+        const categoryLinks = document.querySelectorAll('.category-item');
         categoryLinks.forEach(link => {
             link.addEventListener('click', function(e) {
-                if (this.classList.contains('active')) {
-                    e.preventDefault();
+                if (!this.classList.contains('active')) {
+                    // Show loading animation
+                    showLoading();
+                    
+                    // In a real app, this would be handled by the link href
+                    // Here we just simulate a brief loading state
+                    setTimeout(() => {
+                        hideLoading();
+                    }, 500);
                 }
             });
         });
@@ -1024,213 +1793,92 @@
             });
         });
 
-        // Featured product hover effects
-        const featuredProducts = document.querySelectorAll('.sidebar-product');
-        featuredProducts.forEach(product => {
+        // Featured product click
+        const productItems = document.querySelectorAll('.product-link');
+        productItems.forEach(product => {
             product.addEventListener('click', function(e) {
                 e.preventDefault();
-                const title = this.querySelector('.sidebar-product-title').textContent;
-                showToast(`Added ${title} to cart!`, 'success');
+                const title = this.querySelector('.product-title').textContent;
+                showToast(`Viewing ${title} in shop`, 'info');
             });
         });
 
-        // Load more functionality (for infinite scroll)
-        let isLoading = false;
-        let page = 2;
-        const loadMoreObserver = new IntersectionObserver((entries) => {
+        // Social share buttons (simulated)
+        const socialLinks = document.querySelectorAll('.social-link');
+        socialLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const platform = this.classList[1]; // facebook, instagram, etc.
+                showToast(`Sharing on ${platform.charAt(0).toUpperCase() + platform.slice(1)}`, 'info');
+            });
+        });
+
+        // Lazy load images for better performance
+        const lazyImages = document.querySelectorAll('.blog-image img, .recent-post-image img');
+        
+        const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !isLoading) {
-                    loadMoreArticles();
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.1
+        });
+
+        lazyImages.forEach(img => imageObserver.observe(img));
+
+        // Scroll animations for blog cards
+        const blogObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.6s ease-out';
+                    blogObserver.unobserve(entry.target);
                 }
             });
         }, {
             threshold: 0.1
         });
 
-        const loadMoreTrigger = document.getElementById('loadMoreTrigger');
-        if (loadMoreTrigger) {
-            loadMoreObserver.observe(loadMoreTrigger);
-        }
-
-        async function loadMoreArticles() {
-            if (isLoading) return;
-
-            isLoading = true;
-
-            try {
-                const response = await fetch(`/api/blog?page=${page}`);
-                const data = await response.json();
-
-                if (data.success && data.blogs.length > 0) {
-                    // Append new blog cards
-                    const blogGrid = document.querySelector('.blog-grid');
-                    data.blogs.forEach(blog => {
-                        const blogCard = createBlogCard(blog);
-                        blogGrid.appendChild(blogCard);
-                    });
-
-                    page++;
-
-                    if (!data.hasMore) {
-                        loadMoreObserver.disconnect();
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading more articles:', error);
-            } finally {
-                isLoading = false;
-            }
-        }
-
-        function createBlogCard(blog) {
-            const card = document.createElement('div');
-            card.className = 'blog-card';
-            card.innerHTML = `
-            <div class="blog-image">
-                <img src="${blog.featured_image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'}" 
-                     alt="${blog.title}">
-                <div class="blog-category">
-                    ${blog.category}
-                </div>
-            </div>
-            <div class="blog-content">
-                <div class="blog-meta">
-                    <span class="blog-date">
-                        <i class="far fa-calendar me-1"></i>
-                        ${blog.published_at}
-                    </span>
-                    <span class="blog-read-time">
-                        <i class="far fa-clock me-1"></i>
-                        ${blog.read_time || '5'} min read
-                    </span>
-                </div>
-                <h3 class="blog-title">
-                    <a href="/blog/${blog.slug}">
-                        ${blog.title}
-                    </a>
-                </h3>
-                <p class="blog-excerpt">
-                    ${blog.excerpt}
-                </p>
-                <div class="blog-footer">
-                    <div class="blog-author">
-                        <img src="${blog.author.avatar || 'https://i.pravatar.cc/40'}" 
-                             class="blog-author-avatar" 
-                             alt="${blog.author.name}">
-                        <div class="blog-author-info">
-                            <span class="blog-author-name">${blog.author.name}</span>
-                            <span class="blog-author-title">${blog.author.title || 'Nutrition Expert'}</span>
-                        </div>
-                    </div>
-                    <a href="/blog/${blog.slug}" class="blog-read-more">
-                        Read More <i class="fas fa-arrow-right ms-1"></i>
-                    </a>
-                </div>
-            </div>
-        `;
-            return card;
-        }
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '50px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-slide-up');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements
-        document.querySelectorAll('.blog-card, .sidebar-widget, .featured-article')
-            .forEach(el => observer.observe(el));
+        blogCards.forEach(card => blogObserver.observe(card));
 
         // Email validation helper
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
+
+        // Loading functions
+        function showLoading() {
+            // In a real app, show a loading overlay
+            blogContainer.style.opacity = '0.5';
+            blogContainer.style.pointerEvents = 'none';
+        }
+
+        function hideLoading() {
+            blogContainer.style.opacity = '1';
+            blogContainer.style.pointerEvents = 'auto';
+        }
+
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
     });
 
-    // Toast notification function
+    // Toast notification function (using existing from main.js)
     function showToast(message, type = 'info') {
-        const container = document.getElementById('toastContainer');
-        if (!container) {
-            const container = document.createElement('div');
-            container.id = 'toastContainer';
-            container.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        `;
-            document.body.appendChild(container);
-        }
-
-        const toast = document.createElement('div');
-        toast.className = 'toast-notification';
-        toast.innerHTML = `
-        <div class="toast-content">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 
-                         type === 'error' ? 'fa-exclamation-circle' : 
-                         'fa-info-circle'} me-2"></i>
-            ${message}
-        </div>
-    `;
-
-        toast.style.cssText = `
-        background: ${type === 'success' ? '#27ae60' : 
-                     type === 'error' ? '#e74c3c' : '#3498db'};
-        color: white;
-        padding: 12px 20px;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        animation: slideInRight 0.3s ease;
-    `;
-
-        container.appendChild(toast);
-
-        setTimeout(() => {
-            toast.style.animation = 'slideOutRight 0.3s ease forwards';
-            setTimeout(() => {
-                if (toast.parentElement === container) {
-                    container.removeChild(toast);
-                }
-            }, 300);
-        }, 3000);
-    }
-
-    // Add CSS for toast animations
-    const style = document.createElement('style');
-    style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
+        if (window.showToast) {
+            window.showToast(message, type);
+        } else {
+            // Fallback simple toast
+            console.log(`${type}: ${message}`);
         }
     }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-    document.head.appendChild(style);
 </script>
 @endpush

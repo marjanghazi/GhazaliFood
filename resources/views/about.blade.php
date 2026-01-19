@@ -1,37 +1,39 @@
 @extends('layouts.app')
 
-@section('title', 'About Us | Premium Dry Fruits Store | Nuts & Berries')
+@section('title', 'About Us | Premium Dry Fruits Store | Ghazali Food')
 
 @section('hero')
 <!-- ==========================================================================
    Hero Section
    ========================================================================== -->
-
-<section class="hero-section">
+<section class="about-hero">
     <div class="container">
-        <div class="row align-items-center min-vh-70">
-            <div class="col-lg-6">
-                <h1 class="hero-title animate-slide-up">Our Story & Legacy</h1>
-                <p class="hero-subtitle animate-slide-up delay-1">
-                    Discover the journey of Nuts & Berries - from a passionate family business 
-                    to becoming the leading premium dry fruits store you trust today.
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <div class="hero-badge animate-bounce">
+                    <i class="fas fa-award me-2"></i> Trusted Since 2010
+                </div>
+                <h1 class="hero-title">Our Journey with Nature's Finest</h1>
+                <p class="hero-subtitle">
+                    From humble beginnings to becoming the leading premium dry fruits store,
+                    discover the story behind Ghazali Food's commitment to quality and tradition.
                 </p>
-                <div class="hero-buttons animate-slide-up delay-2">
-                    <a href="{{ route('shop.index') }}" class="btn btn-primary btn-lg">
-                        Shop Now <i class="fas fa-arrow-right ms-2"></i>
+                <div class="hero-actions">
+                    <a href="#our-story" class="btn btn-primary btn-lg">
+                        <i class="fas fa-book-open me-2"></i> Our Story
                     </a>
-                    <a href="#values" class="btn btn-outline btn-lg">
-                        Our Values
+                    <a href="{{ route('shop.index') }}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i> Shop Now
                     </a>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="hero-visual">
                 <div class="hero-image">
                     <img src="https://images.unsplash.com/photo-1542291025-1ec7e8e7cbc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                          alt="Premium Dry Fruits Collection"
-                         class="img-fluid rounded-3">
-                    <div class="hero-badge animate-bounce">
-                        <i class="fas fa-award me-2"></i> Since 2010
+                         class="img-fluid">
+                    <div class="hero-image-badge">
+                        <i class="fas fa-seedling me-2"></i> 100% Natural
                     </div>
                 </div>
             </div>
@@ -42,115 +44,99 @@
 
 @section('content')
 <!-- ==========================================================================
-   Our Journey Section
+   Our Story Section
    ========================================================================== -->
-
-<section class="py-5">
+<section class="story-section section-padding" id="our-story">
     <div class="container">
-        <div class="row align-items-center mb-5">
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <div class="story-image">
-                    <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                         alt="Our Journey"
-                         class="img-fluid rounded-3">
-                    <div class="story-badge">
-                        <i class="fas fa-seedling me-2"></i> Family Owned
+        <div class="section-header">
+            <h2 class="section-title">From Our Family to Yours</h2>
+            <p class="section-subtitle">A legacy of quality and tradition since 2010</p>
+        </div>
+        
+        <div class="story-timeline">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2010</div>
+                    <div class="timeline-content">
+                        <h4>Humble Beginnings</h4>
+                        <p>Started as a small family business with a passion for premium dry fruits</p>
+                    </div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2013</div>
+                    <div class="timeline-content">
+                        <h4>First International Sourcing</h4>
+                        <p>Began sourcing directly from orchards in California and Turkey</p>
+                    </div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2016</div>
+                    <div class="timeline-content">
+                        <h4>Quality Certification</h4>
+                        <p>Achieved organic and premium quality certifications</p>
+                    </div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2020</div>
+                    <div class="timeline-content">
+                        <h4>Online Expansion</h4>
+                        <p>Launched nationwide shipping and online store</p>
+                    </div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">Today</div>
+                    <div class="timeline-content">
+                        <h4>Trusted by Thousands</h4>
+                        <p>Serving families across the country with premium quality</p>
+                    </div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-heart"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="section-header">
-                    <h2 class="section-title">Our Humble Beginnings</h2>
-                    <p class="text-muted mb-4">A journey of passion and quality</p>
-                </div>
-                
-                <div class="story-content">
-                    <p class="lead mb-4">
-                        Founded in 2010, <strong>Nuts & Berries</strong> began with a simple vision: to bring 
-                        the world's finest dry fruits directly to your table.
-                    </p>
-                    <p class="mb-4">
-                        What started as a small family business has blossomed into a trusted name 
-                        in premium dry fruits. Our founder, a third-generation dry fruit trader, 
-                        combined traditional knowledge with modern quality standards to create 
-                        something truly special.
-                    </p>
-                    <p class="mb-0">
-                        Today, we source from the world's best orchards and farms, maintaining 
-                        our commitment to 100% natural, organic, and premium quality products 
-                        that families have trusted for over a decade.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ==========================================================================
-   Mission & Vision Section
-   ========================================================================== -->
-
-<section class="features-section py-5 bg-light">
-    <div class="container">
-        <div class="section-header mb-5">
-            <h2 class="section-title">Our Commitment</h2>
-            <p class="text-muted">Driven by purpose, guided by values</p>
         </div>
         
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon" style="background: var(--gradient-primary);">
-                    <i class="fas fa-bullseye"></i>
-                </div>
-                <h5 class="feature-title">Our Mission</h5>
-                <p class="text-muted">
-                    To deliver the purest, highest quality dry fruits while promoting 
-                    healthy living through natural nutrition.
-                </p>
+        <div class="story-quote">
+            <div class="quote-icon">
+                <i class="fas fa-quote-left"></i>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background: var(--gradient-secondary);">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <h5 class="feature-title">Our Vision</h5>
-                <p class="text-muted">
-                    To become the most trusted global brand for premium dry fruits, 
-                    setting new standards in quality and sustainability.
-                </p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background: var(--gradient-accent);">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <h5 class="feature-title">Our Passion</h5>
-                <p class="text-muted">
-                    We're passionate about bringing joy and health to families through 
-                    nature's finest offerings.
-                </p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background: var(--gradient-gold);">
-                    <i class="fas fa-handshake"></i>
-                </div>
-                <h5 class="feature-title">Our Promise</h5>
-                <p class="text-muted">
-                    Uncompromising quality, complete transparency, and your complete 
-                    satisfaction—guaranteed.
-                </p>
+            <p class="quote-text">
+                "Our journey began with a simple belief: that every family deserves access to 
+                the purest, highest quality dry fruits nature has to offer. This belief continues 
+                to guide every decision we make."
+            </p>
+            <div class="quote-author">
+                <strong>— Ahmed Al-Ghazali</strong><br>
+                <span>Founder & CEO</span>
             </div>
         </div>
     </div>
 </section>
 
 <!-- ==========================================================================
-   Our Values Section
+   Mission & Values Section
    ========================================================================== -->
-
-<section class="py-5" id="values">
+<section class="values-section section-padding bg-light">
     <div class="container">
-        <div class="section-header mb-5">
-            <h2 class="section-title">Our Core Values</h2>
-            <p class="text-muted">The principles that guide everything we do</p>
+        <div class="section-header">
+            <h2 class="section-title">Our Guiding Principles</h2>
+            <p class="section-subtitle">The values that shape everything we do</p>
         </div>
         
         <div class="values-grid">
@@ -159,11 +145,8 @@
                     <i class="fas fa-leaf"></i>
                 </div>
                 <div class="value-content">
-                    <h5>100% Natural</h5>
-                    <p class="text-muted">
-                        No preservatives, no additives. Just pure, natural goodness 
-                        from nature's finest sources.
-                    </p>
+                    <h4>Pure & Natural</h4>
+                    <p>100% natural products with no additives, preservatives, or artificial enhancements.</p>
                 </div>
             </div>
             
@@ -172,11 +155,8 @@
                     <i class="fas fa-medal"></i>
                 </div>
                 <div class="value-content">
-                    <h5>Premium Quality</h5>
-                    <p class="text-muted">
-                        We select only the finest grades. Every product undergoes 
-                        rigorous quality checks before reaching you.
-                    </p>
+                    <h4>Premium Quality</h4>
+                    <p>Only the finest grades selected through rigorous quality control processes.</p>
                 </div>
             </div>
             
@@ -185,24 +165,18 @@
                     <i class="fas fa-globe"></i>
                 </div>
                 <div class="value-content">
-                    <h5>Global Sourcing</h5>
-                    <p class="text-muted">
-                        Sourced from the world's best orchards—from California almonds 
-                        to Turkish apricots and Iranian pistachios.
-                    </p>
+                    <h4>Global Excellence</h4>
+                    <p>Sourced from the world's best orchards to bring you unparalleled quality.</p>
                 </div>
             </div>
             
             <div class="value-card">
                 <div class="value-icon">
-                    <i class="fas fa-seedling"></i>
+                    <i class="fas fa-handshake"></i>
                 </div>
                 <div class="value-content">
-                    <h5>Sustainability</h5>
-                    <p class="text-muted">
-                        Committed to ethical sourcing and sustainable farming 
-                        practices that respect our planet.
-                    </p>
+                    <h4>Trust & Transparency</h4>
+                    <p>Complete honesty about our products, processes, and partnerships.</p>
                 </div>
             </div>
             
@@ -211,24 +185,18 @@
                     <i class="fas fa-users"></i>
                 </div>
                 <div class="value-content">
-                    <h5>Customer First</h5>
-                    <p class="text-muted">
-                        Your satisfaction is our priority. We're here to serve you 
-                        with care and attention.
-                    </p>
+                    <h4>Family First</h4>
+                    <p>Treating every customer like family with personalized care and attention.</p>
                 </div>
             </div>
             
             <div class="value-card">
                 <div class="value-icon">
-                    <i class="fas fa-lightbulb"></i>
+                    <i class="fas fa-seedling"></i>
                 </div>
                 <div class="value-content">
-                    <h5>Innovation</h5>
-                    <p class="text-muted">
-                        Continuously improving our processes and products to serve 
-                        you better.
-                    </p>
+                    <h4>Sustainable Future</h4>
+                    <p>Committed to ethical sourcing and environmental responsibility.</p>
                 </div>
             </div>
         </div>
@@ -236,34 +204,74 @@
 </section>
 
 <!-- ==========================================================================
-   Stats Section
+   Our Promise Section
    ========================================================================== -->
+<section class="promise-section section-padding">
+    <div class="container">
+        <div class="promise-wrapper">
+            <div class="promise-content">
+                <h2 class="promise-title">Our Unwavering Promise</h2>
+                <p class="promise-text">
+                    At Ghazali Food, we promise to deliver only the finest quality dry fruits,
+                    sourced with care and delivered with love. Your satisfaction is our greatest reward.
+                </p>
+                <div class="promise-features">
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Freshness Guaranteed</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Premium Quality</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>100% Natural</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>No Compromises</span>
+                    </div>
+                </div>
+            </div>
+            <div class="promise-visual">
+                <div class="promise-image">
+                    <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Quality Promise">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<section class="py-5 bg-light">
+<!-- ==========================================================================
+   Statistics Section
+   ========================================================================== -->
+<section class="stats-section section-padding bg-primary">
     <div class="container">
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">5000+</div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="5000">0</div>
                 <div class="stat-title">Happy Families</div>
-                <p class="stat-desc text-muted">Trusting us for their daily nutrition</p>
+                <p class="stat-desc">Trusting us with their nutrition</p>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-number">150+</div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="150">0</div>
                 <div class="stat-title">Premium Products</div>
-                <p class="stat-desc text-muted">Curated from across the globe</p>
+                <p class="stat-desc">Curated collection</p>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-number">25+</div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="25">0</div>
                 <div class="stat-title">Countries Sourced</div>
-                <p class="stat-desc text-muted">From world's finest orchards</p>
+                <p class="stat-desc">Global excellence</p>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-number">14+</div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="14">0</div>
                 <div class="stat-title">Years of Trust</div>
-                <p class="stat-desc text-muted">Serving since 2010</p>
+                <p class="stat-desc">Since 2010</p>
             </div>
         </div>
     </div>
@@ -272,80 +280,79 @@
 <!-- ==========================================================================
    Team Section
    ========================================================================== -->
-
-<section class="py-5">
+<section class="team-section section-padding">
     <div class="container">
-        <div class="section-header mb-5">
+        <div class="section-header">
             <h2 class="section-title">Meet Our Family</h2>
-            <p class="text-muted">The passionate team behind Nuts & Berries</p>
+            <p class="section-subtitle">The passionate team behind Ghazali Food</p>
         </div>
         
         <div class="team-grid">
-            <div class="team-card">
-                <div class="team-image">
+            <div class="team-member">
+                <div class="member-image">
                     <img src="https://i.pravatar.cc/300?img=11" alt="Founder">
-                    <div class="team-social">
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <div class="member-overlay">
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        </div>
                     </div>
                 </div>
-                <div class="team-info">
-                    <h5>Ahmed Al-Ghazali</h5>
-                    <p class="team-role">Founder & CEO</p>
-                    <p class="team-desc text-muted">
-                        Third-generation dry fruit trader with over 25 years of experience
-                    </p>
+                <div class="member-info">
+                    <h4>Ahmed Al-Ghazali</h4>
+                    <p class="member-role">Founder & CEO</p>
+                    <p class="member-bio">Third-generation dry fruit trader with 25+ years of expertise</p>
                 </div>
             </div>
             
-            <div class="team-card">
-                <div class="team-image">
+            <div class="team-member">
+                <div class="member-image">
                     <img src="https://i.pravatar.cc/300?img=5" alt="Quality Manager">
-                    <div class="team-social">
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <div class="member-overlay">
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        </div>
                     </div>
                 </div>
-                <div class="team-info">
-                    <h5>Sarah Johnson</h5>
-                    <p class="team-role">Quality Assurance Director</p>
-                    <p class="team-desc text-muted">
-                        Food scientist specializing in nut quality and safety
-                    </p>
+                <div class="member-info">
+                    <h4>Sarah Johnson</h4>
+                    <p class="member-role">Quality Assurance Director</p>
+                    <p class="member-bio">Food scientist specializing in nut quality and safety</p>
                 </div>
             </div>
             
-            <div class="team-card">
-                <div class="team-image">
+            <div class="team-member">
+                <div class="member-image">
                     <img src="https://i.pravatar.cc/300?img=8" alt="Sourcing Head">
-                    <div class="team-social">
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <div class="member-overlay">
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        </div>
                     </div>
                 </div>
-                <div class="team-info">
-                    <h5>Michael Chen</h5>
-                    <p class="team-role">Global Sourcing Head</p>
-                    <p class="team-desc text-muted">
-                        Expert in international agriculture and fair trade
-                    </p>
+                <div class="member-info">
+                    <h4>Michael Chen</h4>
+                    <p class="member-role">Global Sourcing Head</p>
+                    <p class="member-bio">Expert in international agriculture and fair trade</p>
                 </div>
             </div>
             
-            <div class="team-card">
-                <div class="team-image">
+            <div class="team-member">
+                <div class="member-image">
                     <img src="https://i.pravatar.cc/300?img=3" alt="Nutritionist">
-                    <div class="team-social">
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <div class="member-overlay">
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        </div>
                     </div>
                 </div>
-                <div class="team-info">
-                    <h5>Dr. Emma Davis</h5>
-                    <p class="team-role">Chief Nutritionist</p>
-                    <p class="team-desc text-muted">
-                        Registered dietitian specializing in plant-based nutrition
-                    </p>
+                <div class="member-info">
+                    <h4>Dr. Emma Davis</h4>
+                    <p class="member-role">Chief Nutritionist</p>
+                    <p class="member-bio">Registered dietitian specializing in plant-based nutrition</p>
                 </div>
             </div>
         </div>
@@ -355,80 +362,79 @@
 <!-- ==========================================================================
    Testimonials Section
    ========================================================================== -->
-
-<section class="testimonials-section py-5 bg-light">
+<section class="testimonials-section section-padding bg-light">
     <div class="container">
-        <div class="section-header mb-5">
-            <h2 class="section-title">Trusted By Families</h2>
-            <p class="text-muted">What our community says about us</p>
+        <div class="section-header">
+            <h2 class="section-title">Loved by Families</h2>
+            <p class="section-subtitle">What our community says about us</p>
         </div>
         
-        <div class="testimonial-slider">
+        <div class="testimonials-grid">
             <div class="testimonial-card">
                 <div class="testimonial-rating">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
                 </div>
                 <p class="testimonial-text">
-                    "Nuts & Berries has been our family's trusted source for premium dry fruits 
+                    "Ghazali Food has been our family's trusted source for premium dry fruits 
                     for over 5 years. The quality is consistently exceptional!"
                 </p>
                 <div class="testimonial-author">
-                    <div class="author-avatar">
+                    <div class="author-image">
                         <img src="https://i.pravatar.cc/50?img=32" alt="Customer">
                     </div>
                     <div class="author-info">
                         <h6>Fatima Al-Mansoori</h6>
-                        <small>Regular Customer Since 2018</small>
+                        <p>Customer Since 2018</p>
                     </div>
                 </div>
             </div>
             
             <div class="testimonial-card">
                 <div class="testimonial-rating">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star-half-alt text-warning"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
                 </div>
                 <p class="testimonial-text">
-                    "As a professional chef, I demand the best ingredients. Nuts & Berries 
+                    "As a professional chef, I demand the best ingredients. Ghazali Food 
                     consistently delivers premium quality that elevates my dishes."
                 </p>
                 <div class="testimonial-author">
-                    <div class="author-avatar">
+                    <div class="author-image">
                         <img src="https://i.pravatar.cc/50?img=28" alt="Customer">
                     </div>
                     <div class="author-info">
                         <h6>Chef Rajesh Kumar</h6>
-                        <small>Executive Chef, Taj Palace</small>
+                        <p>Executive Chef, Taj Palace</p>
                     </div>
                 </div>
             </div>
             
             <div class="testimonial-card">
                 <div class="testimonial-rating">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
                 </div>
                 <p class="testimonial-text">
                     "The customer service is outstanding, and the product quality is unmatched. 
                     Our go-to for all our dry fruit needs!"
                 </p>
                 <div class="testimonial-author">
-                    <div class="author-avatar">
+                    <div class="author-image">
                         <img src="https://i.pravatar.cc/50?img=19" alt="Customer">
                     </div>
                     <div class="author-info">
                         <h6>John & Maria Rodriguez</h6>
-                        <small>Family Customers Since 2015</small>
+                        <p>Family Customers Since 2015</p>
                     </div>
                 </div>
             </div>
@@ -437,35 +443,24 @@
 </section>
 
 <!-- ==========================================================================
-   Newsletter Section
+   CTA Section
    ========================================================================== -->
-
-<section class="newsletter-section py-5">
+<section class="cta-section section-padding">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h2 class="text-white mb-3">Join Our Healthy Journey</h2>
-                <p class="text-white mb-0">
-                    Subscribe for exclusive offers, nutrition tips, and updates on our 
-                    premium dry fruit collection!
+        <div class="cta-wrapper">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Experience Premium Quality?</h2>
+                <p class="cta-text">
+                    Join thousands of families who trust Ghazali Food for their daily nutrition needs.
                 </p>
-            </div>
-            <div class="col-lg-6">
-                <form class="newsletter-form">
-                    <div class="form-group">
-                        <input type="email" 
-                               class="form-control" 
-                               placeholder="Enter your email address" 
-                               required
-                               aria-label="Email for newsletter">
-                    </div>
-                    <button type="submit" class="btn btn-light btn-lg mt-3">
-                        Subscribe <i class="fas fa-paper-plane ms-2"></i>
-                    </button>
-                    <p class="form-text text-white mt-2">
-                        We respect your privacy. Unsubscribe at any time.
-                    </p>
-                </form>
+                <div class="cta-actions">
+                    <a href="{{ route('shop.index') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i> Shop Our Collection
+                    </a>
+                    <a href="{{ route('contact.index') }}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-envelope me-2"></i> Get In Touch
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -473,25 +468,98 @@
 @endsection
 
 @push('styles')
-<!-- ==========================================================================
-   Custom Styles for About Page
-   ========================================================================== -->
-
 <style>
 /* ==========================================================================
-   Story Section Styles
+   About Hero Section
    ========================================================================== */
+.about-hero {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+    padding: var(--space-2xl) 0;
+    position: relative;
+    overflow: hidden;
+}
 
-.story-image {
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(17, 80, 40, 0.1) 0%, transparent 40%);
+}
+
+.hero-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--gradient-gold);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    margin-bottom: var(--space-lg);
+    font-size: var(--text-sm);
+}
+
+.hero-content .hero-title {
+    color: white;
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-md);
+    line-height: 1.2;
+}
+
+.hero-content .hero-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.hero-visual {
     position: relative;
 }
 
-.story-badge {
+.hero-image {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.6s ease;
+}
+
+.hero-image:hover img {
+    transform: scale(1.05);
+}
+
+.hero-image-badge {
     position: absolute;
     bottom: 20px;
-    left: 20px;
-    background: var(--gradient-gold);
-    color: var(--primary-dark);
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
     padding: 8px 16px;
     border-radius: var(--radius-full);
     font-weight: 600;
@@ -499,9 +567,139 @@
 }
 
 /* ==========================================================================
-   Values Grid Styles
+   Section Common Styles
    ========================================================================== */
+.section-padding {
+    padding: var(--space-2xl) 0;
+}
 
+.section-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.section-title {
+    font-size: var(--text-3xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+}
+
+/* ==========================================================================
+   Story Timeline
+   ========================================================================== */
+.story-timeline {
+    margin: var(--space-xl) 0;
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--gradient-gold);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    position: relative;
+}
+
+.timeline-item:nth-child(odd) {
+    flex-direction: row-reverse;
+}
+
+.timeline-year {
+    flex: 0 0 100px;
+    text-align: center;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--primary-color);
+    background: var(--surface-color);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-color);
+}
+
+.timeline-content {
+    flex: 1;
+    padding: var(--space-lg);
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    margin: 0 var(--space-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.timeline-content h4 {
+    color: var(--primary-color);
+    margin-bottom: var(--space-xs);
+}
+
+.timeline-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.story-quote {
+    text-align: center;
+    max-width: 800px;
+    margin: var(--space-2xl) auto 0;
+    padding: var(--space-xl);
+    background: var(--surface-color);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+}
+
+.quote-icon {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: var(--space-md);
+}
+
+.quote-text {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+}
+
+.quote-author strong {
+    color: var(--primary-color);
+    font-size: var(--text-lg);
+}
+
+.quote-author span {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+/* ==========================================================================
+   Values Grid
+   ========================================================================== */
 .values-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -512,16 +710,17 @@
     background: var(--surface-color);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
-    box-shadow: var(--shadow-md);
-    transition: var(--transition-normal);
     display: flex;
     align-items: flex-start;
     gap: var(--space-md);
+    transition: var(--transition-normal);
+    border: 1px solid var(--border-color);
 }
 
 .value-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
+    border-color: var(--accent-color);
 }
 
 .value-icon {
@@ -537,14 +736,76 @@
     font-size: 1.5rem;
 }
 
-.value-content h5 {
-    margin-bottom: var(--space-xs);
+.value-content h4 {
     color: var(--primary-color);
+    margin-bottom: var(--space-xs);
+}
+
+.value-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
 }
 
 /* ==========================================================================
-   Stats Grid Styles
+   Promise Section
    ========================================================================== */
+.promise-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+}
+
+.promise-title {
+    font-size: var(--text-3xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.promise-text {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
+
+.promise-features {
+    display: grid;
+    gap: var(--space-sm);
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.feature i {
+    color: var(--success-color);
+}
+
+.feature span {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.promise-image {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.promise-image img {
+    width: 100%;
+    height: auto;
+}
+
+/* ==========================================================================
+   Statistics Section
+   ========================================================================== */
+.stats-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
 
 .stats-grid {
     display: grid;
@@ -553,81 +814,96 @@
     text-align: center;
 }
 
-.stat-card {
+.stat-item {
     padding: var(--space-lg);
 }
 
 .stat-number {
     font-size: var(--text-4xl);
     font-weight: 800;
-    color: var(--primary-color);
-    margin-bottom: var(--space-xs);
+    color: white;
+    margin-bottom: var(--space-sm);
 }
 
 .stat-title {
     font-size: var(--text-lg);
     font-weight: 600;
-    color: var(--text-primary);
+    color: white;
     margin-bottom: var(--space-xs);
 }
 
 .stat-desc {
+    color: rgba(255, 255, 255, 0.8);
     font-size: var(--text-sm);
 }
 
 /* ==========================================================================
-   Team Grid Styles
+   Team Section
    ========================================================================== */
-
 .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--space-lg);
 }
 
-.team-card {
+.team-member {
     background: var(--surface-color);
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-md);
     transition: var(--transition-normal);
+    border: 1px solid var(--border-color);
 }
 
-.team-card:hover {
+.team-member:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
 
-.team-image {
+.member-image {
     position: relative;
     height: 250px;
     overflow: hidden;
 }
 
-.team-image img {
+.member-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s ease;
 }
 
-.team-card:hover .team-image img {
+.team-member:hover .member-image img {
     transform: scale(1.05);
 }
 
-.team-social {
+.member-overlay {
     position: absolute;
-    bottom: 15px;
-    right: 15px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent, rgba(17, 80, 40, 0.8));
     display: flex;
-    gap: var(--space-xs);
+    align-items: flex-end;
+    justify-content: center;
     opacity: 0;
-    transform: translateY(10px);
     transition: var(--transition-normal);
+    padding: var(--space-lg);
 }
 
-.team-card:hover .team-social {
+.team-member:hover .member-overlay {
     opacity: 1;
+}
+
+.member-social {
+    display: flex;
+    gap: var(--space-sm);
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+}
+
+.team-member:hover .member-social {
     transform: translateY(0);
 }
 
@@ -649,97 +925,139 @@
     color: white;
 }
 
-.team-info {
-    padding: var(--space-md);
+.member-info {
+    padding: var(--space-lg);
     text-align: center;
 }
 
-.team-info h5 {
-    margin-bottom: 4px;
+.member-info h4 {
     color: var(--text-primary);
-}
-
-.team-role {
-    color: var(--primary-color);
-    font-weight: 600;
     margin-bottom: var(--space-xs);
 }
 
-.team-desc {
+.member-role {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+}
+
+.member-bio {
+    color: var(--text-secondary);
     font-size: var(--text-sm);
     line-height: 1.5;
 }
 
 /* ==========================================================================
-   Newsletter Form Styles
+   Testimonials Section
    ========================================================================== */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+}
 
-.newsletter-form .form-control {
-    padding: 12px 20px;
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
+.testimonial-card {
     background: var(--surface-color);
-    color: var(--text-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.testimonial-rating {
+    color: var(--accent-color);
+    margin-bottom: var(--space-md);
+    font-size: var(--text-lg);
+}
+
+.testimonial-text {
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.author-image img {
     width: 100%;
-    transition: var(--transition-normal);
+    height: 100%;
+    object-fit: cover;
 }
 
-.newsletter-form .form-control:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+.author-info h6 {
+    color: var(--text-primary);
+    margin-bottom: 2px;
 }
 
-.form-text {
+.author-info p {
+    color: var(--text-muted);
     font-size: var(--text-sm);
 }
 
 /* ==========================================================================
-   Responsive Adjustments
+   CTA Section
    ========================================================================== */
-
-@media (max-width: 768px) {
-    .values-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-md);
-    }
-    
-    .stat-number {
-        font-size: var(--text-3xl);
-    }
-    
-    .team-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.cta-section {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 50%, var(--accent-color) 100%);
+    position: relative;
+    overflow: hidden;
 }
 
-@media (max-width: 576px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .team-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .value-card {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .value-icon {
-        margin: 0 auto;
-    }
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+}
+
+.cta-wrapper {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.cta-title {
+    color: white;
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-md);
+}
+
+.cta-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
 }
 
 /* ==========================================================================
    Animations
    ========================================================================== */
-
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -751,126 +1069,152 @@
     }
 }
 
-.story-content > *,
-.feature-card,
-.value-card,
-.stat-card,
-.team-card {
+@keyframes countUp {
+    from {
+        content: '0';
+    }
+    to {
+        content: attr(data-count);
+    }
+}
+
+.animated {
     animation: fadeInUp 0.6s ease-out;
 }
 
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-.delay-3 { animation-delay: 0.6s; }
-.delay-4 { animation-delay: 0.8s; }
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+@media (max-width: 992px) {
+    .hero-wrapper {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-content .hero-title {
+        font-size: var(--text-3xl);
+    }
+    
+    .timeline::before {
+        left: 40px;
+    }
+    
+    .timeline-item,
+    .timeline-item:nth-child(odd) {
+        flex-direction: row;
+    }
+    
+    .timeline-year {
+        flex: 0 0 80px;
+    }
+    
+    .promise-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-actions {
+        flex-direction: column;
+    }
+    
+    .cta-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content .hero-title {
+        font-size: var(--text-2xl);
+    }
+    
+    .hero-content .hero-subtitle {
+        font-size: var(--text-base);
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+    }
+    
+    .hero-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .section-title {
+        font-size: var(--text-2xl);
+    }
+    
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .timeline::before {
+        left: 20px;
+    }
+    
+    .timeline-year {
+        flex: 0 0 60px;
+        font-size: var(--text-base);
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-title {
+        font-size: var(--text-2xl);
+    }
+    
+    .cta-text {
+        font-size: var(--text-base);
+    }
+}
 </style>
 @endpush
 
 @push('scripts')
-<!-- ==========================================================================
-   Custom JavaScript for About Page
-   ========================================================================== -->
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // ==========================================================================
-    // Intersection Observer for Animations
+    // Animated Counter for Statistics
     // ==========================================================================
+    const statNumbers = document.querySelectorAll('.stat-number');
     
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '50px'
-    };
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe all elements with animation classes
-    document.querySelectorAll('.story-content > *, .feature-card, .value-card, .stat-card, .team-card')
-        .forEach(el => observer.observe(el));
-
-    // ==========================================================================
-    // Newsletter Form Submission
-    // ==========================================================================
-    
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const emailInput = this.querySelector('input[type="email"]');
-            const email = emailInput.value;
-            
-            // Simple validation
-            if (!email || !email.includes('@')) {
-                showToast('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/api/newsletter/subscribe', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ email: email })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showToast('Successfully subscribed to our newsletter!', 'success');
-                    emailInput.value = '';
-                } else {
-                    showToast(data.message || 'Subscription failed', 'error');
+                const statNumber = entry.target;
+                const target = parseInt(statNumber.getAttribute('data-count'));
+                if (!isNaN(target)) {
+                    animateCounter(statNumber, 0, target, 2000);
                 }
-            } catch (error) {
-                console.error('Newsletter subscription error:', error);
-                showToast('Network error. Please try again.', 'error');
+                observer.unobserve(statNumber);
             }
         });
-    }
-
-    // ==========================================================================
-    // Team Card Hover Effect Enhancement
-    // ==========================================================================
-    
-    document.querySelectorAll('.team-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.zIndex = '10';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.zIndex = '1';
-        });
+    }, {
+        threshold: 0.5,
+        rootMargin: '50px'
     });
 
-    // ==========================================================================
-    // Stat Counters Animation
-    // ==========================================================================
-    
-    const statNumbers = document.querySelectorAll('.stat-number');
-    const observerStats = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const statNumber = entry.target;
-                const targetValue = parseInt(statNumber.textContent);
-                if (!isNaN(targetValue)) {
-                    animateCounter(statNumber, 0, targetValue, 2000);
-                }
-                observerStats.unobserve(statNumber);
-            }
-        });
-    }, observerOptions);
-
-    statNumbers.forEach(stat => observerStats.observe(stat));
+    statNumbers.forEach(stat => observer.observe(stat));
 
     function animateCounter(element, start, end, duration) {
         let startTimestamp = null;
@@ -878,60 +1222,158 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!startTimestamp) startTimestamp = timestamp;
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
             const currentValue = Math.floor(progress * (end - start) + start);
-            element.textContent = currentValue + (element.textContent.includes('+') ? '+' : '');
+            element.textContent = currentValue;
             if (progress < 1) {
                 window.requestAnimationFrame(step);
             }
         };
         window.requestAnimationFrame(step);
     }
+
+    // ==========================================================================
+    // Timeline Animation
+    // ==========================================================================
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+                timelineObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2,
+        rootMargin: '50px'
+    });
+
+    timelineItems.forEach(item => timelineObserver.observe(item));
+
+    // ==========================================================================
+    // Team Member Hover Effects
+    // ==========================================================================
+    const teamMembers = document.querySelectorAll('.team-member');
+    
+    teamMembers.forEach(member => {
+        member.addEventListener('mouseenter', function() {
+            this.style.zIndex = '10';
+        });
+        
+        member.addEventListener('mouseleave', function() {
+            this.style.zIndex = '1';
+        });
+    });
+
+    // ==========================================================================
+    // Value Cards Animation
+    // ==========================================================================
+    const valueCards = document.querySelectorAll('.value-card');
+    
+    const valueObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('animated');
+                }, index * 100);
+                valueObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '50px'
+    });
+
+    valueCards.forEach(card => valueObserver.observe(card));
+
+    // ==========================================================================
+    // Testimonial Cards Animation
+    // ==========================================================================
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    
+    const testimonialObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('animated');
+                }, index * 150);
+                testimonialObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '50px'
+    });
+
+    testimonialCards.forEach(card => testimonialObserver.observe(card));
+
+    // ==========================================================================
+    // Smooth Scrolling for Anchor Links
+    // ==========================================================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // ==========================================================================
+    // Parallax Effect for Hero Section
+    // ==========================================================================
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.about-hero');
+        if (hero) {
+            const rate = scrolled * -0.5;
+            hero.style.backgroundPosition = `center ${rate}px`;
+        }
+    });
+
+    // ==========================================================================
+    // Social Links Interaction
+    // ==========================================================================
+    document.querySelectorAll('.social-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const platform = this.querySelector('i').className.includes('linkedin') ? 'LinkedIn' : 'Twitter';
+            showToast(`Opening ${platform} profile`, 'info');
+        });
+    });
 });
 
 // ==========================================================================
-// Toast Notification Function
+// Toast Notification Helper Function
 // ==========================================================================
-
-function showToast(message, type = 'info', duration = 3000) {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
+function showToast(message, type = 'info') {
+    // Use existing toast function if available
+    if (typeof window.showToast === 'function') {
+        window.showToast(message, type);
+        return;
+    }
     
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
-        <div class="toast-content">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 
-                         type === 'error' ? 'fa-exclamation-circle' : 
-                         type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
-            <span>${message}</span>
-        </div>
-        <button class="toast-close">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-    
-    container.appendChild(toast);
-    
-    // Show toast
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10);
-    
-    // Auto remove after duration
-    const autoRemove = setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }, duration);
-    
-    // Close button
-    toast.querySelector('.toast-close').addEventListener('click', () => {
-        clearTimeout(autoRemove);
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    });
+    // Fallback simple notification
+    console.log(`${type}: ${message}`);
 }
+
+// ==========================================================================
+// Loading Animation for Images
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        img.addEventListener('load', function() {
+            this.classList.add('loaded');
+        });
+    });
+});
 </script>
 @endpush
