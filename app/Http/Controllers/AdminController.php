@@ -204,38 +204,43 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products',
             'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
+            'best_price' => 'required|numeric|min:0',
             'compare_at_price' => 'nullable|numeric|min:0',
             'cost_price' => 'nullable|numeric|min:0',
-            'sku' => 'nullable|string|max:100|unique:products',
             'barcode' => 'nullable|string|max:100',
-            'quantity' => 'required|integer|min:0',
+            'quantity' => 'required|integer|min:0', // This maps to stock_quantity in database
             'category_id' => 'required|exists:categories,id',
             'weight' => 'nullable|numeric|min:0',
             'dimensions' => 'nullable|string|max:100',
-            'status' => 'required|in:published,draft,archived',
+            'status' => 'required|in:draft,published,out_of_stock,discontinued',
             'is_featured' => 'boolean',
-            'is_bestseller' => 'boolean',
+            'is_bestseller' => 'boolean', // Note: database column is 'is_best_seller' (with underscore)
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
         ]);
 
+        // Note: Your database has 'is_best_seller' column (with underscore)
+        // but your form uses 'is_bestseller' (without underscore)
+        // We'll handle this mapping
+
         Product::create([
             'name' => $request->name,
             'slug' => $request->slug,
-            'description' => $request->description,
-            'price' => $request->price,
+            'description' => $request->description, // This will go to description field
+            'short_description' => null, // Set to null since we don't have it in form
+            'full_description' => null, // Set to null since we don't have it in form
+            'best_price' => $request->best_price,
             'compare_at_price' => $request->compare_at_price,
             'cost_price' => $request->cost_price,
-            'sku' => $request->sku,
             'barcode' => $request->barcode,
-            'quantity' => $request->quantity,
+            'stock_quantity' => $request->quantity, // Map 'quantity' to 'stock_quantity'
             'category_id' => $request->category_id,
             'weight' => $request->weight,
             'dimensions' => $request->dimensions,
             'status' => $request->status,
             'is_featured' => $request->has('is_featured'),
-            'is_bestseller' => $request->has('is_bestseller'),
+            'is_best_seller' => $request->has('is_bestseller'), // Map 'is_bestseller' to 'is_best_seller'
+            'is_new_arrival' => false, // Default to false since not in form
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'created_by' => auth()->id(),
@@ -265,16 +270,15 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
             'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
+            'best_price' => 'required|numeric|min:0',
             'compare_at_price' => 'nullable|numeric|min:0',
             'cost_price' => 'nullable|numeric|min:0',
-            'sku' => 'nullable|string|max:100|unique:products,sku,' . $product->id,
             'barcode' => 'nullable|string|max:100',
             'quantity' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'weight' => 'nullable|numeric|min:0',
             'dimensions' => 'nullable|string|max:100',
-            'status' => 'required|in:published,draft,archived',
+            'status' => 'required|in:draft,published,out_of_stock,discontinued',
             'is_featured' => 'boolean',
             'is_bestseller' => 'boolean',
             'meta_title' => 'nullable|string|max:255',
@@ -285,18 +289,19 @@ class AdminController extends Controller
             'name' => $request->name,
             'slug' => $request->slug,
             'description' => $request->description,
-            'price' => $request->price,
+            'short_description' => $product->short_description, // Keep existing or null
+            'full_description' => $product->full_description, // Keep existing or null
+            'best_price' => $request->best_price,
             'compare_at_price' => $request->compare_at_price,
             'cost_price' => $request->cost_price,
-            'sku' => $request->sku,
             'barcode' => $request->barcode,
-            'quantity' => $request->quantity,
+            'stock_quantity' => $request->quantity,
             'category_id' => $request->category_id,
             'weight' => $request->weight,
             'dimensions' => $request->dimensions,
             'status' => $request->status,
             'is_featured' => $request->has('is_featured'),
-            'is_bestseller' => $request->has('is_bestseller'),
+            'is_best_seller' => $request->has('is_bestseller'),
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
         ]);

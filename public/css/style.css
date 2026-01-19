@@ -1,39 +1,47 @@
 /* ==========================================================================
    Nuts & Berries - Premium Dry Fruits Store Theme
+   Updated with New Color Scheme
    ========================================================================== */
 
 :root {
-  /* Light Mode Colors - Dry Fruits Theme */
-  --primary-color: #8B4513; /* Saddle Brown */
-  --primary-dark: #654321; /* Dark Brown */
-  --primary-light: #D2691E; /* Chocolate */
+  /* New Color Scheme - Based on provided palette */
+  --dark-spruce: #115028;
+  --black-forest: #0C4220;
+  --black: #000000;
+  --palm-leaf: #9B9C2E;
+  --evergreen: #011603;
   
-  --secondary-color: #DAA520; /* Goldenrod */
-  --secondary-dark: #B8860B; /* Dark Goldenrod */
-  --secondary-light: #F4A460; /* Sandy Brown */
+  /* Light Mode Colors - Using New Palette */
+  --primary-color: #115028; /* Dark Spruce */
+  --primary-dark: #0C4220; /* Black Forest */
+  --primary-light: #1A7340; /* Lighter variant for hover */
   
-  --accent-color: #CD853F; /* Peru */
-  --accent-light: #DEB887; /* Burlywood */
+  --secondary-color: #9B9C2E; /* Palm Leaf */
+  --secondary-dark: #7B7C24; /* Darker Palm Leaf */
+  --secondary-light: #B9BA48; /* Lighter Palm Leaf */
   
-  --background-color: #FFF8F0; /* Soft Cream */
-  --surface-color: #FFFFFF;
-  --text-primary: #2C1810;
-  --text-secondary: #5D4037;
-  --text-muted: #795548;
+  --accent-color: #27ae60; /* Green accent for CTAs */
+  --accent-light: #2ecc71;
+  
+  --background-color: #FFFFFF;
+  --surface-color: #F8F9FA;
+  --text-primary: #011603; /* Evergreen */
+  --text-secondary: #115028; /* Dark Spruce */
+  --text-muted: #0C4220; /* Black Forest */
   
   --success-color: #27ae60;
   --warning-color: #f39c12;
   --danger-color: #e74c3c;
   --info-color: #3498db;
   
-  --border-color: #E8D9C9;
-  --shadow-color: rgba(139, 69, 19, 0.1);
+  --border-color: #E0E0E0;
+  --shadow-color: rgba(1, 22, 3, 0.1); /* Evergreen with opacity */
   
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
-  --gradient-accent: linear-gradient(135deg, var(--accent-color), #E67E22);
-  --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
+  --gradient-accent: linear-gradient(135deg, var(--accent-color), #27ae60);
+  --gradient-gold: linear-gradient(135deg, #9B9C2E, #7B7C24); /* Using Palm Leaf shades */
   
   /* Shadows */
   --shadow-sm: 0 2px 8px var(--shadow-color);
@@ -83,22 +91,26 @@
    ========================================================================== */
 
 [data-theme="dark"] {
-  --primary-color: #D2691E;
-  --primary-dark: #8B4513;
-  --primary-light: #F4A460;
+  --primary-color: #27ae60; /* Brighter green for better contrast */
+  --primary-dark: #115028; /* Dark Spruce */
+  --primary-light: #2ecc71; /* Lighter green */
   
-  --secondary-color: #FFD700;
-  --secondary-dark: #DAA520;
-  --secondary-light: #FFE55C;
+  --secondary-color: #B9BA48; /* Lighter Palm Leaf */
+  --secondary-dark: #9B9C2E; /* Palm Leaf */
+  --secondary-light: #D8D96C; /* Even lighter variant */
   
-  --background-color: #121212;
-  --surface-color: #1E1E1E;
+  --background-color: #0A0A0A;
+  --surface-color: #1A1A1A;
   --text-primary: #FFFFFF;
   --text-secondary: #E0E0E0;
   --text-muted: #B0B0B0;
   
   --border-color: #2C2C2C;
-  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  
+  /* Dark mode specific adjustments */
+  --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
 }
 
 /* ==========================================================================
@@ -322,18 +334,18 @@ a:hover {
 .logo-icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+  background: var(--gradient-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 12px;
-  box-shadow: 0 4px 12px rgba(218, 165, 32, 0.3);
+  box-shadow: 0 4px 12px rgba(17, 80, 40, 0.3);
 }
 
 .logo-icon i {
   font-size: 22px;
-  color: var(--primary-dark);
+  color: white;
 }
 
 .logo-text h1 {
@@ -439,7 +451,7 @@ a:hover {
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, var(--secondary-color), var(--secondary-dark));
+  background: var(--gradient-primary);
   border-radius: 2px;
 }
 
@@ -492,7 +504,7 @@ a:hover {
 }
 
 .dropdown-item:hover {
-  background: var(--primary-light);
+  background: var(--primary-color);
   color: white;
   transform: translateX(5px);
 }
@@ -536,7 +548,7 @@ a:hover {
 }
 
 .submenu-item:hover {
-  background: var(--primary-light);
+  background: var(--primary-color);
   color: white;
   padding-left: 16px;
 }
@@ -560,7 +572,7 @@ a:hover {
 }
 
 .dropdown-view-all:hover {
-  background: var(--primary-light);
+  background: var(--primary-color);
   color: white;
 }
 
@@ -593,7 +605,7 @@ a:hover {
 .search-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+  box-shadow: 0 0 0 3px rgba(17, 80, 40, 0.1);
 }
 
 .search-btn {
@@ -730,7 +742,7 @@ a:hover {
 }
 
 .user-menu .dropdown-item:hover {
-  background: var(--primary-light);
+  background: var(--primary-color);
   color: white;
 }
 
@@ -775,7 +787,7 @@ a:hover {
 }
 
 .theme-toggle:hover {
-  background: var(--primary-light);
+  background: var(--primary-color);
   color: white;
   transform: rotate(30deg);
 }
@@ -882,7 +894,7 @@ a:hover {
 
 .hero-section {
   padding: var(--space-2xl) 0;
-  background: linear-gradient(135deg, var(--background-color) 0%, #F8F4E9 100%);
+  background: linear-gradient(135deg, var(--background-color) 0%, #F8F9FA 100%);
   overflow: hidden;
   position: relative;
 }
@@ -930,7 +942,7 @@ a:hover {
   top: 20px;
   right: 20px;
   background: var(--gradient-gold);
-  color: var(--primary-dark);
+  color: white;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-full);
   font-weight: 600;
@@ -1313,7 +1325,7 @@ section {
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: var(--gradient-gold);
+  background: var(--gradient-primary);
   border-radius: var(--radius-full);
 }
 
@@ -1393,7 +1405,7 @@ section {
    ========================================================================== */
 
 .newsletter-section {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+  background: var(--gradient-primary);
   color: white;
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
@@ -1413,17 +1425,21 @@ section {
 .newsletter-form .form-control {
   flex: 1;
   padding: 12px 20px;
-  border: 2px solid var(--border-color);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
-  background: var(--surface-color);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
   transition: var(--transition-normal);
 }
 
 .newsletter-form .form-control:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+  border-color: white;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.newsletter-form .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ==========================================================================
@@ -2312,4 +2328,34 @@ section {
   background: var(--surface-color);
   border-color: var(--border-color);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .hero-section {
+  background: linear-gradient(135deg, var(--background-color) 0%, #111 100%);
+}
+
+[data-theme="dark"] .hero-title {
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] .hero-subtitle {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .newsletter-section {
+  background: var(--gradient-primary);
+}
+
+[data-theme="dark"] .newsletter-form .form-control {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+[data-theme="dark"] .categories-section.bg-light {
+  background: var(--surface-color) !important;
+}
+
+[data-theme="dark"] .new-arrivals-section.bg-light {
+  background: var(--surface-color) !important;
 }
