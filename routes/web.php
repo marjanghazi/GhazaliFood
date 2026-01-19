@@ -40,9 +40,11 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/count', [CartController::class, 'count'])->name('count');
 });
 
-// Wishlist Routes
+// Wishlist Routes - ADD THIS SIMPLE ROUTE AT THE TOP LEVEL
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('auth');
+
+// Wishlist API Routes (with prefix)
 Route::prefix('wishlist')->name('wishlist.')->middleware('auth')->group(function () {
-    Route::get('/', [WishlistController::class, 'index'])->name('index');
     Route::post('/toggle', [WishlistController::class, 'toggle'])->name('toggle');
     Route::post('/add', [WishlistController::class, 'store'])->name('add');
     Route::delete('/remove/{id}', [WishlistController::class, 'destroy'])->name('remove');
@@ -201,16 +203,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Settings Routes - CHANGED FROM PUT TO POST FOR FORMS
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
-    
+
     // Main settings update route - change from PUT to POST
     Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
-    
+
     // Separate settings routes for each tab - change from PUT to POST
     Route::post('/settings/general', [AdminController::class, 'updateGeneralSettings'])->name('settings.general.update');
     Route::post('/settings/email', [AdminController::class, 'updateEmailSettings'])->name('settings.email.update');
     Route::post('/settings/payment', [AdminController::class, 'updatePaymentSettings'])->name('settings.payment.update');
     Route::post('/settings/maintenance', [AdminController::class, 'updateMaintenanceSettings'])->name('settings.maintenance.update');
-    
+
     // Additional settings utility routes
     Route::get('/settings/backup', [AdminController::class, 'backupDatabase'])->name('settings.backup');
     Route::get('/settings/cache/clear', [AdminController::class, 'clearCache'])->name('settings.cache.clear');
