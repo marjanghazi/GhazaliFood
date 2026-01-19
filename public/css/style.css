@@ -329,7 +329,7 @@ a:hover {
 }
 
 /* ==========================================================================
-   Main Header - FIXED VERSION
+   Main Header - UPDATED FIXED VERSION WITH FLEXIBLE SPACING
    ========================================================================== */
 
 .main-header {
@@ -376,7 +376,7 @@ body.has-announcement .main-header {
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   position: relative;
 }
 
@@ -387,7 +387,7 @@ body.has-announcement .main-header {
   text-decoration: none;
   color: var(--text-primary);
   flex-shrink: 0;
-  min-width: 180px;
+  min-width: 160px;
 }
 
 .logo-icon {
@@ -398,7 +398,7 @@ body.has-announcement .main-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 12px;
+  margin-right: 10px;
   flex-shrink: 0;
 }
 
@@ -415,14 +415,14 @@ body.has-announcement .main-header {
 .logo-main {
   font-family: 'Playfair Display', serif;
   font-weight: 800;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1;
   color: var(--primary-color);
   white-space: nowrap;
 }
 
 .logo-tagline {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--text-muted);
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -441,11 +441,11 @@ body.has-announcement .main-header {
 }
 
 .main-header.scrolled .logo-main {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .main-header.scrolled .logo-tagline {
-  font-size: 9px;
+  font-size: 8px;
 }
 
 /* Mobile Toggle */
@@ -471,13 +471,14 @@ body.has-announcement .main-header {
   transition: var(--transition-normal);
 }
 
-/* Main Navigation */
+/* Main Navigation - UPDATED FOR BETTER SPACING */
 .main-nav {
   display: flex;
   align-items: center;
   flex: 1;
   justify-content: space-between;
-  gap: var(--space-lg);
+  gap: var(--space-md);
+  min-width: 0; /* Allow shrinking */
 }
 
 .mobile-close {
@@ -508,20 +509,23 @@ body.has-announcement .main-header {
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   margin: 0;
   padding: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .nav-item {
   position: relative;
+  flex-shrink: 0;
 }
 
 .nav-link {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   padding: 8px 0;
   position: relative;
   transition: var(--transition-fast);
@@ -531,8 +535,9 @@ body.has-announcement .main-header {
 }
 
 .nav-link i {
-  font-size: 14px;
-  width: 20px;
+  font-size: 13px;
+  width: 18px;
+  margin-right: 4px;
 }
 
 .nav-link::after {
@@ -558,8 +563,8 @@ body.has-announcement .main-header {
 }
 
 .dropdown-icon {
-  font-size: 10px;
-  margin-left: 4px;
+  font-size: 9px;
+  margin-left: 2px;
   transition: transform 0.3s ease;
 }
 
@@ -664,10 +669,11 @@ body.has-announcement .main-header {
   transform: translateX(4px);
 }
 
-/* Search Container */
+/* Search Container - UPDATED FOR FLEXIBILITY */
 .search-container {
-  flex: 0 0 300px;
-  min-width: 250px;
+  flex: 0 0 220px;
+  min-width: 180px;
+  max-width: 280px;
 }
 
 .search-wrapper {
@@ -677,22 +683,22 @@ body.has-announcement .main-header {
 
 .search-icon {
   position: absolute;
-  left: 14px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
   z-index: 1;
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 45px 10px 40px;
+  padding: 10px 40px 10px 35px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-full);
   background: var(--surface-color);
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 13px;
   transition: var(--transition-normal);
   font-family: 'Inter', sans-serif;
 }
@@ -713,8 +719,8 @@ body.has-announcement .main-header {
   color: var(--text-primary);
   cursor: pointer;
   padding: 6px;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -728,7 +734,7 @@ body.has-announcement .main-header {
 
 .search-clear {
   position: absolute;
-  right: 40px;
+  right: 38px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -745,12 +751,13 @@ body.has-announcement .main-header {
   color: var(--danger-color);
 }
 
-/* Header Actions */
+/* Header Actions - UPDATED FOR COMPACT LAYOUT */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   flex-shrink: 0;
+  min-width: 180px;
 }
 
 .search-toggle {
@@ -776,17 +783,17 @@ body.has-announcement .main-header {
   background: var(--surface-color);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
-  padding: 8px;
+  padding: 6px;
   border-radius: 50%;
   transition: var(--transition-normal);
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 }
 
 .action-btn:hover {
@@ -802,10 +809,10 @@ body.has-announcement .main-header {
   right: -4px;
   background: var(--gradient-gold);
   color: var(--text-primary);
-  font-size: 10px;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
+  font-size: 9px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -933,10 +940,10 @@ body.has-announcement .main-header {
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   cursor: pointer;
-  padding: 8px;
+  padding: 6px;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2190,16 +2197,49 @@ section {
 }
 
 /* ==========================================================================
-   Responsive Design
+   Responsive Design - UPDATED FOR BETTER HEADER HANDLING
    ========================================================================== */
 
 @media (max-width: 1200px) {
   .search-container {
-    flex: 0 0 250px;
+    flex: 0 0 200px;
   }
   
   .nav-menu {
-    gap: var(--space-md);
+    gap: var(--space-sm);
+  }
+  
+  .nav-link {
+    font-size: 13px;
+  }
+  
+  .nav-link i {
+    font-size: 12px;
+    width: 16px;
+  }
+  
+  .header-actions {
+    min-width: 160px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .nav-link span:not(.badge) {
+    display: none;
+  }
+  
+  .nav-link i {
+    margin-right: 0;
+    font-size: 14px;
+    width: auto;
+  }
+  
+  .dropdown-toggle .dropdown-icon {
+    display: none;
+  }
+  
+  .search-container {
+    flex: 0 0 180px;
   }
 }
 
@@ -2274,6 +2314,16 @@ section {
     font-size: 16px;
     width: 100%;
     justify-content: flex-start;
+  }
+  
+  .nav-link span:not(.badge) {
+    display: inline-block;
+  }
+  
+  .nav-link i {
+    margin-right: 10px;
+    font-size: 16px;
+    width: 20px;
   }
   
   .nav-link::after {
@@ -2475,7 +2525,7 @@ section {
   }
   
   .logo {
-    min-width: 160px;
+    min-width: 140px;
   }
   
   .logo-main {
@@ -2491,24 +2541,24 @@ section {
   }
   
   .header-actions {
-    gap: 8px;
+    gap: 6px;
   }
   
   .action-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
   }
   
   .theme-toggle {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
   
   .action-btn .badge {
-    font-size: 9px;
-    min-width: 16px;
-    height: 16px;
+    font-size: 8px;
+    min-width: 14px;
+    height: 14px;
   }
   
   .toast {
@@ -2537,4 +2587,36 @@ section {
 [data-theme="dark"] .newsletter-form .form-control {
   background: rgba(0, 0, 0, 0.2);
   border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   Additional Desktop Optimization for 100% View
+   ========================================================================== */
+
+@media (min-width: 993px) and (max-width: 1200px) {
+  .header-container {
+    padding: 0 var(--space-md);
+  }
+  
+  .nav-menu {
+    gap: var(--space-sm);
+  }
+  
+  .nav-link {
+    font-size: 13px;
+  }
+  
+  .search-container {
+    flex: 0 0 200px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .header-container {
+    padding: 0 var(--space-lg);
+  }
+  
+  .header-wrapper {
+    gap: var(--space-md);
+  }
 }
