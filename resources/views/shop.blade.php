@@ -1,25 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Shop - Premium Dry Fruits Store | Nuts & Berries')
+@section('title', 'Shop - Premium Dry Fruits Store | Ghazali Food')
 
 @section('hero')
 <!-- Shop Hero -->
 <section class="hero-section">
     <div class="container">
-        <div class="row align-items-center min-vh-60">
-            <div class="col-12 text-center">
-                <h1 class="hero-title animate-slide-up">Our Premium Collection</h1>
-                <p class="lead animate-slide-up delay-1">
-                    Discover exquisite selection of 100% natural, organic dry fruits, nuts, and berries
-                </p>
-                <nav class="breadcrumb-wrapper animate-slide-up delay-2">
-                    <div class="breadcrumb">
-                        <a href="{{ url('/') }}" class="breadcrumb-item">Home</a>
-                        <span class="breadcrumb-separator">/</span>
-                        <span class="breadcrumb-item active">Shop</span>
-                    </div>
-                </nav>
-            </div>
+        <div class="hero-content text-center">
+            <h1 class="hero-title animate__animated animate__slideUp">Our Premium Collection</h1>
+            <p class="hero-subtitle animate__animated animate__slideUp delay-1">
+                Discover exquisite selection of 100% natural, organic dry fruits, nuts, and berries
+            </p>
+            <nav class="breadcrumb-wrapper animate__animated animate__slideUp delay-2">
+                <div class="breadcrumb">
+                    <a href="{{ url('/') }}" class="breadcrumb-item">Home</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-item active">Shop</span>
+                </div>
+            </nav>
         </div>
     </div>
 </section>
@@ -27,27 +25,27 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="row">
+    <div class="shop-container">
         <!-- Sidebar Filters -->
-        <div class="col-lg-3 mb-4">
-            <div class="sidebar bg-surface p-4 rounded-3">
+        <div class="shop-sidebar">
+            <div class="sidebar-content">
                 <!-- Categories Filter -->
-                <div class="mb-5">
-                    <h5 class="sidebar-title mb-4">Categories</h5>
+                <div class="sidebar-section">
+                    <h5 class="sidebar-title">Categories</h5>
                     <ul class="sidebar-list">
                         <li>
                             <a href="{{ route('shop.index') }}"
                                 class="sidebar-link {{ !request()->has('category') ? 'active' : '' }}">
-                                All Categories
-                                <span class="badge-count">{{ $totalProducts ?? 0 }}</span>
+                                <span class="sidebar-text">All Categories</span>
+                                <span class="sidebar-badge">{{ $totalProducts ?? 0 }}</span>
                             </a>
                         </li>
                         @foreach($categories as $category)
                         <li>
                             <a href="{{ route('shop.index', ['category' => $category->slug]) }}"
                                 class="sidebar-link {{ request('category') == $category->slug ? 'active' : '' }}">
-                                {{ $category->name }}
-                                <span class="badge-count">{{ $category->products_count ?? 0 }}</span>
+                                <span class="sidebar-text">{{ $category->name }}</span>
+                                <span class="sidebar-badge">{{ $category->products_count ?? 0 }}</span>
                             </a>
                         </li>
                         @endforeach
@@ -55,58 +53,60 @@
                 </div>
 
                 <!-- Price Filter -->
-                <div class="mb-5">
-                    <h5 class="sidebar-title mb-4">Filter by Price</h5>
-                    <form id="price-filter-form">
+                <div class="sidebar-section">
+                    <h5 class="sidebar-title">Filter by Price</h5>
+                    <form id="price-filter-form" class="price-filter">
                         <div class="price-range-wrapper">
                             <div class="price-display">
                                 <span class="price-label">Price Range:</span>
                                 <span class="price-value">$0 - $<span id="price-value">{{ ceil($maxPrice) }}</span></span>
                             </div>
-                            <input type="range" class="price-slider" id="price-range"
-                                min="0" max="{{ ceil($maxPrice) }}"
-                                value="{{ ceil($maxPrice) }}">
-                            <div class="price-labels d-flex justify-content-between">
+                            <div class="price-slider-container">
+                                <input type="range" class="price-slider" id="price-range"
+                                    min="0" max="{{ ceil($maxPrice) }}"
+                                    value="{{ ceil($maxPrice) }}">
+                            </div>
+                            <div class="price-labels">
                                 <span>$0</span>
                                 <span>${{ ceil($maxPrice) }}</span>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mt-3">
-                            Apply Price Filter
+                            <i class="fas fa-filter me-2"></i>Apply Price Filter
                         </button>
                     </form>
                 </div>
 
                 <!-- Product Status Filter -->
-                <div class="mb-5">
-                    <h5 class="sidebar-title mb-4">Product Status</h5>
+                <div class="sidebar-section">
+                    <h5 class="sidebar-title">Product Status</h5>
                     <div class="filter-checkboxes">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="featured"
+                        <div class="checkbox-item">
+                            <input class="checkbox-input" type="checkbox" id="featured"
                                 name="featured" {{ request()->has('featured') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="featured">
+                            <label class="checkbox-label" for="featured">
                                 <i class="fas fa-star me-2"></i>Featured Products
                             </label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="best-seller"
+                        <div class="checkbox-item">
+                            <input class="checkbox-input" type="checkbox" id="best-seller"
                                 name="best_seller" {{ request()->has('best_seller') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="best-seller">
+                            <label class="checkbox-label" for="best-seller">
                                 <i class="fas fa-fire me-2"></i>Best Sellers
                             </label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="new-arrival"
+                        <div class="checkbox-item">
+                            <input class="checkbox-input" type="checkbox" id="new-arrival"
                                 name="new_arrival" {{ request()->has('new_arrival') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="new-arrival">
+                            <label class="checkbox-label" for="new-arrival">
                                 <i class="fas fa-bell me-2"></i>New Arrivals
                             </label>
                         </div>
                         @if(request()->has('sale'))
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="sale"
+                        <div class="checkbox-item">
+                            <input class="checkbox-input" type="checkbox" id="sale"
                                 name="sale" checked>
-                            <label class="form-check-label" for="sale">
+                            <label class="checkbox-label" for="sale">
                                 <i class="fas fa-tag me-2"></i>On Sale
                             </label>
                         </div>
@@ -115,8 +115,8 @@
                 </div>
 
                 <!-- Sort Options -->
-                <div class="mb-5">
-                    <h5 class="sidebar-title mb-4">Sort By</h5>
+                <div class="sidebar-section">
+                    <h5 class="sidebar-title">Sort By</h5>
                     <div class="sort-options">
                         <select class="form-select" id="sort-select">
                             <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
@@ -130,7 +130,7 @@
                 </div>
 
                 <!-- Clear Filters -->
-                <div>
+                <div class="sidebar-section">
                     <a href="{{ route('shop.index') }}" class="btn btn-outline w-100">
                         <i class="fas fa-redo me-2"></i>Clear All Filters
                     </a>
@@ -139,74 +139,95 @@
         </div>
 
         <!-- Product Grid -->
-        <div class="col-lg-9">
+        <div class="shop-main">
             <!-- Search and Filter Bar -->
-            <div class="filter-bar mb-5">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <form action="{{ route('shop.index') }}" method="GET" class="search-form">
-                            <div class="input-group">
-                                <input type="text" class="form-control search-input" name="search"
-                                    placeholder="Search for almonds, cashews, dates..."
-                                    value="{{ request('search') }}"
-                                    aria-label="Search products">
-                                <button class="btn btn-primary search-btn" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                        <div class="results-count">
-                            <span class="text-muted">
-                                Showing {{ $products->firstItem() }}-{{ $products->lastItem() }}
-                                of {{ $products->total() }} products
-                            </span>
+            <div class="shop-header">
+                <div class="search-filter-bar">
+                    <form action="{{ route('shop.index') }}" method="GET" class="shop-search-form">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="search-input" name="search"
+                                placeholder="Search almonds, cashews, dates..."
+                                value="{{ request('search') }}"
+                                aria-label="Search products">
+                            <button class="search-btn" type="submit">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
                         </div>
+                    </form>
+                    <div class="results-info">
+                        <span class="results-text">
+                            Showing {{ $products->firstItem() }}-{{ $products->lastItem() }}
+                            of {{ $products->total() }} products
+                        </span>
                     </div>
                 </div>
-            </div>
 
-            <!-- Active Filters -->
-            @if(request()->anyFilled(['category', 'search', 'featured', 'best_seller', 'new_arrival', 'sale', 'max_price']))
-            <div class="active-filters mb-4">
-                <div class="d-flex flex-wrap gap-2">
-                    <span class="filter-label">Active Filters:</span>
-                    @if(request('category'))
-                    <span class="filter-tag">
-                        {{ $categories->firstWhere('slug', request('category'))->name ?? request('category') }}
-                        <a href="{{ route('shop.index', request()->except('category')) }}" class="remove-filter">
-                            <i class="fas fa-times"></i>
-                        </a>
-                    </span>
-                    @endif
-                    @if(request('search'))
-                    <span class="filter-tag">
-                        Search: "{{ request('search') }}"
-                        <a href="{{ route('shop.index', request()->except('search')) }}" class="remove-filter">
-                            <i class="fas fa-times"></i>
-                        </a>
-                    </span>
-                    @endif
-                    @if(request('featured'))
-                    <span class="filter-tag">
-                        Featured
-                        <a href="{{ route('shop.index', request()->except('featured')) }}" class="remove-filter">
-                            <i class="fas fa-times"></i>
-                        </a>
-                    </span>
-                    @endif
-                    @if(request('max_price'))
-                    <span class="filter-tag">
-                        Max: ${{ request('max_price') }}
-                        <a href="{{ route('shop.index', request()->except('max_price')) }}" class="remove-filter">
-                            <i class="fas fa-times"></i>
-                        </a>
-                    </span>
-                    @endif
+                <!-- Active Filters -->
+                @if(request()->anyFilled(['category', 'search', 'featured', 'best_seller', 'new_arrival', 'sale', 'max_price']))
+                <div class="active-filters">
+                    <span class="filters-label">Active Filters:</span>
+                    <div class="filters-tags">
+                        @if(request('category'))
+                        <span class="filter-tag">
+                            {{ $categories->firstWhere('slug', request('category'))->name ?? request('category') }}
+                            <a href="{{ route('shop.index', request()->except('category')) }}" class="remove-filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                        @if(request('search'))
+                        <span class="filter-tag">
+                            Search: "{{ request('search') }}"
+                            <a href="{{ route('shop.index', request()->except('search')) }}" class="remove-filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                        @if(request('featured'))
+                        <span class="filter-tag">
+                            Featured
+                            <a href="{{ route('shop.index', request()->except('featured')) }}" class="remove-filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                        @if(request('best_seller'))
+                        <span class="filter-tag">
+                            Best Seller
+                            <a href="{{ route('shop.index', request()->except('best_seller')) }}" class="remove-filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                        @if(request('new_arrival'))
+                        <span class="filter-tag">
+                            New Arrival
+                            <a href="{{ route('shop.index', request()->except('new_arrival')) }}" class="remove-filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                        @if(request('sale'))
+                        <span class="filter-tag">
+                            On Sale
+                            <a href="{{ route('shop.index', request()->except('sale')) }}" class="remove-filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                        @if(request('max_price'))
+                        <span class="filter-tag">
+                            Max: ${{ request('max_price') }}
+                            <a href="{{ route('shop.index', request()->except('max_price')) }}" class="remove-filter">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </span>
+                        @endif
+                    </div>
                 </div>
+                @endif
             </div>
-            @endif
 
             <!-- Products Grid -->
             @if($products->count() > 0)
@@ -269,15 +290,15 @@
                         @if($product->average_rating > 0)
                         <div class="product-rating">
                             @for($i = 1; $i <= 5; $i++)
-                                @if($i <=floor($product->average_rating))
-                                <i class="fas fa-star text-warning"></i>
+                                @if($i <= floor($product->average_rating))
+                                <i class="fas fa-star"></i>
                                 @elseif($i - 0.5 <= $product->average_rating)
-                                    <i class="fas fa-star-half-alt text-warning"></i>
-                                    @else
-                                    <i class="far fa-star text-warning"></i>
-                                    @endif
-                                    @endfor
-                                    <span class="rating-count">({{ $product->total_reviews }})</span>
+                                <i class="fas fa-star-half-alt"></i>
+                                @else
+                                <i class="far fa-star"></i>
+                                @endif
+                            @endfor
+                            <span class="rating-count">({{ $product->total_reviews }})</span>
                         </div>
                         @endif
 
@@ -289,7 +310,7 @@
                             @endif
                         </div>
 
-                        <div class="product-meta mt-2">
+                        <div class="product-meta">
                             @if($product->is_featured)
                             <span class="meta-tag featured">
                                 <i class="fas fa-star me-1"></i>Featured
@@ -307,50 +328,42 @@
             </div>
 
             <!-- Pagination -->
-            <div class="pagination-wrapper mt-5">
-                <div class="d-flex justify-content-between align-items-center">
+            <div class="pagination-wrapper">
+                <div class="pagination-container">
                     <div class="pagination-info">
-                        <span class="text-muted">
+                        <span class="pagination-text">
                             Page {{ $products->currentPage() }} of {{ $products->lastPage() }}
                         </span>
                     </div>
-                    <!-- Pagination -->
-                    <div class="pagination-wrapper mt-5">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="pagination-info">
-                                <span class="text-muted">
-                                    Page {{ $products->currentPage() }} of {{ $products->lastPage() }}
-                                </span>
-                            </div>
-                            <div class="pagination-links">
-                                {{ $products->links() }}
-                            </div>
-                            <div class="pagination-per-page">
-                                <select class="form-select form-select-sm" id="per-page-select">
-                                    <option value="12" {{ request('per_page') == 12 ? 'selected' : '' }}>12 per page</option>
-                                    <option value="24" {{ request('per_page') == 24 ? 'selected' : '' }}>24 per page</option>
-                                    <option value="48" {{ request('per_page') == 48 ? 'selected' : '' }}>48 per page</option>
-                                    <option value="96" {{ request('per_page') == 96 ? 'selected' : '' }}>96 per page</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="pagination-links">
+                        {{ $products->onEachSide(1)->links() }}
+                    </div>
+                    <div class="pagination-per-page">
+                        <select class="form-select" id="per-page-select">
+                            <option value="12" {{ request('per_page') == 12 ? 'selected' : '' }}>12 per page</option>
+                            <option value="24" {{ request('per_page') == 24 ? 'selected' : '' }}>24 per page</option>
+                            <option value="36" {{ request('per_page') == 36 ? 'selected' : '' }}>36 per page</option>
+                            <option value="48" {{ request('per_page') == 48 ? 'selected' : '' }}>48 per page</option>
+                        </select>
                     </div>
                 </div>
             </div>
             @else
-            <div class="empty-state text-center py-5">
-                <div class="empty-state-icon">
-                    <i class="fas fa-search fa-4x text-muted mb-3"></i>
-                </div>
-                <h4 class="mb-3">No products found</h4>
-                <p class="text-muted mb-4">Try adjusting your search or filter criteria</p>
-                <div class="empty-state-actions">
-                    <a href="{{ route('shop.index') }}" class="btn btn-primary me-2">
-                        Clear All Filters
-                    </a>
-                    <a href="{{ route('shop.index', ['new_arrival' => true]) }}" class="btn btn-outline">
-                        View New Arrivals
-                    </a>
+            <div class="empty-state">
+                <div class="empty-state-content">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>No products found</h4>
+                    <p class="empty-state-text">Try adjusting your search or filter criteria</p>
+                    <div class="empty-state-actions">
+                        <a href="{{ route('shop.index') }}" class="btn btn-primary">
+                            <i class="fas fa-redo me-2"></i>Clear All Filters
+                        </a>
+                        <a href="{{ route('shop.index', ['new_arrival' => true]) }}" class="btn btn-outline">
+                            <i class="fas fa-bell me-2"></i>View New Arrivals
+                        </a>
+                    </div>
                 </div>
             </div>
             @endif
@@ -361,26 +374,24 @@
 <!-- Newsletter Section -->
 <section class="newsletter-section">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h2 class="text-white mb-3">Stay Updated</h2>
-                <p class="text-white mb-4">Subscribe to our newsletter for exclusive offers, new arrivals, and health tips!</p>
+        <div class="newsletter-container">
+            <div class="newsletter-content">
+                <h2 class="newsletter-title">Stay Updated</h2>
+                <p class="newsletter-text">Subscribe to our newsletter for exclusive offers, new arrivals, and health tips!</p>
             </div>
-            <div class="col-lg-6">
-                <form class="newsletter-form">
-                    <div class="input-group">
-                        <input type="email"
-                            class="form-control"
-                            placeholder="Enter your email address"
-                            required
-                            aria-label="Email for newsletter">
-                        <button type="submit" class="btn btn-light">
-                            Subscribe <i class="fas fa-paper-plane ms-2"></i>
-                        </button>
-                    </div>
-                    <p class="form-text text-white mt-2">We respect your privacy. Unsubscribe at any time.</p>
-                </form>
-            </div>
+            <form class="newsletter-form">
+                <div class="newsletter-input-group">
+                    <input type="email"
+                        class="newsletter-input"
+                        placeholder="Enter your email address"
+                        required
+                        aria-label="Email for newsletter">
+                    <button type="submit" class="newsletter-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p class="newsletter-note">We respect your privacy. Unsubscribe at any time.</p>
+            </form>
         </div>
     </div>
 </section>
@@ -388,25 +399,46 @@
 
 @push('styles')
 <style>
+    /* Hero Section */
     .hero-section {
-        padding-top: 120px;
-        padding-bottom: var(--space-xl);
+        padding: var(--space-2xl) 0 var(--space-xl);
         background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
-        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 40%),
+            radial-gradient(circle at 90% 80%, rgba(17, 80, 40, 0.1) 0%, transparent 40%);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
         text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
     }
 
-    .hero-section .hero-title {
-        color: white;
+    .hero-title {
         font-size: var(--text-4xl);
+        color: white;
         margin-bottom: var(--space-md);
+        font-weight: 700;
     }
 
-    .hero-section .lead {
-        color: rgba(255, 255, 255, 0.9);
+    .hero-subtitle {
         font-size: var(--text-lg);
-        max-width: 600px;
-        margin: 0 auto var(--space-lg);
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: var(--space-xl);
+        line-height: 1.6;
     }
 
     .breadcrumb-wrapper {
@@ -414,19 +446,21 @@
     }
 
     .breadcrumb {
-        display: flex;
-        justify-content: center;
+        display: inline-flex;
         align-items: center;
         gap: var(--space-xs);
-        list-style: none;
-        padding: 0;
-        margin: 0;
+        background: rgba(255, 255, 255, 0.1);
+        padding: var(--space-sm) var(--space-lg);
+        border-radius: var(--radius-full);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
 
     .breadcrumb-item {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.9);
         text-decoration: none;
         font-size: var(--text-sm);
+        font-weight: 500;
         transition: var(--transition-fast);
     }
 
@@ -435,28 +469,50 @@
     }
 
     .breadcrumb-item.active {
-        color: var(--secondary-color);
+        color: var(--accent-color);
         font-weight: 600;
     }
 
     .breadcrumb-separator {
         color: rgba(255, 255, 255, 0.6);
+        font-size: var(--text-xs);
     }
 
-    /* Sidebar Styles */
-    .sidebar {
+    /* Shop Container */
+    .shop-container {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: var(--space-xl);
+    }
+
+    /* Sidebar */
+    .shop-sidebar {
         position: sticky;
-        top: 100px;
+        top: calc(var(--header-height) + var(--space-lg));
+        height: fit-content;
+    }
+
+    .sidebar-content {
         background: var(--surface-color);
         border-radius: var(--radius-lg);
+        padding: var(--space-lg);
         box-shadow: var(--shadow-md);
-        transition: var(--transition-normal);
+        border: 1px solid var(--border-color);
+    }
+
+    .sidebar-section {
+        margin-bottom: var(--space-xl);
+    }
+
+    .sidebar-section:last-child {
+        margin-bottom: 0;
     }
 
     .sidebar-title {
         font-size: var(--text-lg);
         font-weight: 600;
         color: var(--text-primary);
+        margin-bottom: var(--space-md);
         padding-bottom: var(--space-sm);
         border-bottom: 2px solid var(--border-color);
     }
@@ -475,39 +531,57 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: var(--space-xs) var(--space-sm);
+        padding: var(--space-sm) var(--space-md);
         color: var(--text-secondary);
         text-decoration: none;
-        border-radius: var(--radius-sm);
-        transition: var(--transition-fast);
+        border-radius: var(--radius-md);
+        transition: var(--transition-normal);
+        border-left: 3px solid transparent;
     }
 
     .sidebar-link:hover {
-        background: var(--primary-light);
+        background: var(--primary-color);
         color: white;
+        border-left-color: var(--accent-color);
         transform: translateX(5px);
     }
 
     .sidebar-link.active {
-        background: var(--primary-color);
+        background: linear-gradient(90deg, var(--primary-color) 0%, transparent 100%);
         color: white;
+        border-left-color: var(--accent-color);
+    }
+
+    .sidebar-text {
         font-weight: 500;
     }
 
-    .sidebar-link .badge-count {
+    .sidebar-badge {
         background: var(--surface-color);
         color: var(--text-primary);
         font-size: var(--text-xs);
-        padding: 2px 6px;
+        padding: 2px 8px;
         border-radius: var(--radius-full);
+        font-weight: 600;
+        min-width: 30px;
+        text-align: center;
     }
 
-    .sidebar-link.active .badge-count {
+    .sidebar-link:hover .sidebar-badge {
         background: white;
         color: var(--primary-color);
     }
 
-    /* Price Range Slider */
+    .sidebar-link.active .sidebar-badge {
+        background: white;
+        color: var(--primary-color);
+    }
+
+    /* Price Filter */
+    .price-filter {
+        width: 100%;
+    }
+
     .price-range-wrapper {
         padding: var(--space-md) 0;
     }
@@ -516,98 +590,237 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: var(--space-md);
-        padding: var(--space-sm);
+        margin-bottom: var(--space-lg);
+        padding: var(--space-md);
         background: var(--background-color);
         border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
     }
 
     .price-label {
         font-weight: 500;
         color: var(--text-primary);
+        font-size: var(--text-sm);
     }
 
     .price-value {
         font-weight: 700;
         color: var(--primary-color);
+        font-size: var(--text-lg);
+    }
+
+    .price-slider-container {
+        padding: var(--space-lg) 0;
     }
 
     .price-slider {
         width: 100%;
         height: 6px;
         -webkit-appearance: none;
-        appearance: none;
         background: var(--border-color);
         border-radius: var(--radius-full);
         outline: none;
-        margin: var(--space-md) 0;
     }
 
     .price-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
-        appearance: none;
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
         background: var(--primary-color);
         cursor: pointer;
-        border: 3px solid var(--surface-color);
-        box-shadow: var(--shadow-sm);
+        border: 3px solid white;
+        box-shadow: var(--shadow-md);
+        transition: var(--transition-normal);
+    }
+
+    .price-slider::-webkit-slider-thumb:hover {
+        background: var(--accent-color);
+        transform: scale(1.1);
     }
 
     .price-slider::-moz-range-thumb {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
         background: var(--primary-color);
         cursor: pointer;
-        border: 3px solid var(--surface-color);
-        box-shadow: var(--shadow-sm);
+        border: 3px solid white;
+        box-shadow: var(--shadow-md);
     }
 
     .price-labels {
+        display: flex;
+        justify-content: space-between;
         font-size: var(--text-sm);
         color: var(--text-muted);
+        margin-top: var(--space-sm);
     }
 
     /* Filter Checkboxes */
-    .filter-checkboxes .form-check {
-        margin-bottom: var(--space-sm);
-        padding-left: 0;
+    .filter-checkboxes {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
     }
 
-    .filter-checkboxes .form-check-input {
-        margin-right: var(--space-xs);
-    }
-
-    .filter-checkboxes .form-check-label {
+    .checkbox-item {
         display: flex;
         align-items: center;
+    }
+
+    .checkbox-input {
+        display: none;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        padding: var(--space-sm) var(--space-md);
+        color: var(--text-secondary);
+        border-radius: var(--radius-md);
         cursor: pointer;
-        padding: var(--space-xs) var(--space-sm);
-        border-radius: var(--radius-sm);
-        transition: var(--transition-fast);
+        transition: var(--transition-normal);
+        width: 100%;
+        user-select: none;
+        border: 1px solid transparent;
     }
 
-    .filter-checkboxes .form-check-label:hover {
+    .checkbox-label:hover {
         background: var(--background-color);
+        border-color: var(--border-color);
     }
 
-    .filter-checkboxes .form-check-input:checked+.form-check-label {
-        background: var(--primary-light);
+    .checkbox-input:checked + .checkbox-label {
+        background: var(--primary-color);
         color: white;
+        border-color: var(--primary-color);
+    }
+
+    .checkbox-label i {
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Sort Options */
+    .sort-options .form-select {
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: var(--space-sm) var(--space-md);
+        border-radius: var(--radius-md);
+        font-weight: 500;
+        transition: var(--transition-normal);
+    }
+
+    .sort-options .form-select:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    /* Shop Header */
+    .shop-header {
+        margin-bottom: var(--space-xl);
+    }
+
+    .search-filter-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-lg);
+        margin-bottom: var(--space-md);
+    }
+
+    .shop-search-form {
+        flex: 1;
+        max-width: 500px;
+    }
+
+    .search-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 16px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 12px 52px 12px 44px;
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-full);
+        background: var(--surface-color);
+        color: var(--text-primary);
+        font-size: var(--text-base);
+        transition: var(--transition-normal);
+        font-weight: 500;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+    }
+
+    .search-btn {
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--gradient-gold);
+        border: none;
+        color: var(--text-primary);
+        cursor: pointer;
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-normal);
+    }
+
+    .search-btn:hover {
+        transform: translateY(-50%) scale(1.1) rotate(10deg);
+    }
+
+    .results-info {
+        flex-shrink: 0;
+    }
+
+    .results-text {
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+        font-weight: 500;
     }
 
     /* Active Filters */
     .active-filters {
-        background: var(--background-color);
+        background: var(--surface-color);
         padding: var(--space-md);
         border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
     }
 
-    .filter-label {
-        font-weight: 500;
+    .filters-label {
+        display: block;
+        font-weight: 600;
         color: var(--text-primary);
+        margin-bottom: var(--space-sm);
+        font-size: var(--text-sm);
+    }
+
+    .filters-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
     }
 
     .filter-tag {
@@ -616,41 +829,329 @@
         gap: var(--space-xs);
         background: var(--primary-color);
         color: white;
-        padding: 4px 12px;
+        padding: 6px 12px;
         border-radius: var(--radius-full);
-        font-size: var(--text-sm);
+        font-size: var(--text-xs);
+        font-weight: 500;
+        transition: var(--transition-fast);
     }
 
-    .filter-tag .remove-filter {
+    .filter-tag:hover {
+        background: var(--primary-dark);
+    }
+
+    .remove-filter {
         color: white;
         text-decoration: none;
         opacity: 0.8;
         transition: var(--transition-fast);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
     }
 
-    .filter-tag .remove-filter:hover {
+    .remove-filter:hover {
         opacity: 1;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Products Grid */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: var(--space-lg);
+        margin-bottom: var(--space-2xl);
+    }
+
+    .product-card {
+        background: var(--surface-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: 1px solid var(--border-color);
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--accent-color);
+    }
+
+    .product-image {
+        position: relative;
+        height: 240px;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.1);
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        padding: 6px 12px;
+        font-size: var(--text-xs);
+        font-weight: 700;
+        border-radius: var(--radius-full);
+        color: white;
+        z-index: 2;
+        text-transform: uppercase;
+    }
+
+    .badge-new {
+        background: var(--gradient-primary);
+    }
+
+    .badge-sale {
+        background: var(--gradient-gold);
+        color: var(--text-primary);
+    }
+
+    .badge-featured {
+        background: var(--primary-color);
+    }
+
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, transparent, rgba(17, 80, 40, 0.8));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: var(--transition-normal);
+    }
+
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: var(--space-xs);
+        transform: translateY(20px);
+        transition: transform 0.4s ease;
+    }
+
+    .product-card:hover .product-actions {
+        transform: translateY(0);
+    }
+
+    .product-actions .btn {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-actions .btn:hover {
+        transform: scale(1.1);
+    }
+
+    .product-content {
+        padding: var(--space-lg);
+    }
+
+    .product-category {
+        font-size: var(--text-xs);
+        color: var(--text-muted);
+        margin-bottom: var(--space-xs);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .product-title {
+        font-size: var(--text-lg);
+        font-weight: 700;
+        margin-bottom: var(--space-sm);
+        line-height: 1.4;
+    }
+
+    .product-title a {
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: var(--transition-fast);
+    }
+
+    .product-title a:hover {
+        color: var(--accent-color);
+    }
+
+    .product-rating {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: var(--space-sm);
+    }
+
+    .product-rating i {
+        color: var(--accent-color);
+        font-size: 14px;
+    }
+
+    .rating-count {
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+        margin-left: 4px;
+    }
+
+    .product-price {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+    }
+
+    .current-price {
+        font-size: var(--text-xl);
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .old-price {
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+        text-decoration: line-through;
+    }
+
+    .discount {
+        font-size: var(--text-xs);
+        font-weight: 700;
+        color: var(--danger-color);
+        background: rgba(231, 76, 60, 0.1);
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+    }
+
+    .product-meta {
+        display: flex;
+        gap: var(--space-xs);
+        flex-wrap: wrap;
+    }
+
+    .meta-tag {
+        font-size: var(--text-xs);
+        padding: 4px 8px;
+        border-radius: var(--radius-sm);
+        display: inline-flex;
+        align-items: center;
+        font-weight: 500;
+    }
+
+    .meta-tag.featured {
+        background: rgba(17, 80, 40, 0.1);
+        color: var(--primary-color);
+    }
+
+    .meta-tag.best-seller {
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--accent-color);
+    }
+
+    /* Pagination */
+    .pagination-wrapper {
+        background: var(--surface-color);
+        padding: var(--space-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--space-md);
+    }
+
+    .pagination-info {
+        flex-shrink: 0;
+    }
+
+    .pagination-text {
+        font-size: var(--text-sm);
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .pagination-links {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination-per-page {
+        flex-shrink: 0;
+    }
+
+    .pagination-per-page .form-select {
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-md);
+        font-size: var(--text-sm);
     }
 
     /* Empty State */
     .empty-state {
         background: var(--surface-color);
         border-radius: var(--radius-lg);
-        padding: var(--space-xl);
-        box-shadow: var(--shadow-md);
+        padding: var(--space-2xl);
+        text-align: center;
+        border: 1px solid var(--border-color);
+    }
+
+    .empty-state-content {
+        max-width: 500px;
+        margin: 0 auto;
     }
 
     .empty-state-icon {
-        margin-bottom: var(--space-lg);
+        width: 80px;
+        height: 80px;
+        background: var(--background-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--space-lg);
+        color: var(--text-muted);
+        font-size: 32px;
     }
 
     .empty-state h4 {
-        margin-bottom: var(--space-md);
+        font-size: var(--text-xl);
         color: var(--text-primary);
+        margin-bottom: var(--space-sm);
+        font-weight: 600;
     }
 
-    .empty-state p {
+    .empty-state-text {
+        color: var(--text-secondary);
         margin-bottom: var(--space-xl);
+        line-height: 1.6;
     }
 
     .empty-state-actions {
@@ -660,125 +1161,154 @@
         flex-wrap: wrap;
     }
 
-    /* Product Meta Tags */
-    .product-meta {
+    /* Newsletter Section */
+    .newsletter-section {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 50%, var(--accent-color) 100%);
+        padding: var(--space-xl) 0;
+        margin-top: var(--space-2xl);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .newsletter-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-xl);
+    }
+
+    .newsletter-content {
+        flex: 1;
+    }
+
+    .newsletter-title {
+        color: white;
+        font-size: var(--text-2xl);
+        font-weight: 700;
+        margin-bottom: var(--space-sm);
+    }
+
+    .newsletter-text {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: var(--text-lg);
+        line-height: 1.5;
+    }
+
+    .newsletter-form {
+        flex: 1;
+        max-width: 500px;
+    }
+
+    .newsletter-input-group {
         display: flex;
         gap: var(--space-xs);
-        flex-wrap: wrap;
+        margin-bottom: var(--space-sm);
     }
 
-    .meta-tag {
-        font-size: var(--text-xs);
-        padding: 2px 8px;
-        border-radius: var(--radius-sm);
-        display: inline-flex;
-        align-items: center;
+    .newsletter-input {
+        flex: 1;
+        padding: 14px 20px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-full);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: var(--text-base);
+        transition: var(--transition-normal);
     }
 
-    .meta-tag.featured {
-        background: rgba(139, 69, 19, 0.1);
+    .newsletter-input:focus {
+        outline: none;
+        border-color: white;
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .newsletter-input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .newsletter-btn {
+        background: white;
+        border: none;
         color: var(--primary-color);
-    }
-
-    .meta-tag.best-seller {
-        background: rgba(218, 165, 32, 0.1);
-        color: var(--secondary-color);
-    }
-
-    /* Pagination */
-    .pagination-wrapper {
-        background: var(--surface-color);
-        padding: var(--space-lg);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
-    }
-
-    .pagination-info {
-        font-size: var(--text-sm);
-    }
-
-    .pagination-per-page select {
-        max-width: 150px;
-    }
-
-    /* Custom Pagination */
-    .custom-pagination {
-        display: flex;
-        gap: var(--space-xs);
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .custom-pagination .page-item {
-        display: flex;
-    }
-
-    .custom-pagination .page-link {
+        padding: 14px 28px;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition-normal);
         display: flex;
         align-items: center;
-        justify-content: center;
-        min-width: 40px;
-        height: 40px;
-        padding: 0 var(--space-sm);
-        border: 2px solid var(--border-color);
-        border-radius: var(--radius-md);
-        background: var(--surface-color);
-        color: var(--text-primary);
-        text-decoration: none;
-        transition: var(--transition-fast);
-        font-weight: 500;
+        gap: var(--space-xs);
     }
 
-    .custom-pagination .page-link:hover {
-        background: var(--primary-light);
+    .newsletter-btn:hover {
+        background: var(--gradient-gold);
         color: white;
-        border-color: var(--primary-light);
+        transform: translateY(-2px);
     }
 
-    .custom-pagination .page-item.active .page-link {
-        background: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-    }
-
-    .custom-pagination .page-item.disabled .page-link {
-        opacity: 0.5;
-        cursor: not-allowed;
-        background: var(--border-color);
+    .newsletter-note {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: var(--text-xs);
+        margin-top: var(--space-xs);
     }
 
     /* Responsive Design */
+    @media (max-width: 1200px) {
+        .shop-container {
+            grid-template-columns: 280px 1fr;
+        }
+    }
+
     @media (max-width: 992px) {
-        .hero-section {
-            padding-top: 100px;
+        .shop-container {
+            grid-template-columns: 1fr;
         }
 
-        .hero-section .hero-title {
-            font-size: var(--text-3xl);
-        }
-
-        .sidebar {
+        .shop-sidebar {
             position: static;
-            margin-bottom: var(--space-lg);
+        }
+
+        .search-filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .shop-search-form {
+            max-width: 100%;
+        }
+
+        .results-info {
+            text-align: center;
         }
 
         .products-grid {
             grid-template-columns: repeat(2, 1fr);
         }
 
-        .pagination-wrapper {
+        .pagination-container {
             flex-direction: column;
-            gap: var(--space-md);
+            text-align: center;
         }
 
-        .pagination-info,
-        .pagination-per-page {
+        .newsletter-container {
+            flex-direction: column;
             text-align: center;
+        }
+
+        .newsletter-form {
+            max-width: 100%;
         }
     }
 
     @media (max-width: 768px) {
+        .hero-title {
+            font-size: var(--text-3xl);
+        }
+
+        .hero-subtitle {
+            font-size: var(--text-base);
+        }
+
         .products-grid {
             grid-template-columns: 1fr;
         }
@@ -793,21 +1323,86 @@
     }
 
     @media (max-width: 576px) {
-        .filter-bar .row {
-            flex-direction: column;
-            gap: var(--space-md);
+        .hero-title {
+            font-size: var(--text-2xl);
         }
 
-        .filter-bar .col-md-8,
-        .filter-bar .col-md-4 {
-            width: 100%;
+        .hero-subtitle {
+            font-size: var(--text-sm);
         }
 
-        .pagination-wrapper .d-flex {
-            flex-direction: column;
-            gap: var(--space-md);
-            align-items: center;
+        .breadcrumb {
+            padding: var(--space-xs) var(--space-md);
+            font-size: var(--text-xs);
         }
+
+        .sidebar-content {
+            padding: var(--space-md);
+        }
+
+        .active-filters {
+            padding: var(--space-sm);
+        }
+
+        .filters-tags {
+            justify-content: center;
+        }
+
+        .product-image {
+            height: 200px;
+        }
+    }
+
+    /* Custom Pagination Styles */
+    .pagination {
+        display: flex;
+        gap: var(--space-xs);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .page-item {
+        display: flex;
+    }
+
+    .page-item.active .page-link {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .page-item.disabled .page-link {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        padding: 0 var(--space-sm);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        background: var(--surface-color);
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition-fast);
+    }
+
+    .page-link:hover {
+        background: var(--primary-light);
+        color: white;
+        border-color: var(--primary-light);
+    }
+
+    .page-item.active .page-link {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
     }
 </style>
 @endpush
@@ -836,20 +1431,16 @@
         }
 
         // Checkbox filters
-        const checkboxes = ['featured', 'best-seller', 'new-arrival', 'sale'];
-        checkboxes.forEach(id => {
-            const checkbox = document.getElementById(id);
-            if (checkbox) {
-                checkbox.addEventListener('change', function() {
-                    const params = new URLSearchParams(window.location.search);
-                    if (this.checked) {
-                        params.set(this.name, 'true');
-                    } else {
-                        params.delete(this.name);
-                    }
-                    window.location.href = `{{ route('shop.index') }}?${params.toString()}`;
-                });
-            }
+        document.querySelectorAll('.checkbox-input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const params = new URLSearchParams(window.location.search);
+                if (this.checked) {
+                    params.set(this.name, 'true');
+                } else {
+                    params.delete(this.name);
+                }
+                window.location.href = `{{ route('shop.index') }}?${params.toString()}`;
+            });
         });
 
         // Sort select
@@ -868,7 +1459,7 @@
             perPageSelect.addEventListener('change', function() {
                 const params = new URLSearchParams(window.location.search);
                 params.set('per_page', this.value);
-                params.set('page', '1'); // Reset to first page
+                params.set('page', '1');
                 window.location.href = `{{ route('shop.index') }}?${params.toString()}`;
             });
         }
@@ -902,7 +1493,7 @@
 
                     if (data.success) {
                         // Update cart count
-                        document.querySelectorAll('.cart-count').forEach(element => {
+                        document.querySelectorAll('.cart-btn .badge').forEach(element => {
                             element.textContent = data.cart_count;
                             element.style.display = data.cart_count > 0 ? 'flex' : 'none';
                         });
@@ -945,14 +1536,6 @@
                     const data = await response.json();
 
                     if (data.success) {
-                        // Update wishlist count
-                        if (data.wishlist_count !== undefined) {
-                            document.querySelectorAll('.badge-count').forEach(element => {
-                                element.textContent = data.wishlist_count;
-                                element.style.display = data.wishlist_count > 0 ? 'inline' : 'none';
-                            });
-                        }
-
                         // Update button icon
                         const icon = this.querySelector('i');
                         if (data.in_wishlist) {
@@ -963,7 +1546,13 @@
                             icon.classList.add('far');
                         }
 
-                        showToast(data.message, data.in_wishlist ? 'success' : 'info');
+                        // Update wishlist count
+                        document.querySelectorAll('.wishlist-btn .badge').forEach(element => {
+                            element.textContent = data.wishlist_count || 0;
+                            element.style.display = data.wishlist_count > 0 ? 'flex' : 'none';
+                        });
+
+                        showToast(data.message, 'success');
                     }
                 } catch (error) {
                     console.error('Error toggling wishlist:', error);
@@ -973,52 +1562,47 @@
         });
 
         // Toast notification function
-        function showToast(message, type = 'info') {
+        window.showToast = function(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             if (!container) return;
 
             const toast = document.createElement('div');
-            toast.className = `toast show align-items-center text-white bg-${type === 'error' ? 'danger' : type} border-0`;
-            toast.setAttribute('role', 'alert');
-            toast.setAttribute('aria-live', 'assertive');
-            toast.setAttribute('aria-atomic', 'true');
-
+            toast.className = `toast toast-${type} animate__animated animate__fadeInRight`;
             toast.innerHTML = `
-                <div class="d-flex">
-                    <div class="toast-body">
-                        <i class="fas ${getToastIcon(type)} me-2"></i>
-                        ${message}
+                <div class="toast-content">
+                    <div class="toast-icon">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <div class="toast-body">
+                        <span class="toast-message">${message}</span>
+                    </div>
                 </div>
+                <button class="toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
             `;
 
             container.appendChild(toast);
 
-            // Initialize Bootstrap toast
-            const bsToast = new bootstrap.Toast(toast, {
-                delay: 3000
-            });
-            bsToast.show();
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
 
-            // Remove toast after it hides
-            toast.addEventListener('hidden.bs.toast', () => {
-                toast.remove();
-            });
-        }
+            const autoRemove = setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
 
-        function getToastIcon(type) {
-            switch (type) {
-                case 'success':
-                    return 'fa-check-circle';
-                case 'error':
-                    return 'fa-exclamation-circle';
-                case 'warning':
-                    return 'fa-exclamation-triangle';
-                default:
-                    return 'fa-info-circle';
-            }
-        }
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            });
+        };
     });
 </script>
 @endpush
