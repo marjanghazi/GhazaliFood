@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
@@ -40,7 +41,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/count', [CartController::class, 'count'])->name('count');
 });
 
-// Wishlist Routes - ADD THIS SIMPLE ROUTE AT THE TOP LEVEL
+// Wishlist Routes
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist')->middleware('auth');
 
 // Wishlist API Routes (with prefix)
@@ -74,9 +75,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{id}', [AuthController::class, 'orderDetails'])->name('orders.show');
 });
 
-// Checkout Routes
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews')->middleware('auth');
+
+
+// Checkout Routes - ADD THIS SIMPLE ROUTE AT THE TOP LEVEL
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout')->middleware('auth');
+
+// Checkout API Routes (with prefix)
 Route::middleware('auth')->prefix('checkout')->name('checkout.')->group(function () {
-    Route::get('/', [CheckoutController::class, 'index'])->name('index');
     Route::post('/', [CheckoutController::class, 'store'])->name('store');
     Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
     Route::get('/cancel', [CheckoutController::class, 'cancel'])->name('cancel');
@@ -203,16 +209,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Settings Routes - CHANGED FROM PUT TO POST FOR FORMS
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
-
+    
     // Main settings update route - change from PUT to POST
     Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
-
+    
     // Separate settings routes for each tab - change from PUT to POST
     Route::post('/settings/general', [AdminController::class, 'updateGeneralSettings'])->name('settings.general.update');
     Route::post('/settings/email', [AdminController::class, 'updateEmailSettings'])->name('settings.email.update');
     Route::post('/settings/payment', [AdminController::class, 'updatePaymentSettings'])->name('settings.payment.update');
     Route::post('/settings/maintenance', [AdminController::class, 'updateMaintenanceSettings'])->name('settings.maintenance.update');
-
+    
     // Additional settings utility routes
     Route::get('/settings/backup', [AdminController::class, 'backupDatabase'])->name('settings.backup');
     Route::get('/settings/cache/clear', [AdminController::class, 'clearCache'])->name('settings.cache.clear');
