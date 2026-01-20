@@ -21,6 +21,21 @@ use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
+    // Define as constants
+    const ORDER_STATUSES = [
+        'pending',
+        'processing',
+        'shipped',
+        'delivered',
+        'cancelled',
+        'refunded'
+    ];
+    const PAYMENT_STATUSES = [
+        'pending',
+        'paid',
+        'failed',
+        'refunded'
+    ];
     public function dashboard()
     {
         // Get low stock threshold from settings
@@ -99,6 +114,8 @@ class AdminController extends Controller
         return view('admin.orders.edit', [
             'title' => 'Edit Order #' . $order->order_number,
             'order' => $order,
+            'statuses' => self::ORDER_STATUSES,
+            'paymentStatuses' => self::PAYMENT_STATUSES,
             'useAdminLayout' => true
         ]);
     }

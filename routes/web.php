@@ -101,17 +101,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [CheckoutController::class, 'index'])->name('index');
         Route::post('/', [CheckoutController::class, 'store'])->name('store');
         Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
-        Route::get('/cancel', [CheckoutController::class, 'cancel'])->name('cancel');
         
-        // Order Tracking & Management
-        Route::get('/track', [CheckoutController::class, 'track'])->name('track');
+        // Order Management
         Route::get('/order/{order}', [CheckoutController::class, 'orderDetails'])->name('order.details');
+        Route::get('/download-invoice/{order}', [CheckoutController::class, 'downloadInvoice'])->name('download.invoice');
         Route::delete('/cancel/{order}', [CheckoutController::class, 'cancel'])->name('cancel');
     });
-    
-    // User-specific order routes
-    Route::get('/my-orders/{order}', [CheckoutController::class, 'orderDetails'])->name('my.order.details');
-    Route::get('/download-invoice/{order}', [CheckoutController::class, 'downloadInvoice'])->name('download.invoice');
 });
 
 // ============================================================================
@@ -269,13 +264,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 // ============================================================================
-// SOCIAL LOGIN ROUTES (Add these if you implement social login)
-// ============================================================================
-
-// Route::get('/auth/{provider}', [SocialLoginController::class, 'redirectToProvider'])->name('social.login');
-// Route::get('/auth/{provider}/callback', [SocialLoginController::class, 'handleProviderCallback']);
-
-// ============================================================================
 // API ROUTES FOR AJAX REQUESTS
 // ============================================================================
 
@@ -292,9 +280,6 @@ Route::prefix('api')->name('api.')->group(function () {
         Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
         Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
         Route::get('/wishlist/count', [WishlistController::class, 'count'])->name('wishlist.count');
-        Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.apply-coupon');
-        Route::get('/order/{id}/status', [CheckoutController::class, 'orderStatus'])->name('order.status');
-        Route::post('/product/{id}/review', [ReviewController::class, 'store'])->name('product.review');
     });
 });
 

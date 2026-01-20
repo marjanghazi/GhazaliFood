@@ -22,10 +22,10 @@ class CheckoutController extends Controller
         }
 
         $user = Auth::user();
-        
-        // Get cart items from session or database
+
+        // Get cart items from session
         $cartItems = session()->get('cart', []);
-        
+
         if (empty($cartItems)) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty');
         }
@@ -33,13 +33,13 @@ class CheckoutController extends Controller
         // Calculate totals
         $subtotal = 0;
         $items = [];
-        
+
         foreach ($cartItems as $id => $item) {
             $product = Product::find($id);
             if ($product) {
                 $itemTotal = $product->best_price * $item['quantity'];
                 $subtotal += $itemTotal;
-                
+
                 $items[] = [
                     'product' => $product,
                     'quantity' => $item['quantity'],
@@ -54,7 +54,7 @@ class CheckoutController extends Controller
         $freeShippingThreshold = Setting::getValue('free_shipping_threshold', 5000);
         $shippingEnabled = Setting::getValue('shipping_enabled', true);
         $shippingRate = Setting::getValue('shipping_cost', 200);
-        
+
         if ($shippingEnabled && $subtotal < $freeShippingThreshold) {
             $shippingCost = $shippingRate;
         }
@@ -82,24 +82,36 @@ class CheckoutController extends Controller
     public function store(Request $request)
     {
         if (!Auth::check()) {
-            return response()->json(['error' => 'Please login to checkout'], 401);
+            return redirect()->route('login')->with('error', 'Please login to checkout');
         }
 
         $request->validate([
+            'shipping_name' => 'required|string|max:255',
+            'shipping_email' => 'required|email|max:255',
+            'shipping_phone' => 'required|string|max:20',
             'shipping_address' => 'required|string|max:500',
             'shipping_city' => 'required|string|max:100',
             'shipping_state' => 'required|string|max:100',
             'shipping_zip' => 'required|string|max:20',
             'shipping_country' => 'required|string|max:100',
             'billing_same_as_shipping' => 'nullable|boolean',
-            'billing_address' => 'required_if:billing_same_as_shipping,false|string|max:500',
-            'billing_city' => 'required_if:billing_same_as_shipping,false|string|max:100',
-            'billing_state' => 'required_if:billing_same_as_shipping,false|string|max:100',
-            'billing_zip' => 'required_if:billing_same_as_shipping,false|string|max:20',
-            'billing_country' => 'required_if:billing_same_as_shipping,false|string|max:100',
-            'payment_method' => 'required|in:cod,credit_card,debit_card,paypal,bank_transfer',
+            'payment_method' => 'required|in:cod,credit_card,debit_card,bank_transfer',
             'notes' => 'nullable|string|max:1000',
+            'agree_terms' => 'required|accepted',
         ]);
+
+        // Fix: Add billing address validation when needed
+        if (!$request->has('billing_same_as_shipping') || !$request->billing_same_as_shipping) {
+            $request->validate([
+                'billing_address' => 'required|string|max:500',
+                'billing_city' => 'required|string|max:100',
+                'billing_state' => 'required|string|max:100',
+                'billing_zip' => 'required|string|max:20',
+                'billing_country' => 'required|string|max:100',
+            ]);
+        }
+
+
 
         $user = Auth::user();
         $cartItems = session()->get('cart', []);
@@ -111,20 +123,19 @@ class CheckoutController extends Controller
         // Calculate totals
         $subtotal = 0;
         $itemsData = [];
-        
+
         foreach ($cartItems as $id => $item) {
             $product = Product::find($id);
             if ($product && $product->stock_quantity >= $item['quantity']) {
                 $itemTotal = $product->best_price * $item['quantity'];
                 $subtotal += $itemTotal;
-                
+
                 $itemsData[] = [
                     'product_id' => $product->id,
                     'product_name' => $product->name,
                     'quantity' => $item['quantity'],
                     'unit_price' => $product->best_price,
-                    'total_price' => $itemTotal,
-                    'product_data' => $product->toArray()
+                    'total_price' => $itemTotal
                 ];
             } else {
                 return back()->with('error', 'Some items are out of stock or insufficient quantity');
@@ -144,7 +155,7 @@ class CheckoutController extends Controller
         $freeShippingThreshold = Setting::getValue('free_shipping_threshold', 5000);
         $shippingEnabled = Setting::getValue('shipping_enabled', true);
         $shippingRate = Setting::getValue('shipping_cost', 200);
-        
+
         if ($shippingEnabled && $subtotal < $freeShippingThreshold) {
             $shippingCost = $shippingRate;
         }
@@ -158,12 +169,32 @@ class CheckoutController extends Controller
         // Generate order number
         $orderNumber = 'ORD-' . strtoupper(Str::random(6)) . '-' . time();
 
+        // Handle billing address
+        $billingSameAsShipping = $request->has('billing_same_as_shipping');
+
+        if ($billingSameAsShipping) {
+            $billingAddress = $request->shipping_address;
+            $billingCity = $request->shipping_city;
+            $billingState = $request->shipping_state;
+            $billingZip = $request->shipping_zip;
+            $billingCountry = $request->shipping_country;
+        } else {
+            $billingAddress = $request->billing_address;
+            $billingCity = $request->billing_city;
+            $billingState = $request->billing_state;
+            $billingZip = $request->billing_zip;
+            $billingCountry = $request->billing_country;
+        }
+
         // Create order
         $order = Order::create([
             'order_number' => $orderNumber,
             'user_id' => $user->id,
+            'customer_name' => $request->shipping_name,
+            'customer_email' => $request->shipping_email,
+            'customer_phone' => $request->shipping_phone,
             'order_status' => 'pending',
-            'payment_status' => 'pending',
+            'payment_status' => $request->payment_method == 'cod' ? 'pending' : 'pending',
             'payment_method' => $request->payment_method,
             'subtotal_amount' => $subtotal,
             'shipping_amount' => $shippingCost,
@@ -174,11 +205,11 @@ class CheckoutController extends Controller
             'shipping_state' => $request->shipping_state,
             'shipping_zip' => $request->shipping_zip,
             'shipping_country' => $request->shipping_country,
-            'billing_address' => $request->billing_same_as_shipping ? $request->shipping_address : $request->billing_address,
-            'billing_city' => $request->billing_same_as_shipping ? $request->shipping_city : $request->billing_city,
-            'billing_state' => $request->billing_same_as_shipping ? $request->shipping_state : $request->billing_state,
-            'billing_zip' => $request->billing_same_as_shipping ? $request->shipping_zip : $request->billing_zip,
-            'billing_country' => $request->billing_same_as_shipping ? $request->shipping_country : $request->billing_country,
+            'billing_address' => $billingAddress,
+            'billing_city' => $billingCity,
+            'billing_state' => $billingState,
+            'billing_zip' => $billingZip,
+            'billing_country' => $billingCountry,
             'customer_notes' => $request->notes,
             'order_date' => Carbon::now(),
         ]);
@@ -206,7 +237,7 @@ class CheckoutController extends Controller
         // $this->sendOrderConfirmation($order, $user);
 
         return redirect()->route('checkout.success', $order)
-            ->with('success', 'Order placed successfully!');
+            ->with('success', 'Order placed successfully! Your order number is: ' . $order->order_number);
     }
 
     // Show success page
@@ -226,18 +257,18 @@ class CheckoutController extends Controller
     public function track(Request $request)
     {
         $order = null;
-        
+
         if ($request->has('order_number') || $request->has('tracking_number')) {
             $query = Order::query();
-            
+
             if ($request->order_number) {
                 $query->where('order_number', 'like', '%' . $request->order_number . '%');
             }
-            
+
             if ($request->tracking_number) {
                 $query->where('tracking_number', 'like', '%' . $request->tracking_number . '%');
             }
-            
+
             $order = $query->first();
         }
 
@@ -286,7 +317,20 @@ class CheckoutController extends Controller
             }
         }
 
-        return redirect()->route('orders.show', $order)
+        return redirect()->route('checkout.orderDetails', $order)
             ->with('success', 'Order cancelled successfully');
+    }
+
+    // Download invoice
+    public function downloadInvoice(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // This is a placeholder - implement PDF generation
+        return response()->streamDownload(function () use ($order) {
+            echo view('checkout.invoice', ['order' => $order])->render();
+        }, 'invoice-' . $order->order_number . '.html');
     }
 }

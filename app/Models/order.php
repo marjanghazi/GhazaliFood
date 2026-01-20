@@ -16,28 +16,40 @@ class Order extends Model
         'customer_email',
         'customer_phone',
         'shipping_address',
+        'shipping_city',
+        'shipping_state',
+        'shipping_zip',
+        'shipping_country',
         'billing_address',
-        'subtotal',
-        'shipping_cost',
+        'billing_city',
+        'billing_state',
+        'billing_zip',
+        'billing_country',
+        'order_status',
+        'payment_status',
+        'payment_method',
+        'subtotal_amount',
+        'shipping_amount',
         'tax_amount',
         'discount_amount',
         'total_amount',
-        'payment_method',
-        'payment_status',
-        'order_status',
-        'notes',
+        'customer_notes',
         'tracking_number',
-        'shipping_method'
+        'order_date',
+        'delivered_at',
+        'cancelled_at',
+        'cancelled_reason'
     ];
 
     protected $casts = [
-        'subtotal' => 'decimal:2',
-        'shipping_cost' => 'decimal:2',
+        'subtotal_amount' => 'decimal:2',
+        'shipping_amount' => 'decimal:2',
         'tax_amount' => 'decimal:2',
         'discount_amount' => 'decimal:2',
         'total_amount' => 'decimal:2',
-        'shipping_address' => 'array',
-        'billing_address' => 'array'
+        'order_date' => 'datetime',
+        'delivered_at' => 'datetime',
+        'cancelled_at' => 'datetime'
     ];
 
     public function user()
@@ -74,5 +86,25 @@ class Order extends Model
         ];
         
         return $colors[$this->payment_status] ?? 'secondary';
+    }
+
+    // Helper method to get formatted address
+    public function getFormattedShippingAddressAttribute()
+    {
+        return $this->shipping_address . ', ' . $this->shipping_city . ', ' . 
+               $this->shipping_state . ' ' . $this->shipping_zip . ', ' . $this->shipping_country;
+    }
+
+    // Helper method to get formatted billing address
+    public function getFormattedBillingAddressAttribute()
+    {
+        return $this->billing_address . ', ' . $this->billing_city . ', ' . 
+               $this->billing_state . ' ' . $this->billing_zip . ', ' . $this->billing_country;
+    }
+    
+    // Add this method for getting the last item
+    public function getLatestItem()
+    {
+        return $this->items()->latest()->first();
     }
 }

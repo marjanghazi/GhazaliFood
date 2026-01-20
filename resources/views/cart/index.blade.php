@@ -243,7 +243,7 @@
 
                     <!-- Checkout Button -->
                     <div class="checkout-section">
-                        <a href="{{ route('checkout') }}" class="btn btn-primary checkout-btn">
+                        <a href="{{ route('checkout.index') }}" class="btn btn-primary checkout-btn">
                             <i class="fas fa-lock me-2"></i> Proceed to Checkout
                         </a>
 
