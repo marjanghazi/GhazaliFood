@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-<!-- Replace this section in app.blade.php -->
-<!-- Old CSS links (remove these) -->
-<!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->
-<!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> -->
-
-<!-- New CSS links (add these) -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +33,7 @@
     <!-- Animate.css for extra animations -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-    <!-- Tailwind CSS (ADD THIS) -->
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
     <!-- Custom CSS -->
@@ -195,14 +189,14 @@
                         $wishlistCount = App\Models\Wishlist::getCount();
                         @endphp
                         @if($wishlistCount > 0)
-                        <span class="badge">{{ $wishlistCount }}</span>
+                        <span class="badge cart-count">{{ $wishlistCount }}</span>
                         @endif
                     </a>
                     @endauth
 
                     <!-- Cart -->
                     <a href="{{ route('cart.index') }}" class="action-btn cart-btn" aria-label="Shopping cart">
-                        <i class="fas fa-shopping-cart"></i>
+                        <i class="fas fa-shopping-cart cart-icon"></i>
                         @php
                         $cartCount = 0;
                         if(session()->has('cart')) {
@@ -213,7 +207,7 @@
                         }
                         @endphp
                         @if($cartCount > 0)
-                        <span class="badge">{{ $cartCount }}</span>
+                        <span class="badge cart-count">{{ $cartCount }}</span>
                         @endif
                     </a>
 
@@ -460,8 +454,8 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- Global Toast Container - MOVED OUTSIDE HEADER -->
+    <div class="toast-global-container" id="toastGlobalContainer"></div>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
@@ -858,26 +852,59 @@
             document.getElementById('loadingOverlay').classList.remove('active');
         };
 
-        // Toast notification function
-        window.showToast = function(message, type = 'success') {
-            const toastContainer = document.getElementById('toastContainer');
-            if (!toastContainer) return;
+        // Global Toast notification function - UPDATED
+        window.showToast = function(message, type = 'success', duration = 5000) {
+            const toastContainer = document.getElementById('toastGlobalContainer');
+            if (!toastContainer) {
+                console.error('Toast container not found!');
+                return;
+            }
 
             const toast = document.createElement('div');
-            toast.className = `toast toast-${type} animate__animated animate__fadeInRight`;
+            toast.className = `toast-global animate__animated animate__fadeInRight`;
+            
+            // Set type-specific styling
+            let iconClass, bgColor, textColor;
+            switch(type) {
+                case 'success':
+                    iconClass = 'fa-check-circle';
+                    bgColor = '#27ae60';
+                    textColor = '#ffffff';
+                    break;
+                case 'error':
+                    iconClass = 'fa-exclamation-circle';
+                    bgColor = '#e74c3c';
+                    textColor = '#ffffff';
+                    break;
+                case 'warning':
+                    iconClass = 'fa-exclamation-triangle';
+                    bgColor = '#f39c12';
+                    textColor = '#000000';
+                    break;
+                case 'info':
+                    iconClass = 'fa-info-circle';
+                    bgColor = '#3498db';
+                    textColor = '#ffffff';
+                    break;
+                default:
+                    iconClass = 'fa-info-circle';
+                    bgColor = '#3498db';
+                    textColor = '#ffffff';
+            }
+
             toast.innerHTML = `
-            <div class="toast-content">
-                <div class="toast-icon">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <div class="toast-global-content" style="background: ${bgColor}; color: ${textColor};">
+                    <div class="toast-global-icon">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <div class="toast-global-body">
+                        <span class="toast-global-message">${message}</span>
+                    </div>
+                    <button class="toast-global-close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <div class="toast-body">
-                    <span class="toast-message">${message}</span>
-                </div>
-            </div>
-            <button class="toast-close">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
+            `;
 
             toastContainer.appendChild(toast);
 
@@ -888,21 +915,25 @@
             const autoRemove = setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => {
-                    toast.remove();
+                    if (toast.parentNode) {
+                        toast.remove();
+                    }
                 }, 300);
-            }, 5000);
+            }, duration);
 
-            toast.querySelector('.toast-close').addEventListener('click', () => {
+            toast.querySelector('.toast-global-close').addEventListener('click', () => {
                 clearTimeout(autoRemove);
                 toast.classList.remove('show');
                 setTimeout(() => {
-                    toast.remove();
+                    if (toast.parentNode) {
+                        toast.remove();
+                    }
                 }, 300);
             });
         };
 
         // Add to cart functionality
-        window.addToCart = async function(productId, quantity = 1) {
+        window.addToCart = async function(productId, quantity = 1, variantId = null) {
             showLoading();
 
             try {
@@ -910,11 +941,13 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({
                         product_id: productId,
-                        quantity: quantity
+                        quantity: quantity,
+                        variant_id: variantId
                     })
                 });
 
@@ -922,7 +955,7 @@
 
                 if (data.success) {
                     // Update cart count
-                    document.querySelectorAll('.cart-btn .badge').forEach(element => {
+                    document.querySelectorAll('.cart-btn .cart-count').forEach(element => {
                         element.textContent = data.cart_count;
                         element.style.display = data.cart_count > 0 ? 'flex' : 'none';
                     });
@@ -951,5 +984,4 @@
         };
     </script>
 </body>
-
 </html>
