@@ -32,7 +32,7 @@ class ContactController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-            
+
             // For regular form submissions
             return redirect()->back()
                 ->withErrors($validator)
@@ -57,7 +57,7 @@ class ContactController extends Controller
                 'message' => 'Thank you for contacting us! We will get back to you soon.'
             ]);
         }
-        
+
         // For regular form submissions
         return redirect()->back()->with('success', 'Thank you for contacting us! We will get back to you soon.');
     }
