@@ -397,7 +397,6 @@
                                     <label for="name" class="form-label">Full Name *</label>
                                     <div class="relative">
                                         <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                            <i class="fas fa-user"></i>
                                         </div>
                                         <input type="text"
                                             id="name"
@@ -417,7 +416,6 @@
                                     <label for="email" class="form-label">Email Address *</label>
                                     <div class="relative">
                                         <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                            <i class="fas fa-envelope"></i>
                                         </div>
                                         <input type="email"
                                             id="email"
@@ -439,7 +437,6 @@
                                     <label for="phone" class="form-label">Phone Number</label>
                                     <div class="relative">
                                         <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                            <i class="fas fa-phone"></i>
                                         </div>
                                         <input type="tel"
                                             id="phone"
@@ -458,7 +455,6 @@
                                     <label for="subject" class="form-label">Subject *</label>
                                     <div class="relative">
                                         <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                            <i class="fas fa-tag"></i>
                                         </div>
                                         <input type="text"
                                             id="subject"
@@ -479,7 +475,6 @@
                                 <label for="feedback_type" class="form-label">Feedback Type *</label>
                                 <div class="relative">
                                     <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                        <i class="fas fa-comment-alt"></i>
                                     </div>
                                     <select id="feedback_type"
                                         name="feedback_type"
