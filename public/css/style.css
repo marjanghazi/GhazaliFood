@@ -2815,3 +2815,93 @@ section {
         bottom: 75px !important;
     }
 }
+/* Announcement Bar Fixes */
+.announcement-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--gradient-gold);
+    color: #000;
+    z-index: 1100;
+    height: var(--announcement-height);
+    overflow: hidden;
+    transition: height 0.3s ease;
+    display: block !important; /* Force display */
+    opacity: 1 !important; /* Force opacity */
+    visibility: visible !important; /* Force visibility */
+}
+
+.announcement-bar.collapsed {
+    height: 0;
+    overflow: hidden;
+}
+
+.announcement-container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.announcement-content {
+    flex: 1;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.announcement-item {
+    padding: var(--space-xs) var(--space-lg);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.announcement-close {
+    position: absolute;
+    right: var(--space-lg);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: var(--radius-full);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    z-index: 1101;
+}
+
+.announcement-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Add body class when announcement is active */
+body.announcement-active {
+    padding-top: calc(var(--header-height) + var(--announcement-height));
+}
+
+body.announcement-active .main-header {
+    top: var(--announcement-height);
+}

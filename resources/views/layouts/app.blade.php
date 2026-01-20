@@ -472,40 +472,182 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Announcement Bar
+            // DEBUG: Check if elements exist
+            console.log('DOM loaded - checking elements:');
+            console.log('Announcement bar exists:', !!document.getElementById('announcementBar'));
+            console.log('Announcement toggle exists:', !!document.getElementById('announcementToggle'));
+            console.log('Close buttons found:', document.querySelectorAll('.announcement-close').length);
+
+            // Announcement Bar - FIXED VERSION
             const announcementBar = document.getElementById('announcementBar');
             const announcementToggle = document.getElementById('announcementToggle');
 
             if (announcementBar && announcementToggle) {
-                const isCollapsed = localStorage.getItem('announcementCollapsed') === 'true';
+                console.log('Announcement bar found, initializing...');
 
+                // Add class to body when announcement is active
+                document.body.classList.add('announcement-active');
+
+                // Check if announcement should be collapsed
+                const isCollapsed = localStorage.getItem('announcementCollapsed') === 'true';
+                const closedAnnouncements = JSON.parse(localStorage.getItem('closedAnnouncements') || '[]');
+                console.log('Closed announcements:', closedAnnouncements);
+
+                // Check if any announcement items should be hidden
+                document.querySelectorAll('.announcement-item').forEach(item => {
+                    const closeButton = item.querySelector('.announcement-close');
+                    if (closeButton) {
+                        const id = closeButton.dataset.id;
+                        if (id && closedAnnouncements.includes(id)) {
+                            item.style.display = 'none';
+                            console.log('Hiding announcement item with id:', id);
+                        }
+                    }
+                });
+
+                // Hide entire bar if all items are hidden
+                const visibleItems = Array.from(document.querySelectorAll('.announcement-item')).filter(
+                    item => item.style.display !== 'none' && getComputedStyle(item).display !== 'none'
+                );
+
+                console.log('Visible announcement items:', visibleItems.length);
+
+                if (visibleItems.length === 0) {
+                    announcementBar.style.display = 'none';
+                    document.body.classList.remove('announcement-active');
+                    console.log('All announcements hidden, removing bar');
+                    return;
+                }
+
+                // Set initial collapsed state
                 if (isCollapsed) {
                     announcementBar.classList.add('collapsed');
                     announcementToggle.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                    document.body.classList.remove('announcement-active');
+                    console.log('Announcement initially collapsed');
+                } else {
+                    console.log('Announcement initially expanded');
                 }
 
-                announcementToggle.addEventListener('click', () => {
+                // Toggle button functionality
+                announcementToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Announcement toggle clicked');
+
                     announcementBar.classList.toggle('collapsed');
                     const isNowCollapsed = announcementBar.classList.contains('collapsed');
                     localStorage.setItem('announcementCollapsed', isNowCollapsed);
-                    announcementToggle.innerHTML = isNowCollapsed ?
-                        '<i class="fas fa-chevron-down"></i>' :
-                        '<i class="fas fa-chevron-up"></i>';
+
+                    if (isNowCollapsed) {
+                        announcementToggle.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                        document.body.classList.remove('announcement-active');
+                        console.log('Announcement collapsed');
+                    } else {
+                        announcementToggle.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                        document.body.classList.add('announcement-active');
+                        console.log('Announcement expanded');
+                    }
                 });
 
+                // Close button functionality - FIXED
                 document.querySelectorAll('.announcement-close').forEach(button => {
-                    button.addEventListener('click', function() {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Close button clicked');
+
                         const id = this.dataset.id;
+                        const announcementItem = this.closest('.announcement-item');
+
                         if (id) {
                             const closedAnnouncements = JSON.parse(localStorage.getItem('closedAnnouncements') || '[]');
                             if (!closedAnnouncements.includes(id)) {
                                 closedAnnouncements.push(id);
                                 localStorage.setItem('closedAnnouncements', JSON.stringify(closedAnnouncements));
+                                console.log('Saved closed announcement id:', id);
                             }
                         }
-                        this.closest('.announcement-item').style.display = 'none';
+
+                        // Hide the specific announcement item
+                        announcementItem.style.display = 'none';
+                        console.log('Hiding announcement item');
+
+                        // Check if all items are now hidden
+                        const remainingItems = Array.from(document.querySelectorAll('.announcement-item')).filter(
+                            item => item.style.display !== 'none' && getComputedStyle(item).display !== 'none'
+                        );
+
+                        console.log('Remaining items after close:', remainingItems.length);
+
+                        if (remainingItems.length === 0) {
+                            announcementBar.style.display = 'none';
+                            document.body.classList.remove('announcement-active');
+                            console.log('All announcements closed, hiding bar');
+                        }
                     });
                 });
+            }
+
+            // Theme Toggle - COMPLETELY FIXED VERSION
+            const themeToggle = document.getElementById('themeToggle');
+
+            if (themeToggle) {
+                console.log('Theme toggle button found, initializing...');
+
+                // Initialize theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                console.log('Initial theme set to:', savedTheme);
+
+                // Remove all existing event listeners by replacing the button
+                const newButton = themeToggle.cloneNode(true);
+                themeToggle.parentNode.replaceChild(newButton, themeToggle);
+
+                // Get fresh reference
+                const freshToggle = document.getElementById('themeToggle');
+
+                // Add click event listener
+                freshToggle.addEventListener('click', function handleThemeClick(e) {
+                    console.log('Theme button clicked!');
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                    console.log('Changing theme from', currentTheme, 'to', newTheme);
+
+                    // Apply theme change
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+
+                    // Force a reflow to ensure theme change is applied
+                    document.body.offsetHeight;
+
+                    // Update button state for immediate feedback
+                    freshToggle.style.transform = 'rotate(180deg)';
+                    setTimeout(() => {
+                        freshToggle.style.transform = '';
+                    }, 300);
+                }, {
+                    capture: true
+                }); // Use capturing phase
+
+                // Also add as direct onclick handler as backup
+                freshToggle.onclick = function(e) {
+                    console.log('Direct onclick handler triggered');
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+
+                    return false;
+                };
             }
 
             // Mobile Navigation
@@ -573,32 +715,6 @@
                         behavior: 'smooth'
                     });
                 });
-            }
-
-            // Theme Toggle - SINGLE CLICK VERSION
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                // Initialize theme from localStorage or default to 'light'
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-theme', savedTheme);
-
-                // Add single click event listener
-                themeToggle.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent event bubbling
-                    e.preventDefault(); // Prevent default behavior
-
-                    const currentTheme = document.documentElement.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-                    // Apply new theme
-                    document.documentElement.setAttribute('data-theme', newTheme);
-                    localStorage.setItem('theme', newTheme);
-
-                    console.log('Theme changed to:', newTheme); // For debugging
-                });
-
-                // Remove any other potential event listeners
-                themeToggle.onclick = null;
             }
 
             // User dropdown
@@ -715,6 +831,14 @@
                     }
                 });
             });
+
+            // Initialize body padding based on announcement
+            setTimeout(() => {
+                if (announcementBar && !announcementBar.classList.contains('collapsed') && announcementBar.offsetHeight > 0) {
+                    document.body.classList.add('announcement-active');
+                    console.log('Body announcement-active class added on init');
+                }
+            }, 100);
         });
 
         // Loading overlay functions
@@ -734,18 +858,18 @@
             const toast = document.createElement('div');
             toast.className = `toast toast-${type} animate__animated animate__fadeInRight`;
             toast.innerHTML = `
-                <div class="toast-content">
-                    <div class="toast-icon">
-                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                    </div>
-                    <div class="toast-body">
-                        <span class="toast-message">${message}</span>
-                    </div>
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
                 </div>
-                <button class="toast-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
+                <div class="toast-body">
+                    <span class="toast-message">${message}</span>
+                </div>
+            </div>
+            <button class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
 
             toastContainer.appendChild(toast);
 
