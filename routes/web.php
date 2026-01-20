@@ -12,6 +12,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Admin\CategoryController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -121,15 +122,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Product toggle routes
     Route::patch('/products/{id}/toggle-status', [AdminController::class, 'toggleProductStatus'])->name('products.toggle-status');
     Route::patch('/products/{id}/toggle-featured', [AdminController::class, 'toggleProductFeatured'])->name('products.toggle-featured');
-
     // Category Management Routes
-    Route::get('/categories', [AdminController::class, 'categories'])->name('categories.index');
-    Route::get('/categories/create', [AdminController::class, 'createCategory'])->name('categories.create');
-    Route::post('/categories', [AdminController::class, 'storeCategory'])->name('categories.store');
-    Route::get('/categories/{id}', [AdminController::class, 'showCategory'])->name('categories.show');
-    Route::get('/categories/{id}/edit', [AdminController::class, 'editCategory'])->name('categories.edit');
-    Route::put('/categories/{id}', [AdminController::class, 'updateCategory'])->name('categories.update');
-    Route::delete('/categories/{id}', [AdminController::class, 'destroyCategory'])->name('categories.destroy');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store'); // Fixed
+    Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+    // You can also add the toggle status route if needed
+    Route::patch('/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
 
     // Customer Management Routes
     Route::get('/customers', [AdminController::class, 'customers'])->name('customers.index');
@@ -209,16 +212,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Settings Routes - CHANGED FROM PUT TO POST FOR FORMS
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
-    
+
     // Main settings update route - change from PUT to POST
     Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
-    
+
     // Separate settings routes for each tab - change from PUT to POST
     Route::post('/settings/general', [AdminController::class, 'updateGeneralSettings'])->name('settings.general.update');
     Route::post('/settings/email', [AdminController::class, 'updateEmailSettings'])->name('settings.email.update');
     Route::post('/settings/payment', [AdminController::class, 'updatePaymentSettings'])->name('settings.payment.update');
     Route::post('/settings/maintenance', [AdminController::class, 'updateMaintenanceSettings'])->name('settings.maintenance.update');
-    
+
     // Additional settings utility routes
     Route::get('/settings/backup', [AdminController::class, 'backupDatabase'])->name('settings.backup');
     Route::get('/settings/cache/clear', [AdminController::class, 'clearCache'])->name('settings.cache.clear');
