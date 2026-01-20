@@ -78,17 +78,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews')->middleware('auth');
 
-
-// Checkout Routes - ADD THIS SIMPLE ROUTE AT THE TOP LEVEL
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout')->middleware('auth');
-
-// Checkout API Routes (with prefix)
-Route::middleware('auth')->prefix('checkout')->name('checkout.')->group(function () {
-    Route::post('/', [CheckoutController::class, 'store'])->name('store');
-    Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
-    Route::get('/cancel', [CheckoutController::class, 'cancel'])->name('cancel');
-});
-
 // Policy Pages Routes
 Route::prefix('policies')->name('policies.')->group(function () {
     Route::get('/privacy', [PolicyController::class, 'privacy'])->name('privacy');
@@ -98,7 +87,37 @@ Route::prefix('policies')->name('policies.')->group(function () {
     Route::get('/cookies', [PolicyController::class, 'cookies'])->name('cookies');
 });
 
-// Admin Routes
+// ============================================================================
+// CHECKOUT & ORDER MANAGEMENT ROUTES
+// ============================================================================
+
+// Public Order Tracking (without authentication)
+Route::get('/track-order', [CheckoutController::class, 'track'])->name('track.order');
+
+// Checkout Routes - Require Authentication
+Route::middleware('auth')->group(function () {
+    // Checkout Process
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('/', [CheckoutController::class, 'index'])->name('index');
+        Route::post('/', [CheckoutController::class, 'store'])->name('store');
+        Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
+        Route::get('/cancel', [CheckoutController::class, 'cancel'])->name('cancel');
+        
+        // Order Tracking & Management
+        Route::get('/track', [CheckoutController::class, 'track'])->name('track');
+        Route::get('/order/{order}', [CheckoutController::class, 'orderDetails'])->name('order.details');
+        Route::delete('/cancel/{order}', [CheckoutController::class, 'cancel'])->name('cancel');
+    });
+    
+    // User-specific order routes
+    Route::get('/my-orders/{order}', [CheckoutController::class, 'orderDetails'])->name('my.order.details');
+    Route::get('/download-invoice/{order}', [CheckoutController::class, 'downloadInvoice'])->name('download.invoice');
+});
+
+// ============================================================================
+// ADMIN ROUTES
+// ============================================================================
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -109,6 +128,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/orders/{id}', [AdminController::class, 'updateOrder'])->name('orders.update');
     Route::delete('/orders/{id}', [AdminController::class, 'destroyOrder'])->name('orders.destroy');
     Route::get('/orders/{id}/print', [AdminController::class, 'printOrder'])->name('orders.print');
+    Route::get('/orders/export', [AdminController::class, 'exportOrders'])->name('orders.export');
+    Route::post('/orders/{id}/update-status', [AdminController::class, 'updateOrderStatus'])->name('orders.update-status');
+    Route::post('/orders/{id}/update-tracking', [AdminController::class, 'updateTracking'])->name('orders.update-tracking');
+    Route::get('/orders/{id}/invoice', [AdminController::class, 'generateInvoice'])->name('orders.invoice');
 
     // Product Management Routes
     Route::get('/products', [AdminController::class, 'products'])->name('products.index');
@@ -118,20 +141,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/products/{id}/edit', [AdminController::class, 'editProduct'])->name('products.edit');
     Route::put('/products/{id}', [AdminController::class, 'updateProduct'])->name('products.update');
     Route::delete('/products/{id}', [AdminController::class, 'destroyProduct'])->name('products.destroy');
-
-    // Product toggle routes
     Route::patch('/products/{id}/toggle-status', [AdminController::class, 'toggleProductStatus'])->name('products.toggle-status');
     Route::patch('/products/{id}/toggle-featured', [AdminController::class, 'toggleProductFeatured'])->name('products.toggle-featured');
+    Route::post('/products/import', [AdminController::class, 'importProducts'])->name('products.import');
+    Route::get('/products/export', [AdminController::class, 'exportProducts'])->name('products.export');
+    Route::post('/products/{id}/upload-images', [AdminController::class, 'uploadProductImages'])->name('products.upload-images');
+
     // Category Management Routes
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store'); // Fixed
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
     Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-
-    // You can also add the toggle status route if needed
     Route::patch('/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
 
     // Customer Management Routes
@@ -142,6 +165,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('/customers/{id}/toggle-status', [AdminController::class, 'toggleCustomerStatus'])->name('customers.toggle-status');
     Route::delete('/customers/{id}', [AdminController::class, 'destroyCustomer'])->name('customers.destroy');
     Route::get('/customers/export', [AdminController::class, 'exportCustomers'])->name('customers.export');
+    Route::get('/customers/{id}/orders', [AdminController::class, 'customerOrders'])->name('customers.orders');
 
     // User Management Routes
     Route::get('/users', [AdminController::class, 'users'])->name('users.index');
@@ -185,6 +209,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/coupons/{id}', [AdminController::class, 'updateCoupon'])->name('coupons.update');
     Route::patch('/coupons/{id}/toggle-status', [AdminController::class, 'toggleCouponStatus'])->name('coupons.toggle-status');
     Route::delete('/coupons/{id}', [AdminController::class, 'destroyCoupon'])->name('coupons.destroy');
+    Route::get('/coupons/validate/{code}', [AdminController::class, 'validateCoupon'])->name('coupons.validate');
 
     // Banner Management Routes
     Route::get('/banners', [AdminController::class, 'banners'])->name('banners.index');
@@ -209,14 +234,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/reports/sales', [AdminController::class, 'salesReport'])->name('reports.sales');
     Route::get('/reports/customers', [AdminController::class, 'customersReport'])->name('reports.customers');
     Route::get('/reports/products', [AdminController::class, 'productsReport'])->name('reports.products');
+    Route::get('/reports/export/{type}', [AdminController::class, 'exportReport'])->name('reports.export');
+    Route::get('/reports/dashboard', [AdminController::class, 'dashboardReport'])->name('reports.dashboard');
 
-    // Settings Routes - CHANGED FROM PUT TO POST FOR FORMS
+    // Settings Routes
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
-
-    // Main settings update route - change from PUT to POST
     Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
-
-    // Separate settings routes for each tab - change from PUT to POST
     Route::post('/settings/general', [AdminController::class, 'updateGeneralSettings'])->name('settings.general.update');
     Route::post('/settings/email', [AdminController::class, 'updateEmailSettings'])->name('settings.email.update');
     Route::post('/settings/payment', [AdminController::class, 'updatePaymentSettings'])->name('settings.payment.update');
@@ -226,13 +249,78 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/settings/backup', [AdminController::class, 'backupDatabase'])->name('settings.backup');
     Route::get('/settings/cache/clear', [AdminController::class, 'clearCache'])->name('settings.cache.clear');
     Route::post('/settings/email/test', [AdminController::class, 'testEmail'])->name('settings.email.test');
+    Route::get('/settings/logs', [AdminController::class, 'viewLogs'])->name('settings.logs');
+    Route::get('/settings/activity', [AdminController::class, 'activityLog'])->name('settings.activity');
 
     // Profile Routes
     Route::get('/profile', [AdminController::class, 'adminProfile'])->name('profile.index');
     Route::put('/profile', [AdminController::class, 'updateAdminProfile'])->name('profile.update');
+    Route::post('/profile/change-password', [AdminController::class, 'changePassword'])->name('profile.change-password');
+    
+    // Admin Notifications
+    Route::get('/notifications', [AdminController::class, 'notifications'])->name('notifications.index');
+    Route::post('/notifications/mark-read', [AdminController::class, 'markNotificationsRead'])->name('notifications.mark-read');
+    Route::post('/notifications/clear', [AdminController::class, 'clearNotifications'])->name('notifications.clear');
+    
+    // Admin Dashboard Widgets
+    Route::get('/dashboard/stats', [AdminController::class, 'dashboardStats'])->name('dashboard.stats');
+    Route::get('/dashboard/charts', [AdminController::class, 'dashboardCharts'])->name('dashboard.charts');
+    Route::get('/dashboard/activity', [AdminController::class, 'dashboardActivity'])->name('dashboard.activity');
 });
 
-// Fallback Route for 404
+// ============================================================================
+// SOCIAL LOGIN ROUTES (Add these if you implement social login)
+// ============================================================================
+
+// Route::get('/auth/{provider}', [SocialLoginController::class, 'redirectToProvider'])->name('social.login');
+// Route::get('/auth/{provider}/callback', [SocialLoginController::class, 'handleProviderCallback']);
+
+// ============================================================================
+// API ROUTES FOR AJAX REQUESTS
+// ============================================================================
+
+Route::prefix('api')->name('api.')->group(function () {
+    // Public APIs
+    Route::get('/products/search', [ShopController::class, 'search'])->name('products.search');
+    Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+    Route::get('/product/{id}/quick-view', [ShopController::class, 'quickView'])->name('product.quick-view');
+    
+    // Protected APIs (require authentication)
+    Route::middleware('auth')->group(function () {
+        Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+        Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+        Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+        Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+        Route::get('/wishlist/count', [WishlistController::class, 'count'])->name('wishlist.count');
+        Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.apply-coupon');
+        Route::get('/order/{id}/status', [CheckoutController::class, 'orderStatus'])->name('order.status');
+        Route::post('/product/{id}/review', [ReviewController::class, 'store'])->name('product.review');
+    });
+});
+
+// ============================================================================
+// STATIC PAGES & MISCELLANEOUS ROUTES
+// ============================================================================
+
+Route::get('/sitemap.xml', function() {
+    return response()->view('sitemap')->header('Content-Type', 'text/xml');
+})->name('sitemap');
+
+Route::get('/robots.txt', function() {
+    return response()->view('robots')->header('Content-Type', 'text/plain');
+})->name('robots');
+
+Route::get('/health', function() {
+    return response()->json(['status' => 'ok', 'timestamp' => now()]);
+})->name('health');
+
+// ============================================================================
+// FALLBACK ROUTE FOR 404
+// ============================================================================
+
 Route::fallback(function () {
-    return view('errors.404');
+    return view('errors.404', [
+        'title' => 'Page Not Found - Ghazali Food',
+        'message' => 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.'
+    ]);
 });
