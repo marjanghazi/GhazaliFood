@@ -134,7 +134,7 @@ body {
   padding-top: var(--header-height);
 }
 
-body.has-announcement {
+body.announcement-active {
   padding-top: calc(var(--header-height) + var(--announcement-height));
 }
 
@@ -228,7 +228,7 @@ a:hover {
 }
 
 /* ==========================================================================
-   Announcement Bar
+   Announcement Bar - FIXED
    ========================================================================== */
 
 .announcement-bar {
@@ -347,7 +347,7 @@ a:hover {
   transition: all 0.3s ease;
 }
 
-body.has-announcement .main-header {
+body.announcement-active .main-header {
   top: var(--announcement-height);
 }
 
@@ -482,7 +482,7 @@ body.has-announcement .main-header {
 }
 
 .mobile-close {
-  display: none;
+  display: none; /* Hidden by default on all screens */
   position: absolute;
   top: 20px;
   right: 20px;
@@ -495,15 +495,16 @@ body.has-announcement .main-header {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-md);
+  transition: var(--transition-fast);
 }
 
 .mobile-close:hover {
   background: var(--primary-color);
   color: white;
+  transform: rotate(90deg);
 }
 
 .nav-menu {
@@ -758,6 +759,7 @@ body.has-announcement .main-header {
   gap: 8px;
   flex-shrink: 0;
   min-width: 180px;
+  justify-content: flex-end;
 }
 
 .search-toggle {
@@ -821,7 +823,10 @@ body.has-announcement .main-header {
   border: 2px solid var(--background-color);
 }
 
-/* User Dropdown */
+/* ==========================================================================
+   User Dropdown - FIXED VERSION (Updated to prevent going off-screen)
+   ========================================================================== */
+
 .user-dropdown {
   position: relative;
 }
@@ -830,17 +835,27 @@ body.has-announcement .main-header {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  min-width: 240px;
+  min-width: 280px; /* Increased width for better content */
   background: var(--surface-color);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  padding: var(--space-sm);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-md);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
+  z-index: 1100;
   border: 1px solid var(--border-color);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Ensure dropdown stays on screen */
+@media (min-width: 993px) {
+  .user-menu {
+    right: 0;
+    left: auto;
+  }
 }
 
 .user-menu.show {
@@ -855,8 +870,9 @@ body.has-announcement .main-header {
   padding: var(--space-sm);
   background: var(--gradient-primary);
   border-radius: var(--radius-sm);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
   color: white;
+  width: 100%;
 }
 
 .user-avatar {
@@ -870,8 +886,14 @@ body.has-announcement .main-header {
   font-weight: 700;
   font-size: 16px;
   color: var(--primary-color);
-  margin-right: 10px;
+  margin-right: 12px;
   flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0; /* Prevent overflow */
+  overflow: hidden;
 }
 
 .user-info h6 {
@@ -879,45 +901,78 @@ body.has-announcement .main-header {
   font-size: 14px;
   color: white;
   line-height: 1.3;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-info small {
+  display: block;
   font-size: 11px;
   opacity: 0.9;
   color: rgba(255, 255, 255, 0.9);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-menu .dropdown-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
+  padding: 12px;
   color: var(--text-primary);
   text-decoration: none;
   border-radius: var(--radius-sm);
   transition: var(--transition-fast);
   font-size: 14px;
-  margin-bottom: 4px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  width: 100%;
+  border: 1px solid transparent;
 }
 
 .user-menu .dropdown-item:hover {
   background: var(--primary-color);
   color: white;
+  border-color: var(--primary-color);
+  transform: translateX(4px);
 }
 
 .user-menu .dropdown-item i {
   width: 20px;
-  margin-right: 10px;
+  margin-right: 12px;
   font-size: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.user-menu .dropdown-item span {
+  flex: 1;
+  margin-right: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .badge-count {
   background: var(--gradient-gold);
   color: var(--text-primary);
   font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 8px;
   font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.user-menu .dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: var(--space-sm) 0;
+  width: 100%;
 }
 
 .logout-btn {
@@ -931,7 +986,65 @@ body.has-announcement .main-header {
   text-align: left;
   font-family: inherit;
   font-size: inherit;
+  font-weight: inherit;
   padding: 0;
+}
+
+.logout-btn i {
+  width: 20px;
+  margin-right: 12px;
+  font-size: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.logout-btn span {
+  flex: 1;
+  margin-right: 12px;
+}
+
+/* Mobile dropdown adjustments */
+@media (max-width: 992px) {
+  .user-menu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    transform: translateY(100%);
+    max-height: 70vh;
+  }
+  
+  .user-menu.show {
+    transform: translateY(0);
+  }
+  
+  .user-menu-header {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-md);
+  }
+  
+  .user-avatar {
+    margin-right: 0;
+    margin-bottom: var(--space-sm);
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+  }
+  
+  .user-info h6,
+  .user-info small {
+    white-space: normal;
+    text-align: center;
+  }
+  
+  .user-menu .dropdown-item {
+    padding: 14px 16px;
+  }
 }
 
 /* Theme Toggle */
@@ -2221,6 +2334,12 @@ section {
   .header-actions {
     min-width: 160px;
   }
+  
+  /* Fix user dropdown on medium screens */
+  .user-menu {
+    min-width: 260px;
+    right: -10px;
+  }
 }
 
 @media (max-width: 1100px) {
@@ -2248,7 +2367,7 @@ section {
     padding-top: var(--header-height);
   }
   
-  body.has-announcement {
+  body.announcement-active {
     padding-top: calc(var(--header-height) + var(--announcement-height));
   }
   
@@ -2294,7 +2413,8 @@ section {
     left: 0;
   }
   
-  .mobile-close {
+  /* Show mobile close button only when nav is active on mobile */
+  .main-nav.active .mobile-close {
     display: flex;
   }
   
@@ -2621,7 +2741,10 @@ section {
   }
 }
 
-/* WhatsApp Floating Button */
+/* ==========================================================================
+   WhatsApp Floating Button
+   ========================================================================== */
+
 .whatsapp-float {
     position: fixed;
     bottom: 30px;
@@ -2815,6 +2938,7 @@ section {
         bottom: 75px !important;
     }
 }
+
 /* Announcement Bar Fixes */
 .announcement-bar {
     position: fixed;

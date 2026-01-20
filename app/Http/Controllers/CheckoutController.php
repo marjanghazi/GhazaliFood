@@ -110,9 +110,6 @@ class CheckoutController extends Controller
                 'billing_country' => 'required|string|max:100',
             ]);
         }
-
-
-
         $user = Auth::user();
         $cartItems = session()->get('cart', []);
 
