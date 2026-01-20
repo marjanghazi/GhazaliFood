@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+<!-- Replace this section in app.blade.php -->
+<!-- Old CSS links (remove these) -->
+<!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->
+<!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> -->
 
+<!-- New CSS links (add these) -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,6 +39,9 @@
     <!-- Animate.css for extra animations -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
+    <!-- Tailwind CSS (ADD THIS) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
