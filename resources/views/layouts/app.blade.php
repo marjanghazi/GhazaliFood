@@ -430,6 +430,21 @@
         </div>
     </footer>
 
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/923288179010" 
+       class="whatsapp-float" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       aria-label="Chat on WhatsApp">
+        <div class="whatsapp-icon">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+        <span class="whatsapp-text">Chat with us</span>
+        <div class="whatsapp-notification" id="whatsappNotification">
+            <span>Click to chat on WhatsApp!</span>
+        </div>
+    </a>
+
     <!-- Back to Top Button -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-chevron-up"></i>
@@ -588,6 +603,49 @@
                         });
                     }
                 });
+            }
+
+            // WhatsApp Notification
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            const whatsappNotification = document.getElementById('whatsappNotification');
+            
+            if (whatsappFloat && whatsappNotification) {
+                let notificationShown = localStorage.getItem('whatsappNotificationShown') === 'true';
+                
+                // Show notification bubble on first visit with delay
+                if (!notificationShown) {
+                    setTimeout(() => {
+                        whatsappNotification.classList.add('show');
+                        localStorage.setItem('whatsappNotificationShown', 'true');
+                        
+                        // Auto hide after 5 seconds
+                        setTimeout(() => {
+                            whatsappNotification.classList.remove('show');
+                        }, 5000);
+                    }, 3000);
+                }
+                
+                // Hide notification when clicked
+                whatsappFloat.addEventListener('click', () => {
+                    whatsappNotification.classList.remove('show');
+                });
+                
+                // Show/hide text on hover
+                whatsappFloat.addEventListener('mouseenter', () => {
+                    whatsappFloat.classList.add('hover');
+                });
+                
+                whatsappFloat.addEventListener('mouseleave', () => {
+                    whatsappFloat.classList.remove('hover');
+                });
+                
+                // Add pulse animation periodically
+                setInterval(() => {
+                    whatsappFloat.classList.add('pulse');
+                    setTimeout(() => {
+                        whatsappFloat.classList.remove('pulse');
+                    }, 1000);
+                }, 10000); // Pulse every 10 seconds
             }
 
             // Close mobile menu when clicking outside

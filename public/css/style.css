@@ -2620,3 +2620,198 @@ section {
     gap: var(--space-md);
   }
 }
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.whatsapp-float:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+    background: linear-gradient(135deg, #25D366 0%, #075E54 100%);
+    width: 180px;
+    border-radius: 50px;
+}
+
+.whatsapp-float.hover {
+    width: 180px;
+    border-radius: 50px;
+}
+
+.whatsapp-icon {
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover .whatsapp-icon {
+    transform: scale(1.1);
+}
+
+.whatsapp-text {
+    position: absolute;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-20px);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    padding-left: 10px;
+}
+
+.whatsapp-float:hover .whatsapp-text {
+    opacity: 1;
+    transform: translateX(25px);
+}
+
+.whatsapp-notification {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: white;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    font-size: 13px;
+    font-weight: 500;
+    max-width: 200px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1001;
+}
+
+.whatsapp-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.whatsapp-notification::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+}
+
+.whatsapp-notification span {
+    display: block;
+    line-height: 1.4;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+.whatsapp-float.pulse {
+    animation: pulse 1s;
+}
+
+/* Responsive WhatsApp Button */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+    }
+    
+    .whatsapp-icon {
+        font-size: 24px;
+    }
+    
+    .whatsapp-notification {
+        bottom: 65px;
+        right: -50px;
+        font-size: 12px;
+        padding: 8px 12px;
+        max-width: 180px;
+    }
+    
+    .whatsapp-notification::after {
+        right: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .whatsapp-float {
+        bottom: 15px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .whatsapp-icon {
+        font-size: 22px;
+    }
+    
+    .whatsapp-notification {
+        display: none; /* Hide notification on very small screens */
+    }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .whatsapp-notification {
+    background: #2d3748;
+    color: #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .whatsapp-notification::after {
+    border-top-color: #2d3748;
+}
+
+/* Ensure WhatsApp button doesn't interfere with other elements */
+.back-to-top {
+    right: 30px;
+    bottom: 100px !important;
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        right: 20px;
+        bottom: 85px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-to-top {
+        right: 15px;
+        bottom: 75px !important;
+    }
+}
