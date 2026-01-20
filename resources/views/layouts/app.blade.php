@@ -575,19 +575,30 @@
                 });
             }
 
-            // Theme Toggle
+            // Theme Toggle - SINGLE CLICK VERSION
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
-                const currentTheme = localStorage.getItem('theme') || 'light';
-                document.documentElement.setAttribute('data-theme', currentTheme);
+                // Initialize theme from localStorage or default to 'light'
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
 
-                themeToggle.addEventListener('click', () => {
+                // Add single click event listener
+                themeToggle.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent event bubbling
+                    e.preventDefault(); // Prevent default behavior
+
                     const currentTheme = document.documentElement.getAttribute('data-theme');
                     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
+                    // Apply new theme
                     document.documentElement.setAttribute('data-theme', newTheme);
                     localStorage.setItem('theme', newTheme);
+
+                    console.log('Theme changed to:', newTheme); // For debugging
                 });
+
+                // Remove any other potential event listeners
+                themeToggle.onclick = null;
             }
 
             // User dropdown
