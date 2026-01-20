@@ -124,65 +124,24 @@
                                 <i class="fas fa-home me-2"></i>Home
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('shop.index') }}" class="nav-link {{ request()->is('shop*') ? 'active' : '' }}">
-                                <i class="fas fa-shopping-bag me-2"></i>Shop
-                            </a>
-                        </li>
-                        
-                        <!-- Categories Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle">
-                                <i class="fas fa-layer-group me-2"></i>Categories <i class="fas fa-chevron-down ms-1 dropdown-icon"></i>
-                            </a>
-                            <div class="dropdown-menu">
-                                @php
-                                    $categories = App\Models\Category::with(['children' => function($query) {
-                                        $query->active()->orderBy('display_order');
-                                    }])
-                                    ->whereNull('parent_id')
-                                    ->active()
-                                    ->orderBy('display_order')
-                                    ->limit(8)
-                                    ->get();
-                                @endphp
-                                
-                                @foreach($categories as $category)
-                                    <a href="{{ route('shop.index', ['category' => $category->slug]) }}" 
-                                       class="dropdown-item">
-                                        <div class="dropdown-item-content">
-                                            <span class="dropdown-item-title">{{ $category->name }}</span>
-                                            <span class="dropdown-item-desc">{{ $category->products_count ?? 0 }} products</span>
-                                        </div>
-                                        @if($category->children->count() > 0)
-                                            <i class="fas fa-chevron-right"></i>
-                                        @endif
-                                    </a>
-                                @endforeach
-                                
-                                @if($categories->count() > 0)
-                                    <div class="dropdown-divider"></div>
-                                    <a href="{{ route('categories.index') }}" class="dropdown-view-all">
-                                        <span>View All Categories</span>
-                                        <i class="fas fa-arrow-right"></i>
-                                    </a>
-                                @endif
-                            </div>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a href="{{ route('blog.index') }}" class="nav-link {{ request()->is('blog*') ? 'active' : '' }}">
-                                <i class="fas fa-blog me-2"></i>Blog
-                            </a>
-                        </li>
-                        <li class="nav-item">
+                         <li class="nav-item">
                             <a href="{{ route('about') }}" class="nav-link {{ request()->is('about') ? 'active' : '' }}">
                                 <i class="fas fa-info-circle me-2"></i>About
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('shop.index') }}" class="nav-link {{ request()->is('shop*') ? 'active' : '' }}">
+                                <i class="fas fa-shopping-bag me-2"></i>Shop
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('contact.index') }}" class="nav-link {{ request()->is('contact*') ? 'active' : '' }}">
                                 <i class="fas fa-envelope me-2"></i>Contact
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a href="{{ route('blog.index') }}" class="nav-link {{ request()->is('blog*') ? 'active' : '' }}">
+                                <i class="fas fa-blog me-2"></i>Blog
                             </a>
                         </li>
                     </ul>
