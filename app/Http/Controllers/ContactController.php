@@ -25,6 +25,15 @@ class ContactController extends Controller
         ]);
 
         if ($validator->fails()) {
+            // For AJAX requests
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            
+            // For regular form submissions
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
@@ -41,6 +50,15 @@ class ContactController extends Controller
             'user_agent' => $request->header('User-Agent')
         ]);
 
+        // For AJAX requests
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Thank you for contacting us! We will get back to you soon.'
+            ]);
+        }
+        
+        // For regular form submissions
         return redirect()->back()->with('success', 'Thank you for contacting us! We will get back to you soon.');
     }
 }
