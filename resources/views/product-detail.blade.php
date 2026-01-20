@@ -205,10 +205,6 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2 text-emerald-600">
-                            <i class="fas fa-shipping-fast"></i>
-                            <span class="font-medium">Free delivery tomorrow</span>
-                        </div>
                     </div>
                     <div class="flex items-center space-x-2 text-sm text-gray-600">
                         <i class="fas fa-map-marker-alt"></i>
