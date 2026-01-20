@@ -49,9 +49,6 @@
                     <div class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium whitespace-nowrap">
                         <i class="fas fa-check-circle mr-1"></i> 100% Authentic
                     </div>
-                    <div class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium whitespace-nowrap">
-                        <i class="fas fa-shipping-fast mr-1"></i> Free Shipping
-                    </div>
                 </div>
             </div>
         </div>
@@ -303,15 +300,6 @@
                         <div class="text-xs md:text-sm">
                             <div class="font-medium text-gray-900">Secure</div>
                             <div class="text-gray-600">100% Safe</div>
-                        </div>
-                    </div>
-                    <div class="text-center space-y-2">
-                        <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                            <i class="fas fa-truck text-blue-600 text-lg md:text-xl"></i>
-                        </div>
-                        <div class="text-xs md:text-sm">
-                            <div class="font-medium text-gray-900">Free Shipping</div>
-                            <div class="text-gray-600">Over $50</div>
                         </div>
                     </div>
                     <div class="text-center space-y-2">
