@@ -72,7 +72,7 @@ class Order extends Model
             'cancelled' => 'danger',
             'refunded' => 'secondary'
         ];
-        
+
         return $colors[$this->order_status] ?? 'secondary';
     }
 
@@ -84,24 +84,24 @@ class Order extends Model
             'failed' => 'danger',
             'refunded' => 'info'
         ];
-        
+
         return $colors[$this->payment_status] ?? 'secondary';
     }
 
     // Helper method to get formatted address
     public function getFormattedShippingAddressAttribute()
     {
-        return $this->shipping_address . ', ' . $this->shipping_city . ', ' . 
-               $this->shipping_state . ' ' . $this->shipping_zip . ', ' . $this->shipping_country;
+        return $this->shipping_address . ', ' . $this->shipping_city . ', ' .
+            $this->shipping_state . ' ' . $this->shipping_zip . ', ' . $this->shipping_country;
     }
 
     // Helper method to get formatted billing address
     public function getFormattedBillingAddressAttribute()
     {
-        return $this->billing_address . ', ' . $this->billing_city . ', ' . 
-               $this->billing_state . ' ' . $this->billing_zip . ', ' . $this->billing_country;
+        return $this->billing_address . ', ' . $this->billing_city . ', ' .
+            $this->billing_state . ' ' . $this->billing_zip . ', ' . $this->billing_country;
     }
-    
+
     // Add this method for getting the last item
     public function getLatestItem()
     {
@@ -110,13 +110,8 @@ class Order extends Model
 
     // Add this to your Order model (app/Models/Order.php)
 
-public function statusHistory()
-{
-    return $this->hasMany(OrderStatusHistory::class)->latest();
-}
-
-public function shippingAddress()
-{
-    return $this->belongsTo(ShippingAddress::class);
-}
+    public function shippingAddress()
+    {
+        return $this->belongsTo(ShippingAddress::class);
+    }
 }
