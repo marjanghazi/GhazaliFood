@@ -7,7 +7,8 @@
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center min-vh-70">
-            <div class="col-lg-6">
+            <!-- Left Column - Text Content -->
+            <div class="col-lg-6 hero-text-column">
                 <!-- Animated Title with Typing Effect -->
                 <h1 class="hero-title mb-3 mb-md-4" data-aos="fade-up" data-aos-delay="100">
                     <span class="typed-text" data-typed-items='"Premium Quality Dry Fruits", "100% Natural & Organic Nuts", "Sourced from Finest Orchards", "Healthy Snacking Delivered"'></span>
@@ -26,8 +27,8 @@
                 </div>
             </div>
 
-            <!-- Enhanced Hero Images with Multiple Animations -->
-            <div class="col-lg-6 hero-image-wrapper order-1 order-lg-2">
+            <!-- Right Column - Image Content -->
+            <div class="col-lg-6 hero-image-column">
                 <div class="hero-image-container position-relative">
                     <!-- Main Product Image with Parallax Effect -->
                     <div class="hero-main-image" data-depth="0.2">
@@ -59,7 +60,7 @@
                     </div>
 
                     <div class="product-floating-image floating-image-4">
-                        <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?ixlib=rb-4.0.3&auto=format&fit=crop&w-400&q=80"
+                        <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
                             alt="Berries" class="img-fluid">
                         <div class="product-label">Berries</div>
                     </div>
@@ -94,9 +95,13 @@
         <div class="particle"></div>
         <div class="particle"></div>
         <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
 </section>
 @endsection
+
 
 @section('content')
 <!-- Features Section -->
@@ -444,28 +449,79 @@
 
 @push('styles')
 <style>
+    /* Hero Section - Side by Side Layout */
     .hero-section {
-        padding-top: 120px;
-        padding-bottom: var(--space-2xl);
-        background: linear-gradient(135deg,
-                rgba(244, 241, 231, 1) 0%,
-                rgba(255, 248, 240, 1) 50%,
-                rgba(250, 245, 235, 1) 100%);
+        padding: var(--space-2xl) 0;
+        background: linear-gradient(135deg, var(--background-color) 0%, #F8F4E9 100%);
         position: relative;
         overflow: hidden;
-        min-height: 100vh;
+        min-height: 80vh;
         display: flex;
         align-items: center;
+    }
+
+    .hero-section .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Row and Columns Layout */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+        align-items: center;
+    }
+
+    .col-lg-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding: 0 15px;
+        position: relative;
+        width: 100%;
+    }
+
+    .min-vh-70 {
+        min-height: 70vh;
+    }
+
+    .align-items-center {
+        align-items: center !important;
+    }
+
+    /* Left Column - Text Content */
+    .hero-text-column {
+        padding-right: 40px;
     }
 
     .hero-title {
         font-size: var(--text-5xl);
         margin-bottom: var(--space-lg);
         color: var(--primary-color);
-        min-height: 84px;
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        line-height: 1.2;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
     }
 
-    .hero-image-wrapper {
+    .hero-subtitle {
+        font-size: var(--text-lg);
+        margin-bottom: var(--space-xl);
+        color: var(--text-secondary);
+        max-width: 500px;
+        line-height: 1.6;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: var(--space-md);
+        margin-top: var(--space-xl);
+    }
+
+    /* Right Column - Image Content */
+    .hero-image-column {
         position: relative;
         height: 600px;
     }
@@ -476,7 +532,7 @@
         position: relative;
     }
 
-    /* Main Image with 3D Effect */
+    /* Main Image with Floating Animation */
     .hero-main-image {
         position: absolute;
         top: 50%;
@@ -485,29 +541,46 @@
         width: 450px;
         height: 450px;
         z-index: 2;
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        animation: mainImageFloat 8s ease-in-out infinite;
+        animation: mainImageFloat 6s ease-in-out infinite;
     }
 
     .hero-main-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 30px;
-        box-shadow:
-            0 25px 50px -12px rgba(120, 53, 15, 0.25),
-            0 0 0 1px rgba(255, 255, 255, 0.1),
-            inset 0 2px 4px 0 rgba(255, 255, 255, 0.5);
-        filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 20px;
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.1),
+            0 0 0 1px rgba(255, 255, 255, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        transition: all 0.3s ease;
     }
 
     .hero-main-image:hover img {
-        transform: perspective(1000px) rotateY(5deg) rotateX(2deg) scale(1.02);
-        box-shadow:
-            0 35px 60px -15px rgba(120, 53, 15, 0.35),
-            0 0 0 1px rgba(255, 255, 255, 0.2),
-            inset 0 2px 8px 0 rgba(255, 255, 255, 0.7);
+        transform: perspective(1000px) rotateY(5deg) rotateX(2deg) scale(1.05);
+        box-shadow: 
+            0 30px 60px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(255, 255, 255, 0.3),
+            inset 0 2px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .hero-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--gradient-gold);
+        color: var(--text-primary);
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 14px;
+        box-shadow: 
+            0 8px 20px rgba(255, 165, 0, 0.3),
+            0 0 0 2px rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        z-index: 3;
+        animation: badgePulse 2s ease-in-out infinite;
     }
 
     /* Floating Product Images */
@@ -515,14 +588,24 @@
         position: absolute;
         width: 140px;
         height: 140px;
-        border-radius: 20px;
+        border-radius: 18px;
         overflow: hidden;
-        box-shadow:
+        box-shadow: 
             0 15px 35px rgba(0, 0, 0, 0.1),
             0 5px 15px rgba(0, 0, 0, 0.07);
         z-index: 1;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 3px solid transparent;
+    }
+
+    .product-floating-image:hover {
+        transform: scale(1.15) rotate(5deg);
+        z-index: 10;
+        border-color: var(--accent-color);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.15),
+            0 10px 20px rgba(0, 0, 0, 0.1);
     }
 
     .product-floating-image img {
@@ -530,14 +613,6 @@
         height: 100%;
         object-fit: cover;
         transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .product-floating-image:hover {
-        transform: scale(1.15) rotate(5deg);
-        z-index: 3;
-        box-shadow:
-            0 25px 50px rgba(0, 0, 0, 0.15),
-            0 10px 20px rgba(0, 0, 0, 0.1);
     }
 
     .product-floating-image:hover img {
@@ -549,7 +624,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
         color: white;
         padding: 8px;
         font-size: 12px;
@@ -563,16 +638,16 @@
         transform: translateY(0);
     }
 
-    /* Floating Animations for Product Images */
+    /* Floating positions with individual animations */
     .floating-image-1 {
-        top: 15%;
+        top: 10%;
         left: 5%;
         animation: floatProduct1 12s ease-in-out infinite;
     }
 
     .floating-image-2 {
-        top: 10%;
-        right: 10%;
+        top: 5%;
+        right: 8%;
         animation: floatProduct2 14s ease-in-out infinite 1s;
     }
 
@@ -594,12 +669,12 @@
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 8px 16px;
+        padding: 10px 16px;
         border-radius: 50px;
         font-size: 12px;
         font-weight: 600;
         color: var(--primary-color);
-        box-shadow:
+        box-shadow: 
             0 10px 25px rgba(0, 0, 0, 0.1),
             0 0 0 1px rgba(255, 255, 255, 0.5);
         display: flex;
@@ -686,6 +761,7 @@
         animation: particleFloat 20s linear infinite;
     }
 
+    /* Particle positions */
     .particle:nth-child(1) {
         width: 8px;
         height: 8px;
@@ -726,159 +802,132 @@
         animation-delay: 20s;
     }
 
-    /* Hero Badge */
-    .hero-badge {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #FFD700, #FFA500);
-        color: var(--primary-dark);
-        padding: 10px 20px;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 14px;
-        box-shadow:
-            0 10px 20px rgba(255, 165, 0, 0.3),
-            0 0 0 2px rgba(255, 255, 255, 0.5);
-        z-index: 5;
-        animation: badgePulse 2s ease-in-out infinite;
+    .particle:nth-child(6) {
+        width: 9px;
+        height: 9px;
+        top: 30%;
+        left: 70%;
+        animation-delay: 8s;
+    }
+
+    .particle:nth-child(7) {
+        width: 5px;
+        height: 5px;
+        top: 50%;
+        left: 40%;
+        animation-delay: 12s;
+    }
+
+    .particle:nth-child(8) {
+        width: 11px;
+        height: 11px;
+        top: 65%;
+        left: 60%;
+        animation-delay: 18s;
     }
 
     /* Keyframe Animations */
     @keyframes mainImageFloat {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: translate(-50%, -50%) rotate(0deg);
         }
-
         33% {
             transform: translate(-50%, -52%) rotate(1deg);
         }
-
         66% {
             transform: translate(-50%, -48%) rotate(-1deg);
         }
     }
 
     @keyframes floatProduct1 {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: translate(0, 0) rotate(0deg);
         }
-
         25% {
             transform: translate(10px, -15px) rotate(2deg);
         }
-
         50% {
             transform: translate(-5px, 10px) rotate(-1deg);
         }
-
         75% {
             transform: translate(15px, 5px) rotate(1deg);
         }
     }
 
     @keyframes floatProduct2 {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: translate(0, 0) rotate(0deg);
         }
-
         25% {
             transform: translate(-15px, 10px) rotate(-2deg);
         }
-
         50% {
             transform: translate(10px, -5px) rotate(1deg);
         }
-
         75% {
             transform: translate(-5px, -15px) rotate(-1deg);
         }
     }
 
     @keyframes floatProduct3 {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: translate(0, 0) rotate(0deg);
         }
-
         25% {
             transform: translate(15px, -10px) rotate(3deg);
         }
-
         50% {
             transform: translate(-10px, 15px) rotate(-2deg);
         }
-
         75% {
             transform: translate(5px, 10px) rotate(1deg);
         }
     }
 
     @keyframes floatProduct4 {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: translate(0, 0) rotate(0deg);
         }
-
         25% {
             transform: translate(-10px, -15px) rotate(-3deg);
         }
-
         50% {
             transform: translate(15px, 5px) rotate(2deg);
         }
-
         75% {
             transform: translate(-5px, 15px) rotate(-1deg);
         }
     }
 
     @keyframes badgeFloat {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: translateY(0);
         }
-
         50% {
             transform: translateY(-10px);
         }
     }
 
     @keyframes badgePulse {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: scale(1);
-            box-shadow:
-                0 10px 20px rgba(255, 165, 0, 0.3),
+            box-shadow: 
+                0 8px 20px rgba(255, 165, 0, 0.3),
                 0 0 0 2px rgba(255, 255, 255, 0.5);
         }
-
         50% {
             transform: scale(1.05);
-            box-shadow:
-                0 15px 30px rgba(255, 165, 0, 0.4),
+            box-shadow: 
+                0 12px 25px rgba(255, 165, 0, 0.4),
                 0 0 0 2px rgba(255, 255, 255, 0.6);
         }
     }
 
     @keyframes elementPulse {
-
-        0%,
-        100% {
+        0%, 100% {
             transform: scale(1);
             opacity: 0.5;
         }
-
         50% {
             transform: scale(1.1);
             opacity: 0.7;
@@ -889,7 +938,6 @@
         0% {
             transform: translate(-50%, -50%) rotate(0deg);
         }
-
         100% {
             transform: translate(-50%, -50%) rotate(360deg);
         }
@@ -900,15 +948,12 @@
             transform: translateY(100vh) translateX(0);
             opacity: 0;
         }
-
         10% {
             opacity: 1;
         }
-
         90% {
             opacity: 1;
         }
-
         100% {
             transform: translateY(-100px) translateX(100px);
             opacity: 0;
@@ -929,9 +974,38 @@
     }
 
     @media (max-width: 992px) {
-        .hero-image-wrapper {
+        .hero-section {
+            padding: var(--space-xl) 0;
+            min-height: auto;
+        }
+
+        .col-lg-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .hero-text-column {
+            padding-right: 0;
+            margin-bottom: var(--space-xl);
+            text-align: center;
+        }
+
+        .hero-title {
+            min-height: auto;
+            justify-content: center;
+        }
+
+        .hero-subtitle {
+            margin: 0 auto var(--space-lg);
+        }
+
+        .hero-buttons {
+            justify-content: center;
+        }
+
+        .hero-image-column {
             height: 500px;
-            margin-top: 50px;
+            margin-top: var(--space-lg);
         }
 
         .hero-main-image {
@@ -946,22 +1020,20 @@
 
         .quality-badge {
             font-size: 10px;
-            padding: 6px 12px;
+            padding: 8px 12px;
         }
     }
 
     @media (max-width: 768px) {
-        .hero-section {
-            padding-top: 100px;
-            padding-bottom: var(--space-xl);
-        }
-
         .hero-title {
             font-size: var(--text-3xl);
-            min-height: 60px;
         }
 
-        .hero-image-wrapper {
+        .hero-subtitle {
+            font-size: var(--text-base);
+        }
+
+        .hero-image-column {
             height: 400px;
         }
 
@@ -975,22 +1047,18 @@
             height: 80px;
         }
 
-        .product-floating-image .product-label {
-            font-size: 10px;
-            padding: 4px;
+        .hero-buttons {
+            flex-direction: column;
         }
 
-        .quality-badge {
-            display: none;
-        }
-
-        .bg-element {
-            display: none;
+        .hero-buttons .btn {
+            width: 100%;
+            text-align: center;
         }
     }
 
     @media (max-width: 576px) {
-        .hero-image-wrapper {
+        .hero-image-column {
             height: 350px;
         }
 
@@ -1004,20 +1072,25 @@
             height: 70px;
         }
 
+        .quality-badge {
+            font-size: 9px;
+            padding: 6px 10px;
+        }
+
         .floating-image-1 {
-            left: 5%;
+            left: 2%;
         }
 
         .floating-image-2 {
-            right: 5%;
+            right: 2%;
         }
 
         .floating-image-3 {
-            left: 5%;
+            left: 2%;
         }
 
         .floating-image-4 {
-            right: 5%;
+            right: 2%;
         }
     }
 </style>
@@ -1043,7 +1116,7 @@
             });
         }
 
-        // Initialize Parallax Effect
+        // Initialize Parallax Effect on mouse move
         const heroSection = document.querySelector('.hero-section');
         const mainImage = document.querySelector('.hero-main-image');
 
@@ -1065,18 +1138,27 @@
                 const rotateX = lastY * 10;
                 const rotateY = -lastX * 10;
 
+                // Apply parallax to main image
                 mainImage.style.transform =
                     `translate(-50%, -50%) 
                      rotateY(${rotateY}deg) 
                      rotateX(${rotateX}deg) 
                      scale(1.02)`;
 
-                // Move floating images slightly
+                // Apply subtle movement to floating images
                 document.querySelectorAll('.product-floating-image').forEach((img, index) => {
-                    const speed = (index + 1) * 0.5;
-                    const x = lastX * 20 * speed;
-                    const y = lastY * 20 * speed;
+                    const speed = (index + 1) * 0.3;
+                    const x = lastX * 15 * speed;
+                    const y = lastY * 15 * speed;
                     img.style.transform = `translate(${x}px, ${y}px)`;
+                });
+
+                // Move quality badges slightly
+                document.querySelectorAll('.quality-badge').forEach((badge, index) => {
+                    const speed = (index + 1) * 0.2;
+                    const x = lastX * 10 * speed;
+                    const y = lastY * 10 * speed;
+                    badge.style.transform = `translate(${x}px, ${y}px)`;
                 });
             });
 
@@ -1084,32 +1166,46 @@
             heroSection.addEventListener('mouseleave', () => {
                 mainImage.style.transform = 'translate(-50%, -50%)';
                 document.querySelectorAll('.product-floating-image').forEach(img => {
-                    img.style.transform = 'translate(0, 0)';
+                    // Keep the floating animation but reset parallax
+                    img.style.transform = '';
+                });
+                document.querySelectorAll('.quality-badge').forEach(badge => {
+                    badge.style.transform = '';
                 });
             });
         }
 
-        // Interactive product image hover
+        // Interactive product image hover effects
         document.querySelectorAll('.product-floating-image').forEach(img => {
             img.addEventListener('mouseenter', function() {
                 this.style.zIndex = '10';
-                // Add a subtle glow effect
-                this.style.filter = 'brightness(1.2)';
+                this.style.filter = 'brightness(1.1)';
+                // Add glow effect
+                this.style.boxShadow = 
+                    '0 25px 50px rgba(0, 0, 0, 0.2), 0 15px 25px rgba(0, 0, 0, 0.15)';
             });
 
             img.addEventListener('mouseleave', function() {
                 this.style.zIndex = '1';
                 this.style.filter = 'brightness(1)';
+                this.style.boxShadow = 
+                    '0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07)';
             });
 
-            // Click to show product info
+            // Click to show product info toast
             img.addEventListener('click', function() {
                 const label = this.querySelector('.product-label').textContent;
-                showToast(`Showing details for ${label}`, 'info');
+                showToast(`Exploring ${label} collection...`, 'info');
+                
+                // Add a click animation
+                this.classList.add('clicked');
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 300);
             });
         });
 
-        // Add scroll-triggered animations
+        // Initialize Intersection Observer for scroll animations
         const observerOptions = {
             root: null,
             rootMargin: '0px',
@@ -1119,53 +1215,137 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    // Add animation classes when elements come into view
+                    entry.target.classList.add('animated');
+                    
+                    // For product images, add a staggered animation
+                    if (entry.target.classList.contains('product-floating-image')) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, entry.target.dataset.delay || 0);
+                    }
                 }
             });
         }, observerOptions);
 
         // Observe all animated elements
-        document.querySelectorAll('.product-floating-image, .quality-badge').forEach(el => {
+        document.querySelectorAll('.product-floating-image, .quality-badge, .hero-main-image').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            el.style.transition = 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease';
             observer.observe(el);
         });
 
-        // Add a subtle breathing animation to the hero badge
+        // Add click animation to hero badge
         const heroBadge = document.querySelector('.hero-badge');
         if (heroBadge) {
+            heroBadge.addEventListener('click', function() {
+                this.classList.add('pulse-click');
+                setTimeout(() => {
+                    this.classList.remove('pulse-click');
+                }, 600);
+                showToast('We\'re rated #1 by our customers!', 'success');
+            });
+        }
+
+        // Add subtle breathing animation to hero badge
+        if (heroBadge) {
             setInterval(() => {
-                heroBadge.style.transform = 'scale(' + (1 + Math.sin(Date.now() / 1000) * 0.05) + ')';
+                const scale = 1 + Math.sin(Date.now() / 1000) * 0.05;
+                heroBadge.style.transform = `scale(${scale})`;
             }, 50);
         }
+
+        // Initialize particle animation
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach((particle, index) => {
+            // Set random initial position
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            // Set random animation duration
+            const duration = 15 + Math.random() * 20;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Set random delay
+            const delay = Math.random() * 5;
+            particle.style.animationDelay = `${delay}s`;
+        });
     });
 
+    // Toast notification function
     function showToast(message, type = 'info') {
-        // Simple toast notification
         const toast = document.createElement('div');
         toast.className = `toast-notification toast-${type}`;
         toast.textContent = message;
         toast.style.cssText = `
             position: fixed;
-            top: 20px;
+            top: 100px;
             right: 20px;
-            background: ${type === 'info' ? '#3498db' : type === 'success' ? '#2ecc71' : '#e74c3c'};
+            background: ${type === 'info' ? '#3498db' : type === 'success' ? '#2ecc71' : type === 'warning' ? '#f39c12' : '#e74c3c'};
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10000;
+            font-weight: 500;
+            max-width: 300px;
+            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            border-left: 4px solid ${type === 'info' ? '#2980b9' : type === 'success' ? '#229954' : type === 'warning' ? '#d68910' : '#cb4335'};
         `;
 
         document.body.appendChild(toast);
 
+        // Remove after 3 seconds
         setTimeout(() => {
-            toast.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => toast.remove(), 300);
+            toast.remove();
         }, 3000);
+
+        // Add CSS for animations if not already present
+        if (!document.getElementById('toast-animations')) {
+            const style = document.createElement('style');
+            style.id = 'toast-animations';
+            style.textContent = `
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes fadeOut {
+                    from {
+                        opacity: 1;
+                    }
+                    to {
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }
+
+    // Function to handle scroll animations
+    function handleScrollAnimations() {
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.classList.add('active');
+            }
+        });
+    }
+
+    // Add scroll event listener for animations
+    window.addEventListener('scroll', handleScrollAnimations);
+    // Initial check
+    handleScrollAnimations();
 </script>
 @endpush
