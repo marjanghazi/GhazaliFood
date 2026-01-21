@@ -549,7 +549,7 @@
         height: 100%;
         object-fit: cover;
         border-radius: 20px;
-        box-shadow: 
+        box-shadow:
             0 20px 40px rgba(0, 0, 0, 0.1),
             0 0 0 1px rgba(255, 255, 255, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.6);
@@ -558,7 +558,7 @@
 
     .hero-main-image:hover img {
         transform: perspective(1000px) rotateY(5deg) rotateX(2deg) scale(1.05);
-        box-shadow: 
+        box-shadow:
             0 30px 60px rgba(0, 0, 0, 0.15),
             0 0 0 1px rgba(255, 255, 255, 0.3),
             inset 0 2px 0 rgba(255, 255, 255, 0.8);
@@ -574,7 +574,7 @@
         border-radius: 50px;
         font-weight: 700;
         font-size: 14px;
-        box-shadow: 
+        box-shadow:
             0 8px 20px rgba(255, 165, 0, 0.3),
             0 0 0 2px rgba(255, 255, 255, 0.5);
         display: flex;
@@ -590,7 +590,7 @@
         height: 140px;
         border-radius: 18px;
         overflow: hidden;
-        box-shadow: 
+        box-shadow:
             0 15px 35px rgba(0, 0, 0, 0.1),
             0 5px 15px rgba(0, 0, 0, 0.07);
         z-index: 1;
@@ -603,7 +603,7 @@
         transform: scale(1.15) rotate(5deg);
         z-index: 10;
         border-color: var(--accent-color);
-        box-shadow: 
+        box-shadow:
             0 25px 50px rgba(0, 0, 0, 0.15),
             0 10px 20px rgba(0, 0, 0, 0.1);
     }
@@ -674,7 +674,7 @@
         font-size: 12px;
         font-weight: 600;
         color: var(--primary-color);
-        box-shadow: 
+        box-shadow:
             0 10px 25px rgba(0, 0, 0, 0.1),
             0 0 0 1px rgba(255, 255, 255, 0.5);
         display: flex;
@@ -828,106 +828,139 @@
 
     /* Keyframe Animations */
     @keyframes mainImageFloat {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(-50%, -50%) rotate(0deg);
         }
+
         33% {
             transform: translate(-50%, -52%) rotate(1deg);
         }
+
         66% {
             transform: translate(-50%, -48%) rotate(-1deg);
         }
     }
 
     @keyframes floatProduct1 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(10px, -15px) rotate(2deg);
         }
+
         50% {
             transform: translate(-5px, 10px) rotate(-1deg);
         }
+
         75% {
             transform: translate(15px, 5px) rotate(1deg);
         }
     }
 
     @keyframes floatProduct2 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(-15px, 10px) rotate(-2deg);
         }
+
         50% {
             transform: translate(10px, -5px) rotate(1deg);
         }
+
         75% {
             transform: translate(-5px, -15px) rotate(-1deg);
         }
     }
 
     @keyframes floatProduct3 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(15px, -10px) rotate(3deg);
         }
+
         50% {
             transform: translate(-10px, 15px) rotate(-2deg);
         }
+
         75% {
             transform: translate(5px, 10px) rotate(1deg);
         }
     }
 
     @keyframes floatProduct4 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(-10px, -15px) rotate(-3deg);
         }
+
         50% {
             transform: translate(15px, 5px) rotate(2deg);
         }
+
         75% {
             transform: translate(-5px, 15px) rotate(-1deg);
         }
     }
 
     @keyframes badgeFloat {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translateY(0);
         }
+
         50% {
             transform: translateY(-10px);
         }
     }
 
     @keyframes badgePulse {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: scale(1);
-            box-shadow: 
+            box-shadow:
                 0 8px 20px rgba(255, 165, 0, 0.3),
                 0 0 0 2px rgba(255, 255, 255, 0.5);
         }
+
         50% {
             transform: scale(1.05);
-            box-shadow: 
+            box-shadow:
                 0 12px 25px rgba(255, 165, 0, 0.4),
                 0 0 0 2px rgba(255, 255, 255, 0.6);
         }
     }
 
     @keyframes elementPulse {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: scale(1);
             opacity: 0.5;
         }
+
         50% {
             transform: scale(1.1);
             opacity: 0.7;
@@ -938,6 +971,7 @@
         0% {
             transform: translate(-50%, -50%) rotate(0deg);
         }
+
         100% {
             transform: translate(-50%, -50%) rotate(360deg);
         }
@@ -948,12 +982,15 @@
             transform: translateY(100vh) translateX(0);
             opacity: 0;
         }
+
         10% {
             opacity: 1;
         }
+
         90% {
             opacity: 1;
         }
+
         100% {
             transform: translateY(-100px) translateX(100px);
             opacity: 0;
@@ -1181,14 +1218,14 @@
                 this.style.zIndex = '10';
                 this.style.filter = 'brightness(1.1)';
                 // Add glow effect
-                this.style.boxShadow = 
+                this.style.boxShadow =
                     '0 25px 50px rgba(0, 0, 0, 0.2), 0 15px 25px rgba(0, 0, 0, 0.15)';
             });
 
             img.addEventListener('mouseleave', function() {
                 this.style.zIndex = '1';
                 this.style.filter = 'brightness(1)';
-                this.style.boxShadow = 
+                this.style.boxShadow =
                     '0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07)';
             });
 
@@ -1196,7 +1233,7 @@
             img.addEventListener('click', function() {
                 const label = this.querySelector('.product-label').textContent;
                 showToast(`Exploring ${label} collection...`, 'info');
-                
+
                 // Add a click animation
                 this.classList.add('clicked');
                 setTimeout(() => {
@@ -1217,7 +1254,7 @@
                 if (entry.isIntersecting) {
                     // Add animation classes when elements come into view
                     entry.target.classList.add('animated');
-                    
+
                     // For product images, add a staggered animation
                     if (entry.target.classList.contains('product-floating-image')) {
                         setTimeout(() => {
@@ -1263,11 +1300,11 @@
             // Set random initial position
             particle.style.left = `${Math.random() * 100}%`;
             particle.style.top = `${Math.random() * 100}%`;
-            
+
             // Set random animation duration
             const duration = 15 + Math.random() * 20;
             particle.style.animationDuration = `${duration}s`;
-            
+
             // Set random delay
             const delay = Math.random() * 5;
             particle.style.animationDelay = `${delay}s`;
@@ -1336,7 +1373,7 @@
         elements.forEach(element => {
             const elementTop = element.getBoundingClientRect().top;
             const elementVisible = 150;
-            
+
             if (elementTop < window.innerHeight - elementVisible) {
                 element.classList.add('active');
             }
