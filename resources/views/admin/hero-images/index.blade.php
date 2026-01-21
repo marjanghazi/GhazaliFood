@@ -1,8 +1,10 @@
 @extends('layouts.admin')
 
-@section('admin-title', 'Hero Images Management')
+@section('title', 'Hero Images Management | Admin Panel')
+@section('page_title', 'Hero Images Management')
+@section('breadcrumb', 'Hero Images')
 
-@section('admin-content')
+@section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="mb-0">Hero Images Management</h4>
     <a href="{{ route('admin.hero-images.create') }}" class="btn btn-primary">

@@ -272,3 +272,53 @@ body {
 .modal-header .btn-close {
     filter: invert(1);
 }
+/* Hero Images Admin Styles */
+.image-preview {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+}
+
+.sortable-handle {
+    cursor: move;
+    color: #6c757d;
+}
+
+.sortable-handle:hover {
+    color: #495057;
+}
+
+.status-active {
+    background: #d4edda;
+    color: #155724;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.hero-image-item {
+    transition: background-color 0.2s;
+}
+
+.hero-image-item:hover {
+    background-color: #f8f9fa;
+}
+
+.hero-image-item.sortable-ghost {
+    opacity: 0.5;
+    background-color: #f8f9fa;
+}
+
+.hero-image-item.sortable-chosen {
+    background-color: #e9ecef;
+}
