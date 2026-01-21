@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +36,7 @@
 
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    
+
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
@@ -106,13 +107,14 @@
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="logo">
                     <div class="logo-icon">
-                        <i class="fas fa-seedling"></i>
+                        <img src="{{ asset('images/logo.png') }}" alt="Ghazali Food Logo">
                     </div>
                     <div class="logo-text">
                         <span class="logo-main">Ghazali Food</span>
                         <span class="logo-tagline">Premium Dry Fruits</span>
                     </div>
                 </a>
+
 
                 <!-- Main Navigation -->
                 <nav class="main-nav" id="mainNav">
@@ -312,13 +314,14 @@
                 <div class="footer-section">
                     <a href="{{ url('/') }}" class="footer-logo">
                         <div class="logo-icon">
-                            <i class="fas fa-seedling"></i>
+                            <img src="{{ asset('images/logo.png') }}" alt="Ghazali Food Logo">
                         </div>
                         <div class="logo-text">
                             <h3>Ghazali Food</h3>
                             <p>Premium Dry Fruits</p>
                         </div>
                     </a>
+
                     <p class="footer-description">
                         Premium quality dry fruits, nuts, and berries. 100% natural, organic,
                         and sourced from the finest orchards worldwide.
@@ -862,10 +865,10 @@
 
             const toast = document.createElement('div');
             toast.className = `toast-global animate__animated animate__fadeInRight`;
-            
+
             // Set type-specific styling
             let iconClass, bgColor, textColor;
-            switch(type) {
+            switch (type) {
                 case 'success':
                     iconClass = 'fa-check-circle';
                     bgColor = '#27ae60';
@@ -984,4 +987,5 @@
         };
     </script>
 </body>
+
 </html>

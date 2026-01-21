@@ -3310,3 +3310,14 @@ body.announcement-active .main-header {
 .toast-global-container {
     z-index: 9999;
 }
+.footer-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-icon img {
+    width: 50px;      /* adjust as needed */
+    height: auto;
+    margin-right: 1px;
+}
