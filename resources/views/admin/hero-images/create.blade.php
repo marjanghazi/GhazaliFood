@@ -1,8 +1,10 @@
 @extends('layouts.admin')
 
-@section('admin-title', 'Add Hero Image')
+@section('title', 'Add Hero Image | Admin Panel')
+@section('page_title', 'Add Hero Image')
+@section('breadcrumb', 'Hero Images')
 
-@section('admin-content')
+@section('content')
 <div class="card">
     <div class="card-header">
         <h5 class="mb-0">Add Hero Image</h5>
@@ -171,7 +173,9 @@
         </p>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
     // Initialize form fields based on selected type
     document.addEventListener('DOMContentLoaded', function() {
@@ -180,5 +184,43 @@
             toggleFormFields(typeSelect.value);
         }
     });
+
+    function toggleFormFields(type) {
+        const imageFields = document.getElementById('imageFields');
+        const badgeFields = document.getElementById('badgeFields');
+        const labelField = document.getElementById('labelField');
+        
+        if (type === 'badge') {
+            imageFields.classList.add('d-none');
+            badgeFields.classList.remove('d-none');
+            labelField.classList.add('d-none');
+        } else if (type === 'floating') {
+            imageFields.classList.remove('d-none');
+            badgeFields.classList.add('d-none');
+            labelField.classList.remove('d-none');
+        } else {
+            imageFields.classList.remove('d-none');
+            badgeFields.classList.add('d-none');
+            labelField.classList.add('d-none');
+        }
+    }
+
+    function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onloadend = function() {
+            preview.src = reader.result;
+            preview.style.display = 'block';
+        }
+        
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    }
 </script>
-@endsection
+@endpush

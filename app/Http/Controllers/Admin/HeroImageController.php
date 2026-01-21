@@ -48,7 +48,6 @@ class HeroImageController extends Controller
 
         return view('admin.hero-images.create', compact('imageTypes', 'positions'));
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -64,8 +63,8 @@ class HeroImageController extends Controller
             'icon' => 'nullable|string|max:50',
             'badge_text' => 'nullable|string|max:100',
             'link' => 'nullable|url|max:500',
-            'is_active' => 'boolean',
             'sort_order' => 'nullable|integer'
+            // Remove the 'is_active' validation here
         ]);
 
         if ($validator->fails()) {
@@ -75,10 +74,19 @@ class HeroImageController extends Controller
         }
 
         $data = $request->only([
-            'title', 'subtitle', 'image_type', 'position',
-            'product_label', 'icon', 'badge_text', 'link',
-            'is_active', 'sort_order'
+            'title',
+            'subtitle',
+            'image_type',
+            'position',
+            'product_label',
+            'icon',
+            'badge_text',
+            'link',
+            'sort_order'
         ]);
+
+        // Handle is_active checkbox
+        $data['is_active'] = $request->has('is_active');
 
         // Handle image upload
         if ($request->hasFile('image') && in_array($request->image_type, ['main', 'floating', 'background'])) {
@@ -150,9 +158,16 @@ class HeroImageController extends Controller
         }
 
         $data = $request->only([
-            'title', 'subtitle', 'image_type', 'position',
-            'product_label', 'icon', 'badge_text', 'link',
-            'is_active', 'sort_order'
+            'title',
+            'subtitle',
+            'image_type',
+            'position',
+            'product_label',
+            'icon',
+            'badge_text',
+            'link',
+            'is_active',
+            'sort_order'
         ]);
 
         // Handle image update
@@ -161,7 +176,7 @@ class HeroImageController extends Controller
             if ($heroImage->image_url && !str_contains($heroImage->image_url, 'http')) {
                 Storage::disk('public')->delete($heroImage->image_url);
             }
-            
+
             $imagePath = $request->file('image')->store('hero-images', 'public');
             $data['image_url'] = $imagePath;
         }
