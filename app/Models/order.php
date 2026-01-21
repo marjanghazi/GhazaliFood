@@ -107,4 +107,16 @@ class Order extends Model
     {
         return $this->items()->latest()->first();
     }
+
+    // Add this to your Order model (app/Models/Order.php)
+
+public function statusHistory()
+{
+    return $this->hasMany(OrderStatusHistory::class)->latest();
+}
+
+public function shippingAddress()
+{
+    return $this->belongsTo(ShippingAddress::class);
+}
 }

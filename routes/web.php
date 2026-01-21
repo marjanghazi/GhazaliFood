@@ -309,3 +309,20 @@ Route::fallback(function () {
         'message' => 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.'
     ]);
 });
+
+// Add these inside the middleware('auth')->group for user profile routes
+Route::prefix('profile')->name('profile.')->group(function () {
+    Route::get('/', [AuthController::class, 'profile'])->name('edit');
+    Route::put('/', [AuthController::class, 'updateProfile'])->name('update');
+    Route::put('/password', [AuthController::class, 'updatePassword'])->name('password.update');
+    Route::put('/notifications', [AuthController::class, 'updateNotifications'])->name('notifications.update');
+    Route::put('/social', [AuthController::class, 'updateSocial'])->name('social.update');
+    Route::post('/two-factor/enable', [AuthController::class, 'enableTwoFactor'])->name('two-factor.enable');
+    
+    // Shipping Address Routes
+    Route::prefix('address')->name('address.')->group(function () {
+        Route::post('/', [AuthController::class, 'storeAddress'])->name('store');
+        Route::put('/{id}', [AuthController::class, 'updateAddress'])->name('update');
+        Route::delete('/{id}', [AuthController::class, 'destroyAddress'])->name('destroy');
+    });
+});
