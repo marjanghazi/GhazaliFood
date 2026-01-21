@@ -8,11 +8,14 @@ use App\Models\Category;
 use App\Models\Announcement;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
+use App\Models\HeroImage;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        // Get hero images from database
+        $heroImages = HeroImage::getAllHeroImages();
         // Get active announcements
         $announcements = Announcement::where('status', 'active')
             ->where('start_date', '<=', now())
@@ -92,7 +95,9 @@ class HomeController extends Controller
             'newArrivals',
             'categories',
             'testimonials',
-            'middleBanners'
+            'middleBanners',
+            'heroImages' // ← ADD THIS LINE
+
         ));
     }
 

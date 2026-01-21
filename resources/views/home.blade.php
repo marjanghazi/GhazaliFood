@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('title', 'Premium Dry Fruits Store | Nuts & Berries')
-
 @section('hero')
 <!-- Hero Section -->
 <section class="hero-section">
@@ -32,52 +31,63 @@
                 <div class="hero-image-container position-relative">
                     <!-- Main Product Image with Parallax Effect -->
                     <div class="hero-main-image" data-depth="0.2">
+                        @if($heroImages['main'])
+                        <img src="{{ $heroImages['main']->full_image_url }}"
+                            alt="{{ $heroImages['main']->title ?? 'Premium Dry Fruits' }}"
+                            class="img-fluid rounded-3 shadow-lg">
+                        @else
+                        <!-- Fallback image -->
                         <img src="https://images.unsplash.com/photo-1542291025-1ec7e8e7cbc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                             alt="Premium Dry Fruits"
                             class="img-fluid rounded-3 shadow-lg">
+                        @endif
                         <div class="hero-badge animate-bounce">
                             <i class="fas fa-trophy me-2"></i> #1 Rated
                         </div>
                     </div>
 
                     <!-- Animated Product Collection Images -->
-                    <div class="product-floating-image floating-image-1">
-                        <img src="https://images.unsplash.com/photo-1607305387299-a3d9611cd469?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                            alt="Almonds" class="img-fluid">
-                        <div class="product-label">Almonds</div>
-                    </div>
+                    @php
+                    $floatingPositions = ['floating_1', 'floating_2', 'floating_3', 'floating_4'];
+                    @endphp
 
-                    <div class="product-floating-image floating-image-2">
-                        <img src="https://images.unsplash.com/photo-1574085733277-851d9d856a3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                            alt="Walnuts" class="img-fluid">
-                        <div class="product-label">Walnuts</div>
-                    </div>
+                    @foreach($floatingPositions as $index => $position)
+                    @php
+                    $floatingImage = $heroImages['floating']->firstWhere('position', $position);
+                    $positionClass = 'floating-image-' . ($index + 1);
+                    @endphp
 
-                    <div class="product-floating-image floating-image-3">
-                        <img src="https://images.unsplash.com/photo-1592921870789-04563d55041c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                            alt="Dates" class="img-fluid">
-                        <div class="product-label">Dates</div>
+                    @if($floatingImage)
+                    <div class="product-floating-image {{ $positionClass }}">
+                        <img src="{{ $floatingImage->full_image_url }}"
+                            alt="{{ $floatingImage->product_label }}"
+                            class="img-fluid">
+                        <div class="product-label">{{ $floatingImage->product_label }}</div>
                     </div>
-
-                    <div class="product-floating-image floating-image-4">
-                        <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                            alt="Berries" class="img-fluid">
-                        <div class="product-label">Berries</div>
-                    </div>
+                    @endif
+                    @endforeach
 
                     <!-- Quality Badges with Animation -->
-                    <div class="quality-badge badge-1 pulse-animation">
-                        <i class="fas fa-leaf"></i>
-                        <span>100% Organic</span>
+                    @php
+                    $badgePositions = ['badge_1', 'badge_2', 'badge_3'];
+                    @endphp
+
+                    @foreach($badgePositions as $index => $position)
+                    @php
+                    $badge = $heroImages['badges']->firstWhere('position', $position);
+                    $badgeClass = 'badge-' . ($index + 1);
+                    @endphp
+
+                    @if($badge)
+                    <div class="quality-badge {{ $badgeClass }} 
+                                @if($index == 0) pulse-animation
+                                @elseif($index == 1) bounce-animation
+                                @else float-animation @endif">
+                        <i class="{{ $badge->icon }}"></i>
+                        <span>{{ $badge->badge_text }}</span>
                     </div>
-                    <div class="quality-badge badge-2 bounce-animation">
-                        <i class="fas fa-award"></i>
-                        <span>Premium Quality</span>
-                    </div>
-                    <div class="quality-badge badge-3 float-animation">
-                        <i class="fas fa-shipping-fast"></i>
-                        <span>Free Delivery</span>
-                    </div>
+                    @endif
+                    @endforeach
 
                     <!-- Animated Background Elements -->
                     <div class="bg-element element-1"></div>

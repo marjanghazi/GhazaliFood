@@ -13,6 +13,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\HeroImageController;
+
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -325,4 +327,17 @@ Route::prefix('profile')->name('profile.')->group(function () {
         Route::put('/{id}', [AuthController::class, 'updateAddress'])->name('update');
         Route::delete('/{id}', [AuthController::class, 'destroyAddress'])->name('destroy');
     });
+});
+
+// Admin Routes
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // Hero Images Management
+    Route::get('hero-images', [HeroImageController::class, 'index'])->name('hero-images.index');
+    Route::get('hero-images/create', [HeroImageController::class, 'create'])->name('hero-images.create');
+    Route::post('hero-images', [HeroImageController::class, 'store'])->name('hero-images.store');
+    Route::get('hero-images/{heroImage}/edit', [HeroImageController::class, 'edit'])->name('hero-images.edit');
+    Route::put('hero-images/{heroImage}', [HeroImageController::class, 'update'])->name('hero-images.update');
+    Route::delete('hero-images/{heroImage}', [HeroImageController::class, 'destroy'])->name('hero-images.destroy');
+    Route::post('hero-images/update-order', [HeroImageController::class, 'updateOrder'])->name('hero-images.update-order');
+    Route::post('hero-images/{heroImage}/toggle-status', [HeroImageController::class, 'toggleStatus'])->name('hero-images.toggle-status');
 });
