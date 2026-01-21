@@ -8,9 +8,12 @@
     <div class="container">
         <div class="row align-items-center min-vh-70">
             <div class="col-lg-6">
-                <h1 class="hero-title animate-slide-up">Premium Quality Dry Fruits & Nuts</h1>
+                <!-- Animated Title with Typing Effect -->
+                <h1 class="hero-title mb-3 mb-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <span class="typed-text" data-typed-items='"Premium Quality Dry Fruits", "100% Natural & Organic Nuts", "Sourced from Finest Orchards", "Healthy Snacking Delivered"'></span>
+                </h1>
                 <p class="hero-subtitle animate-slide-up delay-1">
-                    Discover our exquisite collection of 100% natural, organic dry fruits, 
+                    Discover our exquisite collection of 100% natural, organic dry fruits,
                     nuts, and berries sourced from the finest orchards worldwide.
                 </p>
                 <div class="hero-buttons animate-slide-up delay-2">
@@ -21,19 +24,78 @@
                         Explore Products
                     </a>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1542291025-1ec7e8e7cbc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                         alt="Premium Dry Fruits"
-                         class="img-fluid rounded-3">
-                    <div class="hero-badge animate-bounce">
-                        <i class="fas fa-trophy me-2"></i> #1 Rated
+            
+            <!-- Enhanced Hero Images with Multiple Animations -->
+            <div class="col-lg-6 hero-image-wrapper order-1 order-lg-2">
+                <div class="hero-image-container position-relative">
+                    <!-- Main Product Image with Parallax Effect -->
+                    <div class="hero-main-image" data-depth="0.2">
+                        <img src="https://images.unsplash.com/photo-1542291025-1ec7e8e7cbc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Premium Dry Fruits"
+                            class="img-fluid rounded-3 shadow-lg">
+                        <div class="hero-badge animate-bounce">
+                            <i class="fas fa-trophy me-2"></i> #1 Rated
+                        </div>
                     </div>
+                    
+                    <!-- Animated Product Collection Images -->
+                    <div class="product-floating-image floating-image-1">
+                        <img src="https://images.unsplash.com/photo-1607305387299-a3d9611cd469?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                            alt="Almonds" class="img-fluid">
+                        <div class="product-label">Almonds</div>
+                    </div>
+                    
+                    <div class="product-floating-image floating-image-2">
+                        <img src="https://images.unsplash.com/photo-1574085733277-851d9d856a3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                            alt="Walnuts" class="img-fluid">
+                        <div class="product-label">Walnuts</div>
+                    </div>
+                    
+                    <div class="product-floating-image floating-image-3">
+                        <img src="https://images.unsplash.com/photo-1592921870789-04563d55041c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                            alt="Dates" class="img-fluid">
+                        <div class="product-label">Dates</div>
+                    </div>
+                    
+                    <div class="product-floating-image floating-image-4">
+                        <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?ixlib=rb-4.0.3&auto=format&fit=crop&w-400&q=80"
+                            alt="Berries" class="img-fluid">
+                        <div class="product-label">Berries</div>
+                    </div>
+                    
+                    <!-- Quality Badges with Animation -->
+                    <div class="quality-badge badge-1 pulse-animation">
+                        <i class="fas fa-leaf"></i>
+                        <span>100% Organic</span>
+                    </div>
+                    <div class="quality-badge badge-2 bounce-animation">
+                        <i class="fas fa-award"></i>
+                        <span>Premium Quality</span>
+                    </div>
+                    <div class="quality-badge badge-3 float-animation">
+                        <i class="fas fa-shipping-fast"></i>
+                        <span>Free Delivery</span>
+                    </div>
+                    
+                    <!-- Animated Background Elements -->
+                    <div class="bg-element element-1"></div>
+                    <div class="bg-element element-2"></div>
+                    <div class="bg-element element-3"></div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Floating Particles Background -->
+    <div class="hero-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+                </div>
+
 </section>
 @endsection
 
@@ -81,13 +143,13 @@
             <h2 class="section-title">Shop By Categories</h2>
             <p class="text-muted">Browse our premium collection of dry fruits categories</p>
         </div>
-        
+
         <div class="categories-grid">
             @forelse($categories as $category)
             <div class="category-card">
                 <div class="category-image">
-                    <img src="{{ $category->image_url ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" 
-                         alt="{{ $category->name }}">
+                    <img src="{{ $category->image_url ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}"
+                        alt="{{ $category->name }}">
                     <div class="category-overlay">
                         <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="btn btn-primary">
                             Shop Now
@@ -106,7 +168,7 @@
             </div>
             @endforelse
         </div>
-        
+
         @if($categories->count() > 0)
         <div class="text-center mt-5">
             <a href="{{ route('categories.index') }}" class="btn btn-outline-primary btn-lg">
@@ -124,38 +186,38 @@
             <h2 class="section-title">Featured Products</h2>
             <p class="text-muted">Handpicked selection of our premium products</p>
         </div>
-        
+
         <div class="products-grid">
             @forelse($featuredProducts as $product)
             <div class="product-card">
                 <div class="product-image">
-                    <img src="{{ $product->primaryImage->media_url ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" 
-                         alt="{{ $product->name }}">
-                    
+                    <img src="{{ $product->primaryImage->media_url ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}"
+                        alt="{{ $product->name }}">
+
                     @if($product->is_new_arrival)
                     <span class="product-badge badge-new">New</span>
                     @endif
-                    
+
                     @if($product->compare_at_price && $product->compare_at_price > $product->best_price)
                     <span class="product-badge badge-sale">Sale</span>
                     @endif
-                    
+
                     <div class="product-overlay">
                         <div class="product-actions">
-                            <button class="btn btn-primary add-to-cart-btn" 
-                                    data-product-id="{{ $product->id }}">
+                            <button class="btn btn-primary add-to-cart-btn"
+                                data-product-id="{{ $product->id }}">
                                 <i class="fas fa-cart-plus"></i>
                             </button>
-                            
+
                             @auth
-                            <button class="btn btn-outline-danger wishlist-toggle-btn" 
-                                    data-product-id="{{ $product->id }}">
+                            <button class="btn btn-outline-danger wishlist-toggle-btn"
+                                data-product-id="{{ $product->id }}">
                                 <i class="{{ App\Models\Wishlist::isInWishlist($product->id) ? 'fas' : 'far' }} fa-heart"></i>
                             </button>
                             @endauth
-                            
-                            <a href="{{ route('shop.show', $product->slug) }}" 
-                               class="btn btn-outline-secondary">
+
+                            <a href="{{ route('shop.show', $product->slug) }}"
+                                class="btn btn-outline-secondary">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </div>
@@ -170,22 +232,22 @@
                             {{ Str::limit($product->name, 40) }}
                         </a>
                     </h4>
-                    
+
                     @if($product->average_rating > 0)
                     <div class="product-rating">
                         @for($i = 1; $i <= 5; $i++)
-                            @if($i <= $product->average_rating)
+                            @if($i <=$product->average_rating)
                             <i class="fas fa-star text-warning"></i>
                             @elseif($i - 0.5 <= $product->average_rating)
-                            <i class="fas fa-star-half-alt text-warning"></i>
-                            @else
-                            <i class="far fa-star text-warning"></i>
-                            @endif
-                        @endfor
-                        <span class="rating-count">({{ $product->total_reviews }})</span>
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                                @else
+                                <i class="far fa-star text-warning"></i>
+                                @endif
+                                @endfor
+                                <span class="rating-count">({{ $product->total_reviews }})</span>
                     </div>
                     @endif
-                    
+
                     <div class="product-price">
                         <span class="current-price">${{ number_format($product->best_price, 2) }}</span>
                         @if($product->compare_at_price && $product->compare_at_price > $product->best_price)
@@ -201,7 +263,7 @@
             </div>
             @endforelse
         </div>
-        
+
         @if($featuredProducts->count() > 0)
         <div class="text-center mt-4">
             <a href="{{ route('shop.index', ['featured' => true]) }}" class="btn btn-outline-primary btn-lg">
@@ -220,14 +282,14 @@
             <h2 class="section-title">New Arrivals</h2>
             <p class="text-muted">Fresh products added weekly</p>
         </div>
-        
+
         <div class="products-grid">
             @foreach($newArrivals as $product)
             <div class="product-card">
                 <div class="product-image">
                     <a href="{{ route('shop.show', $product->slug) }}">
-                        <img src="{{ $product->primaryImage->media_url ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}" 
-                             alt="{{ $product->name }}">
+                        <img src="{{ $product->primaryImage->media_url ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}"
+                            alt="{{ $product->name }}">
                     </a>
                 </div>
                 <div class="product-content">
@@ -243,7 +305,7 @@
             </div>
             @endforeach
         </div>
-        
+
         <div class="text-center mt-4">
             <a href="{{ route('shop.index', ['new_arrival' => true]) }}" class="btn btn-outline-primary">
                 View All New Arrivals <i class="fas fa-arrow-right ms-2"></i>
@@ -260,25 +322,25 @@
             <h2 class="section-title">What Our Customers Say</h2>
             <p class="text-muted">Trusted by thousands of happy customers</p>
         </div>
-        
+
         <div class="testimonial-slider">
             @forelse($testimonials as $testimonial)
             <div class="testimonial-card">
                 <div class="testimonial-rating">
                     @for($i = 1; $i <= 5; $i++)
-                        @if($i <= $testimonial->rating)
+                        @if($i <=$testimonial->rating)
                         <i class="fas fa-star text-warning"></i>
                         @else
                         <i class="far fa-star text-warning"></i>
                         @endif
-                    @endfor
+                        @endfor
                 </div>
                 <p class="testimonial-text">"{{ $testimonial->comment }}"</p>
                 <div class="testimonial-author">
                     @if($testimonial->avatar_url)
                     <div class="author-avatar">
-                        <img src="{{ asset('storage/' . $testimonial->avatar_url) }}" 
-                             alt="{{ $testimonial->name }}">
+                        <img src="{{ asset('storage/' . $testimonial->avatar_url) }}"
+                            alt="{{ $testimonial->name }}">
                     </div>
                     @endif
                     <div class="author-info">
@@ -308,7 +370,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="testimonial-card">
                 <div class="testimonial-rating">
                     <i class="fas fa-star text-warning"></i>
@@ -328,7 +390,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="testimonial-card">
                 <div class="testimonial-rating">
                     <i class="fas fa-star text-warning"></i>
@@ -364,11 +426,11 @@
             <div class="col-lg-6">
                 <form class="newsletter-form">
                     <div class="form-group">
-                        <input type="email" 
-                               class="form-control" 
-                               placeholder="Enter your email address" 
-                               required
-                               aria-label="Email for newsletter">
+                        <input type="email"
+                            class="form-control"
+                            placeholder="Enter your email address"
+                            required
+                            aria-label="Email for newsletter">
                     </div>
                     <button type="submit" class="btn btn-light btn-lg mt-3">
                         Subscribe <i class="fas fa-paper-plane ms-2"></i>
@@ -383,179 +445,692 @@
 
 @push('styles')
 <style>
-.hero-section {
-    padding-top: 120px;
-    padding-bottom: var(--space-2xl);
-    background: linear-gradient(135deg, var(--background-color) 0%, #F8F4E9 100%);
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-title {
-    font-size: var(--text-5xl);
-    margin-bottom: var(--space-lg);
-    color: var(--primary-color);
-}
-
-.hero-subtitle {
-    font-size: var(--text-xl);
-    margin-bottom: var(--space-xl);
-    max-width: 600px;
-    color: var(--text-secondary);
-}
-
-.hero-image {
-    position: relative;
-    animation: float 6s ease-in-out infinite;
-}
-
-.hero-image img {
-    max-width: 100%;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
-}
-
-.hero-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--gradient-gold);
-    color: var(--primary-dark);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-full);
-    font-weight: 600;
-    box-shadow: var(--shadow-lg);
-    animation: bounce 2s infinite;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: var(--space-md);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
     .hero-section {
-        padding-top: 100px;
-        padding-bottom: var(--space-xl);
+        padding-top: 120px;
+        padding-bottom: var(--space-2xl);
+        background: linear-gradient(135deg, 
+            rgba(244, 241, 231, 1) 0%,
+            rgba(255, 248, 240, 1) 50%,
+            rgba(250, 245, 235, 1) 100%);
+        position: relative;
+        overflow: hidden;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
     }
-    
+
     .hero-title {
-        font-size: var(--text-3xl);
+        font-size: var(--text-5xl);
+        margin-bottom: var(--space-lg);
+        color: var(--primary-color);
+        min-height: 84px;
     }
-    
-    .hero-subtitle {
-        font-size: var(--text-lg);
+
+    .hero-image-wrapper {
+        position: relative;
+        height: 600px;
     }
-    
-    .hero-buttons {
-        flex-direction: column;
+
+    .hero-image-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
     }
-}
+
+    /* Main Image with 3D Effect */
+    .hero-main-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 450px;
+        height: 450px;
+        z-index: 2;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: mainImageFloat 8s ease-in-out infinite;
+    }
+
+    .hero-main-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 30px;
+        box-shadow: 
+            0 25px 50px -12px rgba(120, 53, 15, 0.25),
+            0 0 0 1px rgba(255, 255, 255, 0.1),
+            inset 0 2px 4px 0 rgba(255, 255, 255, 0.5);
+        filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03))
+                drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hero-main-image:hover img {
+        transform: perspective(1000px) rotateY(5deg) rotateX(2deg) scale(1.02);
+        box-shadow: 
+            0 35px 60px -15px rgba(120, 53, 15, 0.35),
+            0 0 0 1px rgba(255, 255, 255, 0.2),
+            inset 0 2px 8px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    /* Floating Product Images */
+    .product-floating-image {
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 
+            0 15px 35px rgba(0, 0, 0, 0.1),
+            0 5px 15px rgba(0, 0, 0, 0.07);
+        z-index: 1;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+    }
+
+    .product-floating-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .product-floating-image:hover {
+        transform: scale(1.15) rotate(5deg);
+        z-index: 3;
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.15),
+            0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-floating-image:hover img {
+        transform: scale(1.1);
+    }
+
+    .product-floating-image .product-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: white;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .product-floating-image:hover .product-label {
+        transform: translateY(0);
+    }
+
+    /* Floating Animations for Product Images */
+    .floating-image-1 {
+        top: 15%;
+        left: 5%;
+        animation: floatProduct1 12s ease-in-out infinite;
+    }
+
+    .floating-image-2 {
+        top: 10%;
+        right: 10%;
+        animation: floatProduct2 14s ease-in-out infinite 1s;
+    }
+
+    .floating-image-3 {
+        bottom: 20%;
+        left: 8%;
+        animation: floatProduct3 16s ease-in-out infinite 2s;
+    }
+
+    .floating-image-4 {
+        bottom: 15%;
+        right: 5%;
+        animation: floatProduct4 18s ease-in-out infinite 3s;
+    }
+
+    /* Quality Badges */
+    .quality-badge {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--primary-color);
+        box-shadow: 
+            0 10px 25px rgba(0, 0, 0, 0.1),
+            0 0 0 1px rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 4;
+        white-space: nowrap;
+    }
+
+    .quality-badge i {
+        color: var(--accent-color);
+    }
+
+    .badge-1 {
+        top: 20%;
+        right: 20%;
+        animation: badgeFloat 8s ease-in-out infinite;
+    }
+
+    .badge-2 {
+        top: 50%;
+        left: 10%;
+        animation: badgeFloat 9s ease-in-out infinite 0.5s;
+    }
+
+    .badge-3 {
+        bottom: 25%;
+        right: 15%;
+        animation: badgeFloat 10s ease-in-out infinite 1s;
+    }
+
+    /* Background Elements */
+    .bg-element {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, 
+            rgba(255, 245, 235, 0.6) 0%,
+            rgba(255, 245, 235, 0) 70%);
+        z-index: 0;
+    }
+
+    .element-1 {
+        width: 300px;
+        height: 300px;
+        top: -100px;
+        right: -100px;
+        animation: elementPulse 20s ease-in-out infinite;
+    }
+
+    .element-2 {
+        width: 400px;
+        height: 400px;
+        bottom: -150px;
+        left: -150px;
+        animation: elementPulse 25s ease-in-out infinite reverse;
+    }
+
+    .element-3 {
+        width: 200px;
+        height: 200px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: elementRotate 30s linear infinite;
+    }
+
+    /* Floating Particles */
+    .hero-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        background: radial-gradient(circle, 
+            rgba(255, 215, 140, 0.3) 0%,
+            rgba(255, 215, 140, 0) 70%);
+        border-radius: 50%;
+        animation: particleFloat 20s linear infinite;
+    }
+
+    .particle:nth-child(1) {
+        width: 8px;
+        height: 8px;
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .particle:nth-child(2) {
+        width: 12px;
+        height: 12px;
+        top: 60%;
+        left: 80%;
+        animation-delay: 5s;
+    }
+
+    .particle:nth-child(3) {
+        width: 6px;
+        height: 6px;
+        top: 80%;
+        left: 30%;
+        animation-delay: 10s;
+    }
+
+    .particle:nth-child(4) {
+        width: 10px;
+        height: 10px;
+        top: 40%;
+        left: 90%;
+        animation-delay: 15s;
+    }
+
+    .particle:nth-child(5) {
+        width: 7px;
+        height: 7px;
+        top: 70%;
+        left: 20%;
+        animation-delay: 20s;
+    }
+
+    /* Hero Badge */
+    .hero-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: var(--primary-dark);
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 14px;
+        box-shadow: 
+            0 10px 20px rgba(255, 165, 0, 0.3),
+            0 0 0 2px rgba(255, 255, 255, 0.5);
+        z-index: 5;
+        animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    /* Keyframe Animations */
+    @keyframes mainImageFloat {
+        0%, 100% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        33% {
+            transform: translate(-50%, -52%) rotate(1deg);
+        }
+        66% {
+            transform: translate(-50%, -48%) rotate(-1deg);
+        }
+    }
+
+    @keyframes floatProduct1 {
+        0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+            transform: translate(10px, -15px) rotate(2deg);
+        }
+        50% {
+            transform: translate(-5px, 10px) rotate(-1deg);
+        }
+        75% {
+            transform: translate(15px, 5px) rotate(1deg);
+        }
+    }
+
+    @keyframes floatProduct2 {
+        0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+            transform: translate(-15px, 10px) rotate(-2deg);
+        }
+        50% {
+            transform: translate(10px, -5px) rotate(1deg);
+        }
+        75% {
+            transform: translate(-5px, -15px) rotate(-1deg);
+        }
+    }
+
+    @keyframes floatProduct3 {
+        0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+            transform: translate(15px, -10px) rotate(3deg);
+        }
+        50% {
+            transform: translate(-10px, 15px) rotate(-2deg);
+        }
+        75% {
+            transform: translate(5px, 10px) rotate(1deg);
+        }
+    }
+
+    @keyframes floatProduct4 {
+        0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+            transform: translate(-10px, -15px) rotate(-3deg);
+        }
+        50% {
+            transform: translate(15px, 5px) rotate(2deg);
+        }
+        75% {
+            transform: translate(-5px, 15px) rotate(-1deg);
+        }
+    }
+
+    @keyframes badgeFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @keyframes badgePulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 
+                0 10px 20px rgba(255, 165, 0, 0.3),
+                0 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 
+                0 15px 30px rgba(255, 165, 0, 0.4),
+                0 0 0 2px rgba(255, 255, 255, 0.6);
+        }
+    }
+
+    @keyframes elementPulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.7;
+        }
+    }
+
+    @keyframes elementRotate {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+
+    @keyframes particleFloat {
+        0% {
+            transform: translateY(100vh) translateX(0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100px) translateX(100px);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .hero-main-image {
+            width: 400px;
+            height: 400px;
+        }
+        
+        .product-floating-image {
+            width: 120px;
+            height: 120px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .hero-image-wrapper {
+            height: 500px;
+            margin-top: 50px;
+        }
+        
+        .hero-main-image {
+            width: 350px;
+            height: 350px;
+        }
+        
+        .product-floating-image {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .quality-badge {
+            font-size: 10px;
+            padding: 6px 12px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            padding-top: 100px;
+            padding-bottom: var(--space-xl);
+        }
+        
+        .hero-title {
+            font-size: var(--text-3xl);
+            min-height: 60px;
+        }
+        
+        .hero-image-wrapper {
+            height: 400px;
+        }
+        
+        .hero-main-image {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .product-floating-image {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .product-floating-image .product-label {
+            font-size: 10px;
+            padding: 4px;
+        }
+        
+        .quality-badge {
+            display: none;
+        }
+        
+        .bg-element {
+            display: none;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-image-wrapper {
+            height: 350px;
+        }
+        
+        .hero-main-image {
+            width: 250px;
+            height: 250px;
+        }
+        
+        .product-floating-image {
+            width: 70px;
+            height: 70px;
+        }
+        
+        .floating-image-1 {
+            left: 5%;
+        }
+        
+        .floating-image-2 {
+            right: 5%;
+        }
+        
+        .floating-image-3 {
+            left: 5%;
+        }
+        
+        .floating-image-4 {
+            right: 5%;
+        }
+    }
 </style>
 @endpush
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js"></script>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Add to cart functionality for home page
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', async function(e) {
-            e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Typed.js
+        if (document.querySelector('.typed-text')) {
+            new Typed('.typed-text', {
+                strings: document.querySelector('.typed-text').dataset.typedItems.split(','),
+                typeSpeed: 50,
+                backSpeed: 30,
+                backDelay: 2000,
+                loop: true,
+                showCursor: true,
+                cursorChar: '|',
+                smartBackspace: true
+            });
+        }
+        
+        // Initialize Parallax Effect
+        const heroSection = document.querySelector('.hero-section');
+        const mainImage = document.querySelector('.hero-main-image');
+        
+        if (heroSection && mainImage) {
+            let mouseX = 0;
+            let mouseY = 0;
+            let lastX = 0;
+            let lastY = 0;
             
-            const productId = this.dataset.productId;
-            
-            // Show loading state
-            const originalHtml = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            this.disabled = true;
-            
-            try {
-                const response = await fetch('{{ route("cart.add") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        product_id: productId,
-                        quantity: 1
-                    })
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = heroSection.getBoundingClientRect();
+                mouseX = (e.clientX - rect.left) / rect.width;
+                mouseY = (e.clientY - rect.top) / rect.height;
+                
+                // Smooth interpolation
+                lastX += (mouseX - 0.5) * 0.1;
+                lastY += (mouseY - 0.5) * 0.1;
+                
+                const rotateX = lastY * 10;
+                const rotateY = -lastX * 10;
+                
+                mainImage.style.transform = 
+                    `translate(-50%, -50%) 
+                     rotateY(${rotateY}deg) 
+                     rotateX(${rotateX}deg) 
+                     scale(1.02)`;
+                
+                // Move floating images slightly
+                document.querySelectorAll('.product-floating-image').forEach((img, index) => {
+                    const speed = (index + 1) * 0.5;
+                    const x = lastX * 20 * speed;
+                    const y = lastY * 20 * speed;
+                    img.style.transform = `translate(${x}px, ${y}px)`;
                 });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Update cart count
-                    document.querySelectorAll('.cart-count').forEach(element => {
-                        element.textContent = data.cart_count;
-                        element.style.display = data.cart_count > 0 ? 'flex' : 'none';
-                    });
-                    
-                    // Show success toast
-                    showToast('Product added to cart!', 'success');
-                } else {
-                    showToast(data.message || 'Failed to add to cart', 'error');
-                }
-            } catch (error) {
-                console.error('Error adding to cart:', error);
-                showToast('Network error. Please try again.', 'error');
-            } finally {
-                // Reset button state
-                this.innerHTML = originalHtml;
-                this.disabled = false;
-            }
+            });
+            
+            // Reset on mouse leave
+            heroSection.addEventListener('mouseleave', () => {
+                mainImage.style.transform = 'translate(-50%, -50%)';
+                document.querySelectorAll('.product-floating-image').forEach(img => {
+                    img.style.transform = 'translate(0, 0)';
+                });
+            });
+        }
+        
+        // Interactive product image hover
+        document.querySelectorAll('.product-floating-image').forEach(img => {
+            img.addEventListener('mouseenter', function() {
+                this.style.zIndex = '10';
+                // Add a subtle glow effect
+                this.style.filter = 'brightness(1.2)';
+            });
+            
+            img.addEventListener('mouseleave', function() {
+                this.style.zIndex = '1';
+                this.style.filter = 'brightness(1)';
+            });
+            
+            // Click to show product info
+            img.addEventListener('click', function() {
+                const label = this.querySelector('.product-label').textContent;
+                showToast(`Showing details for ${label}`, 'info');
+            });
         });
+        
+        // Add scroll-triggered animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all animated elements
+        document.querySelectorAll('.product-floating-image, .quality-badge').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+        
+        // Add a subtle breathing animation to the hero badge
+        const heroBadge = document.querySelector('.hero-badge');
+        if (heroBadge) {
+            setInterval(() => {
+                heroBadge.style.transform = 'scale(' + (1 + Math.sin(Date.now() / 1000) * 0.05) + ')';
+            }, 50);
+        }
     });
     
-    // Wishlist toggle for home page
-    document.querySelectorAll('.wishlist-toggle-btn').forEach(button => {
-        button.addEventListener('click', async function(e) {
-            e.preventDefault();
-            
-            const productId = this.dataset.productId;
-            
-            try {
-                const response = await fetch('{{ route("wishlist.toggle") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        product_id: productId
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Update wishlist count
-                    if (data.wishlist_count !== undefined) {
-                        document.querySelectorAll('.badge-count').forEach(element => {
-                            element.textContent = data.wishlist_count;
-                            element.style.display = data.wishlist_count > 0 ? 'inline' : 'none';
-                        });
-                    }
-                    
-                    // Update button icon
-                    const icon = this.querySelector('i');
-                    if (data.in_wishlist) {
-                        icon.classList.remove('far');
-                        icon.classList.add('fas', 'text-danger');
-                    } else {
-                        icon.classList.remove('fas', 'text-danger');
-                        icon.classList.add('far');
-                    }
-                    
-                    showToast(data.message, data.in_wishlist ? 'success' : 'info');
-                }
-            } catch (error) {
-                console.error('Error toggling wishlist:', error);
-                showToast('Network error. Please try again.', 'error');
-            }
-        });
-    });
-});
+    function showToast(message, type = 'info') {
+        // Simple toast notification
+        const toast = document.createElement('div');
+        toast.className = `toast-notification toast-${type}`;
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'info' ? '#3498db' : type === 'success' ? '#2ecc71' : '#e74c3c'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
 </script>
 @endpush
