@@ -24,7 +24,8 @@
                         Explore Products
                     </a>
                 </div>
-            
+            </div>
+
             <!-- Enhanced Hero Images with Multiple Animations -->
             <div class="col-lg-6 hero-image-wrapper order-1 order-lg-2">
                 <div class="hero-image-container position-relative">
@@ -37,32 +38,32 @@
                             <i class="fas fa-trophy me-2"></i> #1 Rated
                         </div>
                     </div>
-                    
+
                     <!-- Animated Product Collection Images -->
                     <div class="product-floating-image floating-image-1">
                         <img src="https://images.unsplash.com/photo-1607305387299-a3d9611cd469?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
                             alt="Almonds" class="img-fluid">
                         <div class="product-label">Almonds</div>
                     </div>
-                    
+
                     <div class="product-floating-image floating-image-2">
                         <img src="https://images.unsplash.com/photo-1574085733277-851d9d856a3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
                             alt="Walnuts" class="img-fluid">
                         <div class="product-label">Walnuts</div>
                     </div>
-                    
+
                     <div class="product-floating-image floating-image-3">
                         <img src="https://images.unsplash.com/photo-1592921870789-04563d55041c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
                             alt="Dates" class="img-fluid">
                         <div class="product-label">Dates</div>
                     </div>
-                    
+
                     <div class="product-floating-image floating-image-4">
                         <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?ixlib=rb-4.0.3&auto=format&fit=crop&w-400&q=80"
                             alt="Berries" class="img-fluid">
                         <div class="product-label">Berries</div>
                     </div>
-                    
+
                     <!-- Quality Badges with Animation -->
                     <div class="quality-badge badge-1 pulse-animation">
                         <i class="fas fa-leaf"></i>
@@ -76,7 +77,7 @@
                         <i class="fas fa-shipping-fast"></i>
                         <span>Free Delivery</span>
                     </div>
-                    
+
                     <!-- Animated Background Elements -->
                     <div class="bg-element element-1"></div>
                     <div class="bg-element element-2"></div>
@@ -85,7 +86,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Floating Particles Background -->
     <div class="hero-particles">
         <div class="particle"></div>
@@ -94,8 +95,6 @@
         <div class="particle"></div>
         <div class="particle"></div>
     </div>
-                </div>
-
 </section>
 @endsection
 
@@ -448,10 +447,10 @@
     .hero-section {
         padding-top: 120px;
         padding-bottom: var(--space-2xl);
-        background: linear-gradient(135deg, 
-            rgba(244, 241, 231, 1) 0%,
-            rgba(255, 248, 240, 1) 50%,
-            rgba(250, 245, 235, 1) 100%);
+        background: linear-gradient(135deg,
+                rgba(244, 241, 231, 1) 0%,
+                rgba(255, 248, 240, 1) 50%,
+                rgba(250, 245, 235, 1) 100%);
         position: relative;
         overflow: hidden;
         min-height: 100vh;
@@ -495,18 +494,17 @@
         height: 100%;
         object-fit: cover;
         border-radius: 30px;
-        box-shadow: 
+        box-shadow:
             0 25px 50px -12px rgba(120, 53, 15, 0.25),
             0 0 0 1px rgba(255, 255, 255, 0.1),
             inset 0 2px 4px 0 rgba(255, 255, 255, 0.5);
-        filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03))
-                drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
+        filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .hero-main-image:hover img {
         transform: perspective(1000px) rotateY(5deg) rotateX(2deg) scale(1.02);
-        box-shadow: 
+        box-shadow:
             0 35px 60px -15px rgba(120, 53, 15, 0.35),
             0 0 0 1px rgba(255, 255, 255, 0.2),
             inset 0 2px 8px 0 rgba(255, 255, 255, 0.7);
@@ -519,7 +517,7 @@
         height: 140px;
         border-radius: 20px;
         overflow: hidden;
-        box-shadow: 
+        box-shadow:
             0 15px 35px rgba(0, 0, 0, 0.1),
             0 5px 15px rgba(0, 0, 0, 0.07);
         z-index: 1;
@@ -537,7 +535,7 @@
     .product-floating-image:hover {
         transform: scale(1.15) rotate(5deg);
         z-index: 3;
-        box-shadow: 
+        box-shadow:
             0 25px 50px rgba(0, 0, 0, 0.15),
             0 10px 20px rgba(0, 0, 0, 0.1);
     }
@@ -601,7 +599,7 @@
         font-size: 12px;
         font-weight: 600;
         color: var(--primary-color);
-        box-shadow: 
+        box-shadow:
             0 10px 25px rgba(0, 0, 0, 0.1),
             0 0 0 1px rgba(255, 255, 255, 0.5);
         display: flex;
@@ -637,9 +635,9 @@
     .bg-element {
         position: absolute;
         border-radius: 50%;
-        background: radial-gradient(circle, 
-            rgba(255, 245, 235, 0.6) 0%,
-            rgba(255, 245, 235, 0) 70%);
+        background: radial-gradient(circle,
+                rgba(255, 245, 235, 0.6) 0%,
+                rgba(255, 245, 235, 0) 70%);
         z-index: 0;
     }
 
@@ -681,9 +679,9 @@
 
     .particle {
         position: absolute;
-        background: radial-gradient(circle, 
-            rgba(255, 215, 140, 0.3) 0%,
-            rgba(255, 215, 140, 0) 70%);
+        background: radial-gradient(circle,
+                rgba(255, 215, 140, 0.3) 0%,
+                rgba(255, 215, 140, 0) 70%);
         border-radius: 50%;
         animation: particleFloat 20s linear infinite;
     }
@@ -739,7 +737,7 @@
         border-radius: 50px;
         font-weight: 700;
         font-size: 14px;
-        box-shadow: 
+        box-shadow:
             0 10px 20px rgba(255, 165, 0, 0.3),
             0 0 0 2px rgba(255, 255, 255, 0.5);
         z-index: 5;
@@ -748,106 +746,139 @@
 
     /* Keyframe Animations */
     @keyframes mainImageFloat {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(-50%, -50%) rotate(0deg);
         }
+
         33% {
             transform: translate(-50%, -52%) rotate(1deg);
         }
+
         66% {
             transform: translate(-50%, -48%) rotate(-1deg);
         }
     }
 
     @keyframes floatProduct1 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(10px, -15px) rotate(2deg);
         }
+
         50% {
             transform: translate(-5px, 10px) rotate(-1deg);
         }
+
         75% {
             transform: translate(15px, 5px) rotate(1deg);
         }
     }
 
     @keyframes floatProduct2 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(-15px, 10px) rotate(-2deg);
         }
+
         50% {
             transform: translate(10px, -5px) rotate(1deg);
         }
+
         75% {
             transform: translate(-5px, -15px) rotate(-1deg);
         }
     }
 
     @keyframes floatProduct3 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(15px, -10px) rotate(3deg);
         }
+
         50% {
             transform: translate(-10px, 15px) rotate(-2deg);
         }
+
         75% {
             transform: translate(5px, 10px) rotate(1deg);
         }
     }
 
     @keyframes floatProduct4 {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         25% {
             transform: translate(-10px, -15px) rotate(-3deg);
         }
+
         50% {
             transform: translate(15px, 5px) rotate(2deg);
         }
+
         75% {
             transform: translate(-5px, 15px) rotate(-1deg);
         }
     }
 
     @keyframes badgeFloat {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: translateY(0);
         }
+
         50% {
             transform: translateY(-10px);
         }
     }
 
     @keyframes badgePulse {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: scale(1);
-            box-shadow: 
+            box-shadow:
                 0 10px 20px rgba(255, 165, 0, 0.3),
                 0 0 0 2px rgba(255, 255, 255, 0.5);
         }
+
         50% {
             transform: scale(1.05);
-            box-shadow: 
+            box-shadow:
                 0 15px 30px rgba(255, 165, 0, 0.4),
                 0 0 0 2px rgba(255, 255, 255, 0.6);
         }
     }
 
     @keyframes elementPulse {
-        0%, 100% {
+
+        0%,
+        100% {
             transform: scale(1);
             opacity: 0.5;
         }
+
         50% {
             transform: scale(1.1);
             opacity: 0.7;
@@ -858,6 +889,7 @@
         0% {
             transform: translate(-50%, -50%) rotate(0deg);
         }
+
         100% {
             transform: translate(-50%, -50%) rotate(360deg);
         }
@@ -868,12 +900,15 @@
             transform: translateY(100vh) translateX(0);
             opacity: 0;
         }
+
         10% {
             opacity: 1;
         }
+
         90% {
             opacity: 1;
         }
+
         100% {
             transform: translateY(-100px) translateX(100px);
             opacity: 0;
@@ -886,7 +921,7 @@
             width: 400px;
             height: 400px;
         }
-        
+
         .product-floating-image {
             width: 120px;
             height: 120px;
@@ -898,17 +933,17 @@
             height: 500px;
             margin-top: 50px;
         }
-        
+
         .hero-main-image {
             width: 350px;
             height: 350px;
         }
-        
+
         .product-floating-image {
             width: 100px;
             height: 100px;
         }
-        
+
         .quality-badge {
             font-size: 10px;
             padding: 6px 12px;
@@ -920,35 +955,35 @@
             padding-top: 100px;
             padding-bottom: var(--space-xl);
         }
-        
+
         .hero-title {
             font-size: var(--text-3xl);
             min-height: 60px;
         }
-        
+
         .hero-image-wrapper {
             height: 400px;
         }
-        
+
         .hero-main-image {
             width: 300px;
             height: 300px;
         }
-        
+
         .product-floating-image {
             width: 80px;
             height: 80px;
         }
-        
+
         .product-floating-image .product-label {
             font-size: 10px;
             padding: 4px;
         }
-        
+
         .quality-badge {
             display: none;
         }
-        
+
         .bg-element {
             display: none;
         }
@@ -958,29 +993,29 @@
         .hero-image-wrapper {
             height: 350px;
         }
-        
+
         .hero-main-image {
             width: 250px;
             height: 250px;
         }
-        
+
         .product-floating-image {
             width: 70px;
             height: 70px;
         }
-        
+
         .floating-image-1 {
             left: 5%;
         }
-        
+
         .floating-image-2 {
             right: 5%;
         }
-        
+
         .floating-image-3 {
             left: 5%;
         }
-        
+
         .floating-image-4 {
             right: 5%;
         }
@@ -1007,35 +1042,35 @@
                 smartBackspace: true
             });
         }
-        
+
         // Initialize Parallax Effect
         const heroSection = document.querySelector('.hero-section');
         const mainImage = document.querySelector('.hero-main-image');
-        
+
         if (heroSection && mainImage) {
             let mouseX = 0;
             let mouseY = 0;
             let lastX = 0;
             let lastY = 0;
-            
+
             heroSection.addEventListener('mousemove', (e) => {
                 const rect = heroSection.getBoundingClientRect();
                 mouseX = (e.clientX - rect.left) / rect.width;
                 mouseY = (e.clientY - rect.top) / rect.height;
-                
+
                 // Smooth interpolation
                 lastX += (mouseX - 0.5) * 0.1;
                 lastY += (mouseY - 0.5) * 0.1;
-                
+
                 const rotateX = lastY * 10;
                 const rotateY = -lastX * 10;
-                
-                mainImage.style.transform = 
+
+                mainImage.style.transform =
                     `translate(-50%, -50%) 
                      rotateY(${rotateY}deg) 
                      rotateX(${rotateX}deg) 
                      scale(1.02)`;
-                
+
                 // Move floating images slightly
                 document.querySelectorAll('.product-floating-image').forEach((img, index) => {
                     const speed = (index + 1) * 0.5;
@@ -1044,7 +1079,7 @@
                     img.style.transform = `translate(${x}px, ${y}px)`;
                 });
             });
-            
+
             // Reset on mouse leave
             heroSection.addEventListener('mouseleave', () => {
                 mainImage.style.transform = 'translate(-50%, -50%)';
@@ -1053,7 +1088,7 @@
                 });
             });
         }
-        
+
         // Interactive product image hover
         document.querySelectorAll('.product-floating-image').forEach(img => {
             img.addEventListener('mouseenter', function() {
@@ -1061,26 +1096,26 @@
                 // Add a subtle glow effect
                 this.style.filter = 'brightness(1.2)';
             });
-            
+
             img.addEventListener('mouseleave', function() {
                 this.style.zIndex = '1';
                 this.style.filter = 'brightness(1)';
             });
-            
+
             // Click to show product info
             img.addEventListener('click', function() {
                 const label = this.querySelector('.product-label').textContent;
                 showToast(`Showing details for ${label}`, 'info');
             });
         });
-        
+
         // Add scroll-triggered animations
         const observerOptions = {
             root: null,
             rootMargin: '0px',
             threshold: 0.1
         };
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1089,7 +1124,7 @@
                 }
             });
         }, observerOptions);
-        
+
         // Observe all animated elements
         document.querySelectorAll('.product-floating-image, .quality-badge').forEach(el => {
             el.style.opacity = '0';
@@ -1097,7 +1132,7 @@
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
-        
+
         // Add a subtle breathing animation to the hero badge
         const heroBadge = document.querySelector('.hero-badge');
         if (heroBadge) {
@@ -1106,7 +1141,7 @@
             }, 50);
         }
     });
-    
+
     function showToast(message, type = 'info') {
         // Simple toast notification
         const toast = document.createElement('div');
@@ -1124,9 +1159,9 @@
             z-index: 1000;
             animation: slideIn 0.3s ease;
         `;
-        
+
         document.body.appendChild(toast);
-        
+
         setTimeout(() => {
             toast.style.animation = 'slideOut 0.3s ease';
             setTimeout(() => toast.remove(), 300);
