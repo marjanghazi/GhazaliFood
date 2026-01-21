@@ -102,7 +102,8 @@
                         class="list-group-item list-group-item-action py-2 ps-5 {{ request()->routeIs('admin.announcements*') ? 'active' : '' }}">
                         <i class="fas fa-bullhorn me-2"></i> Announcements
                     </a>
-                    <a class="nav-link active" href="{{ route('admin.hero-images.index') }}">
+                    <a href="{{ route('admin.hero-images.index') }}"
+                        class="list-group-item list-group-item-action py-2 ps-5 {{ request()->routeIs('admin.hero-images*') ? 'active' : '' }}">
                         <i class="fas fa-images me-2"></i> Hero Images
                     </a>
                 </div>
