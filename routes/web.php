@@ -68,12 +68,35 @@ Route::middleware('guest')->group(function () {
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// User Profile Routes
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile.edit');
-    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
-    Route::get('/orders', [AuthController::class, 'orders'])->name('orders.index');
-    Route::get('/orders/{id}', [AuthController::class, 'orderDetails'])->name('orders.show');
+// ============================================================================
+// USER PROFILE ROUTES
+// ============================================================================
+
+Route::middleware('auth')->prefix('profile')->name('profile.')->group(function () {
+    // Main profile routes
+    Route::get('/', [AuthController::class, 'profile'])->name('edit');
+    Route::put('/', [AuthController::class, 'updateProfile'])->name('update');
+    
+    // Password change routes
+    Route::get('/change-password', [AuthController::class, 'showChangePasswordForm'])->name('change-password');
+    Route::post('/change-password', [AuthController::class, 'updatePassword'])->name('update-password');
+    
+    // Shipping Addresses routes
+    Route::get('/addresses', [AuthController::class, 'shippingAddresses'])->name('shipping-addresses');
+    Route::get('/addresses/create', [AuthController::class, 'createShippingAddress'])->name('addresses.create');
+    Route::post('/addresses', [AuthController::class, 'storeShippingAddress'])->name('addresses.store');
+    Route::get('/addresses/{id}/edit', [AuthController::class, 'editShippingAddress'])->name('addresses.edit');
+    Route::put('/addresses/{id}', [AuthController::class, 'updateShippingAddress'])->name('addresses.update');
+    Route::delete('/addresses/{id}', [AuthController::class, 'destroyShippingAddress'])->name('addresses.destroy');
+    
+    // Wishlist routes
+    Route::get('/wishlist', [AuthController::class, 'wishlist'])->name('wishlist');
+});
+
+// Orders routes (keep these separate)
+Route::middleware('auth')->prefix('orders')->name('orders.')->group(function () {
+    Route::get('/', [AuthController::class, 'orders'])->name('index');
+    Route::get('/{id}', [AuthController::class, 'orderDetails'])->name('show');
 });
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews')->middleware('auth');
@@ -247,10 +270,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/settings/logs', [AdminController::class, 'viewLogs'])->name('settings.logs');
     Route::get('/settings/activity', [AdminController::class, 'activityLog'])->name('settings.activity');
 
-    // Profile Routes
+    // ============================================================================
+    // ADMIN PROFILE ROUTES
+    // ============================================================================
+    
+    // Profile Routes (Updated with proper naming)
     Route::get('/profile', [AdminController::class, 'adminProfile'])->name('profile.index');
     Route::put('/profile', [AdminController::class, 'updateAdminProfile'])->name('profile.update');
-    Route::post('/profile/change-password', [AdminController::class, 'changePassword'])->name('profile.change-password');
+    Route::get('/profile/change-password', [AdminController::class, 'showChangePasswordForm'])->name('profile.change-password');
+    Route::post('/profile/change-password', [AdminController::class, 'changePassword'])->name('profile.update-password');
     
     // Admin Notifications
     Route::get('/notifications', [AdminController::class, 'notifications'])->name('notifications.index');

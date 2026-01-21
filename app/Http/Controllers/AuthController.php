@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\ShippingAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -36,12 +39,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             
+            // Record login activity
+            Auth::user()->recordLogin($request->ip());
+            
             // Redirect based on user role
-            if (Auth::user()->role_id == 1) { // Admin
-                return redirect()->intended(route('admin.dashboard'));
+            if (Auth::user()->isAdmin()) {
+                return redirect()->intended(route('admin.dashboard'))
+                    ->with('success', 'Welcome back, ' . Auth::user()->name . '!');
             }
             
-            return redirect()->intended(route('home'))->with('success', 'Welcome back!');
+            return redirect()->intended(route('home'))
+                ->with('success', 'Welcome back, ' . Auth::user()->name . '!');
         }
 
         return back()->withErrors([
@@ -74,12 +82,16 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
             'role_id' => 3, // Default customer role
-            'status' => 'active'
+            'status' => 'active',
+            'newsletter_subscribed' => $request->has('newsletter')
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
+        
+        // Record first login
+        Auth::user()->recordLogin($request->ip());
 
         return redirect(route('home'))->with('success', 'Account created successfully! Welcome to Nuts & Berries!');
     }
@@ -157,9 +169,17 @@ class AuthController extends Controller
     // Show User Profile
     public function profile()
     {
-        return view('auth.profile', [
+        $user = Auth::user();
+        $shippingAddresses = $user->shippingAddresses()->latest()->get();
+        $orders = $user->orders()->latest()->take(5)->get();
+        $wishlistCount = $user->wishlistCount();
+        
+        return view('auth.profile.index', [
             'title' => 'My Profile - Nuts & Berries',
-            'user' => Auth::user()
+            'user' => $user,
+            'shippingAddresses' => $shippingAddresses,
+            'orders' => $orders,
+            'wishlistCount' => $wishlistCount
         ]);
     }
 
@@ -170,14 +190,67 @@ class AuthController extends Controller
         
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => ['required', 'string', 'email', 'max:255', 
+                       Rule::unique('users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500'
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:20',
+            'date_of_birth' => 'nullable|date|before:today',
+            'gender' => 'nullable|in:male,female,other',
+            'newsletter_subscribed' => 'boolean',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $user->update($request->only('name', 'email', 'phone', 'address'));
+        $data = $request->only([
+            'name', 'email', 'phone', 'address', 'city', 
+            'state', 'country', 'postal_code', 'date_of_birth',
+            'gender', 'newsletter_subscribed'
+        ]);
 
-        return back()->with('success', 'Profile updated successfully!');
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            // Delete old image if exists
+            if ($user->profile_image && Storage::exists($user->profile_image)) {
+                Storage::delete($user->profile_image);
+            }
+            
+            $path = $request->file('profile_image')->store('profile-images', 'public');
+            $data['profile_image'] = $path;
+        }
+
+        $user->update($data);
+
+        return redirect()->route('profile.edit')
+            ->with('success', 'Profile updated successfully!');
+    }
+
+    // Show Change Password Form
+    public function showChangePasswordForm()
+    {
+        return view('auth.profile.change-password', [
+            'title' => 'Change Password - Nuts & Berries',
+            'user' => Auth::user()
+        ]);
+    }
+
+    // Update Password
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $user = Auth::user();
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect()->route('profile.edit')
+            ->with('success', 'Password updated successfully!');
     }
 
     // Show User Orders
@@ -185,7 +258,7 @@ class AuthController extends Controller
     {
         $orders = Auth::user()->orders()->latest()->paginate(10);
         
-        return view('auth.orders', [
+        return view('auth.profile.orders', [
             'title' => 'My Orders - Nuts & Berries',
             'orders' => $orders
         ]);
@@ -194,11 +267,118 @@ class AuthController extends Controller
     // Show Order Details
     public function orderDetails($id)
     {
-        $order = Auth::user()->orders()->with('items.product')->findOrFail($id);
+        $order = Auth::user()->orders()->with(['items.product', 'statusHistory'])->findOrFail($id);
         
-        return view('auth.order-details', [
+        return view('auth.profile.order-details', [
             'title' => 'Order #' . $order->order_number . ' - Nuts & Berries',
             'order' => $order
+        ]);
+    }
+
+    // Shipping Address Management
+    public function shippingAddresses()
+    {
+        $addresses = Auth::user()->shippingAddresses()->latest()->get();
+        
+        return view('auth.profile.shipping-addresses', [
+            'title' => 'Shipping Addresses - Nuts & Berries',
+            'addresses' => $addresses
+        ]);
+    }
+
+    public function createShippingAddress()
+    {
+        return view('auth.profile.address-form', [
+            'title' => 'Add New Address - Nuts & Berries',
+            'address' => null
+        ]);
+    }
+
+    public function storeShippingAddress(Request $request)
+    {
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address_line_1' => 'required|string|max:500',
+            'address_line_2' => 'nullable|string|max:500',
+            'city' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'country' => 'required|string|max:100',
+            'postal_code' => 'required|string|max:20',
+            'is_default' => 'boolean',
+            'address_type' => 'nullable|in:home,office,other'
+        ]);
+
+        $user = Auth::user();
+        
+        // If this is set as default, unset other defaults
+        if ($request->is_default) {
+            $user->shippingAddresses()->update(['is_default' => false]);
+        }
+
+        $address = $user->shippingAddresses()->create($request->all());
+
+        return redirect()->route('profile.shipping-addresses')
+            ->with('success', 'Shipping address added successfully!');
+    }
+
+    public function editShippingAddress($id)
+    {
+        $address = Auth::user()->shippingAddresses()->findOrFail($id);
+        
+        return view('auth.profile.address-form', [
+            'title' => 'Edit Address - Nuts & Berries',
+            'address' => $address
+        ]);
+    }
+
+    public function updateShippingAddress(Request $request, $id)
+    {
+        $address = Auth::user()->shippingAddresses()->findOrFail($id);
+        
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address_line_1' => 'required|string|max:500',
+            'address_line_2' => 'nullable|string|max:500',
+            'city' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'country' => 'required|string|max:100',
+            'postal_code' => 'required|string|max:20',
+            'is_default' => 'boolean',
+            'address_type' => 'nullable|in:home,office,other'
+        ]);
+
+        // If this is set as default, unset other defaults
+        if ($request->is_default) {
+            Auth::user()->shippingAddresses()
+                ->where('id', '!=', $id)
+                ->update(['is_default' => false]);
+        }
+
+        $address->update($request->all());
+
+        return redirect()->route('profile.shipping-addresses')
+            ->with('success', 'Shipping address updated successfully!');
+    }
+
+    public function destroyShippingAddress($id)
+    {
+        $address = Auth::user()->shippingAddresses()->findOrFail($id);
+        $address->delete();
+
+        return redirect()->route('profile.shipping-addresses')
+            ->with('success', 'Shipping address deleted successfully!');
+    }
+
+    // Wishlist
+    public function wishlist()
+    {
+        $wishlistItems = Auth::user()->wishlistItems()->with('product')->paginate(12);
+        
+        return view('auth.profile.wishlist', [
+            'title' => 'My Wishlist - Nuts & Berries',
+            'wishlistItems' => $wishlistItems
         ]);
     }
 }

@@ -1755,4 +1755,76 @@ class AdminController extends Controller
             ], 500);
         }
     }
+    // Add these methods to your AdminController
+
+    // Admin Profile
+    public function adminProfile()
+    {
+        $user = Auth::user();
+
+        return view('admin.profile.index', [
+            'title' => 'Admin Profile - Dashboard',
+            'user' => $user
+        ]);
+    }
+
+    public function updateAdminProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id)
+            ],
+            'phone' => 'nullable|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $data = $request->only(['name', 'email', 'phone']);
+
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            // Delete old image if exists
+            if ($user->profile_image && Storage::exists($user->profile_image)) {
+                Storage::delete($user->profile_image);
+            }
+
+            $path = $request->file('profile_image')->store('admin-profile-images', 'public');
+            $data['profile_image'] = $path;
+        }
+
+        $user->update($data);
+
+        return redirect()->route('admin.profile.index')
+            ->with('success', 'Profile updated successfully!');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $user = Auth::user();
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return back()->with('success', 'Password changed successfully!');
+    }
+
+    // Show Change Password Form for Admin
+    public function showChangePasswordForm()
+    {
+        return view('admin.profile.change-password', [
+            'title' => 'Change Password - Admin Dashboard',
+            'user' => Auth::user()
+        ]);
+    }
 }
