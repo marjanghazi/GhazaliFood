@@ -16,7 +16,7 @@
                 <a href="{{ route('category.show', $product->category->slug) }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors whitespace-nowrap">{{ $product->category->name }}</a>
                 @endif
                 <span class="text-gray-400 dark:text-gray-600">/</span>
-                <span class="text-gray-900 dark:text-white font-medium truncate whitespace-nowrap">{{ Str::limit($product->name, 30) }}</span>
+                <span class="text-gray-900 dark: font-medium truncate whitespace-nowrap">{{ Str::limit($product->name, 30) }}</span>
             </nav>
         </div>
     </div>
@@ -32,7 +32,7 @@
                         </div>
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-sm">Currently viewing</p>
-                            <p class="text-gray-900 dark:text-white font-bold text-lg" id="current-viewers">124</p>
+                            <p class="text-gray-900 dark: font-bold text-lg" id="current-viewers">124</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
@@ -41,7 +41,7 @@
                         </div>
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-sm">Bought today</p>
-                            <p class="text-gray-900 dark:text-white font-bold text-lg" id="recent-purchases">87</p>
+                            <p class="text-gray-900 dark: font-bold text-lg" id="recent-purchases">87</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
@@ -50,7 +50,7 @@
                         </div>
                         <div>
                             <p class="text-gray-500 dark:text-gray-400 text-sm">Trending at</p>
-                            <p class="text-gray-900 dark:text-white font-bold text-lg">#3 in {{ $product->category->name ?? 'Dry Fruits' }}</p>
+                            <p class="text-gray-900 dark: font-bold text-lg">#3 in {{ $product->category->name ?? 'Dry Fruits' }}</p>
                         </div>
                     </div>
                 </div>
@@ -74,13 +74,13 @@
                     <!-- Badges -->
                     <div class="absolute top-4 left-4 z-10 flex flex-col space-y-2">
                         @if($product->is_new_arrival)
-                        <span class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs font-bold rounded-full shadow-lg flex items-center space-x-2">
+                        <span class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600  text-xs font-bold rounded-full shadow-lg flex items-center space-x-2">
                             <i class="fas fa-star text-xs"></i>
                             <span>NEW ARRIVAL</span>
                         </span>
                         @endif
                         @if($product->compare_at_price && $product->compare_at_price > $product->best_price)
-                        <span class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-lg">
+                        <span class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600  text-xs font-bold rounded-full shadow-lg">
                             -{{ $product->discount_percentage }}% OFF
                         </span>
                         @endif
@@ -100,7 +100,7 @@
                     </div>
 
                     <!-- Live Badge -->
-                    <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm flex items-center space-x-2 shadow-lg">
+                    <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm  px-4 py-2 rounded-full text-sm flex items-center space-x-2 shadow-lg">
                         <div class="relative">
                             <div class="w-2.5 h-2.5 bg-red-500 rounded-full animate-ping absolute"></div>
                             <div class="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
@@ -109,7 +109,7 @@
                     </div>
 
                     <!-- Purchase Alert -->
-                    <div id="recent-purchase-pulse" class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm flex items-center space-x-2 animate-pulse shadow-lg hidden">
+                    <div id="recent-purchase-pulse" class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-500  px-4 py-2 rounded-full text-sm flex items-center space-x-2 animate-pulse shadow-lg hidden">
                         <i class="fas fa-bolt"></i>
                         <span>Just purchased!</span>
                     </div>
@@ -167,7 +167,7 @@
                             </span>
                             @endif
                         </div>
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">{{ $product->name }}</h1>
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark: mb-3">{{ $product->name }}</h1>
                         <div class="flex flex-wrap items-center gap-3 md:gap-4 mb-6">
                             <div class="flex items-center">
                                 @php
@@ -208,7 +208,7 @@
                 <!-- Pricing -->
                 <div class="space-y-3 mb-6">
                     <div class="flex flex-wrap items-center gap-4">
-                        <span class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">{{ config('settings.currency_symbol', '₹') }}{{ number_format($product->best_price, 2) }}</span>
+                        <span class="text-4xl md:text-5xl font-bold text-gray-900 dark:">{{ config('settings.currency_symbol', '₹') }}{{ number_format($product->best_price, 2) }}</span>
                         @if($product->compare_at_price && $product->compare_at_price > $product->best_price)
                         <span class="text-2xl md:text-3xl text-gray-400 dark:text-gray-600 line-through">{{ config('settings.currency_symbol', '₹') }}{{ number_format($product->compare_at_price, 2) }}</span>
                         <span class="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-bold rounded-xl whitespace-nowrap text-lg">
@@ -235,7 +235,7 @@
                                 @endif
                             </div>
                             <div>
-                                <span class="font-bold text-gray-900 dark:text-white text-lg">{{ $product->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span>
+                                <span class="font-bold text-gray-900 dark: text-lg">{{ $product->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}</span>
                                 @if($product->stock_quantity > 0)
                                 <span class="text-gray-600 dark:text-gray-400 ml-2">• {{ $product->stock_quantity }} units available</span>
                                 @endif
@@ -249,7 +249,7 @@
                     </div>
                     <div class="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Deliver to <span class="font-medium text-gray-900 dark:text-white">New York 10001</span></span>
+                        <span>Deliver to <span class="font-medium text-gray-900 dark:">New York 10001</span></span>
                         <button class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-medium ml-2">Change</button>
                     </div>
                     <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
@@ -270,7 +270,7 @@
                                    data-stock="{{ $variant->stock_quantity }}"
                                    class="hidden peer" {{ $loop->first ? 'checked' : '' }}>
                             <div class="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-4 text-center transition-all duration-300 hover:border-emerald-400 dark:hover:border-emerald-500 peer-checked:border-emerald-500 dark:peer-checked:border-emerald-400 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-900/20">
-                                <div class="font-medium text-gray-900 dark:text-white text-base mb-2">{{ $variant->name }}</div>
+                                <div class="font-medium text-gray-900 dark: text-base mb-2">{{ $variant->name }}</div>
                                 <div class="text-emerald-600 dark:text-emerald-400 font-bold text-lg">{{ config('settings.currency_symbol', '₹') }}{{ number_format($variant->price, 2) }}</div>
                                 <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $variant->stock_quantity }} in stock</div>
                             </div>
@@ -294,7 +294,7 @@
                                    value="1" 
                                    min="1" 
                                    max="{{ $product->stock_quantity }}"
-                                   class="w-16 h-12 text-center text-lg font-medium border-x border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent">
+                                   class="w-16 h-12 text-center text-lg font-medium border-x border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark: focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 focus:border-transparent">
                             <button id="increaseQty" class="w-12 h-12 flex items-center justify-center bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 transition-colors">
                                 <i class="fas fa-plus text-sm"></i>
                             </button>
@@ -319,7 +319,7 @@
                             data-name="{{ $product->name }}"
                             data-price="{{ $product->best_price }}"
                             data-image="{{ $product->media->first()->media_url ?? asset('images/placeholder.jpg') }}"
-                            class="h-14 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800 text-white font-bold rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100 dark:hover:shadow-emerald-900/30 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
+                            class="h-14 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800  font-bold rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100 dark:hover:shadow-emerald-900/30 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
                             {{ $product->stock_quantity < 1 ? 'disabled' : '' }}>
                         <i class="fas fa-shopping-cart text-lg"></i>
                         <span class="text-base">Add to Cart</span>
@@ -327,7 +327,7 @@
                     </button>
                     <button id="buyNowBtn"
                             data-id="{{ $product->id }}"
-                            class="h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 dark:from-amber-600 dark:to-orange-600 dark:hover:from-amber-700 dark:hover:to-orange-700 text-white font-bold rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 hover:shadow-lg hover:shadow-amber-100 dark:hover:shadow-amber-900/30 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 dark:from-amber-600 dark:to-orange-600 dark:hover:from-amber-700 dark:hover:to-orange-700 font-bold rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 hover:shadow-lg hover:shadow-amber-100 dark:hover:shadow-amber-900/30 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                             {{ $product->stock_quantity < 1 ? 'disabled' : '' }}>
                         <i class="fas fa-bolt text-lg"></i>
                         <span class="text-base">Buy Now</span>
@@ -341,7 +341,7 @@
                             <i class="fas fa-shield-alt text-emerald-600 dark:text-emerald-400 text-xl"></i>
                         </div>
                         <div class="text-sm">
-                            <div class="font-bold text-gray-900 dark:text-white">100% Secure</div>
+                            <div class="font-bold text-gray-900 dark:">100% Secure</div>
                             <div class="text-gray-600 dark:text-gray-400">SSL Protected</div>
                         </div>
                     </div>
@@ -350,7 +350,7 @@
                             <i class="fas fa-undo text-purple-600 dark:text-purple-400 text-xl"></i>
                         </div>
                         <div class="text-sm">
-                            <div class="font-bold text-gray-900 dark:text-white">30-Day Returns</div>
+                            <div class="font-bold text-gray-900 dark:">30-Day Returns</div>
                             <div class="text-gray-600 dark:text-gray-400">Easy Returns</div>
                         </div>
                     </div>
@@ -359,7 +359,7 @@
                             <i class="fas fa-award text-amber-600 dark:text-amber-400 text-xl"></i>
                         </div>
                         <div class="text-sm">
-                            <div class="font-bold text-gray-900 dark:text-white">Quality Guaranteed</div>
+                            <div class="font-bold text-gray-900 dark:">Quality Guaranteed</div>
                             <div class="text-gray-600 dark:text-gray-400">Premium Grade</div>
                         </div>
                     </div>
@@ -368,7 +368,7 @@
                             <i class="fas fa-headset text-blue-600 dark:text-blue-400 text-xl"></i>
                         </div>
                         <div class="text-sm">
-                            <div class="font-bold text-gray-900 dark:text-white">24/7 Support</div>
+                            <div class="font-bold text-gray-900 dark:">24/7 Support</div>
                             <div class="text-gray-600 dark:text-gray-400">Dedicated Help</div>
                         </div>
                     </div>
@@ -404,12 +404,12 @@
                 <!-- Description -->
                 <div id="description" class="tab-content active">
                     <div class="prose prose-lg dark:prose-invert max-w-none">
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Product Description</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 dark: mb-6">Product Description</h3>
                         {!! $product->full_description ?? $product->description !!}
                         
                         @if(!empty($product->benefits))
                         <div class="mt-8 bg-gradient-to-r from-emerald-50 to-amber-50 dark:from-emerald-900/10 dark:to-amber-900/10 rounded-2xl p-6">
-                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Key Benefits</h4>
+                            <h4 class="text-xl font-bold text-gray-900 dark: mb-4">Key Benefits</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @foreach(explode("\n", $product->benefits) as $benefit)
                                     @if(trim($benefit))
@@ -429,57 +429,57 @@
                 <div id="specifications" class="tab-content hidden">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Product Details</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 dark: mb-6">Product Details</h3>
                             <dl class="space-y-4">
                                 <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                     <dt class="text-gray-600 dark:text-gray-400 font-medium">SKU</dt>
-                                    <dd class="font-bold text-gray-900 dark:text-white">{{ $product->sku ?? 'GF-' . str_pad($product->id, 6, '0', STR_PAD_LEFT) }}</dd>
+                                    <dd class="font-bold text-gray-900 dark:">{{ $product->sku ?? 'GF-' . str_pad($product->id, 6, '0', STR_PAD_LEFT) }}</dd>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                     <dt class="text-gray-600 dark:text-gray-400 font-medium">Weight</dt>
-                                    <dd class="font-bold text-gray-900 dark:text-white">{{ $product->weight ?? '500g' }}</dd>
+                                    <dd class="font-bold text-gray-900 dark:">{{ $product->weight ?? '500g' }}</dd>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                     <dt class="text-gray-600 dark:text-gray-400 font-medium">Dimensions</dt>
-                                    <dd class="font-bold text-gray-900 dark:text-white">{{ $product->dimensions ?? '20 × 15 × 5 cm' }}</dd>
+                                    <dd class="font-bold text-gray-900 dark:">{{ $product->dimensions ?? '20 × 15 × 5 cm' }}</dd>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                     <dt class="text-gray-600 dark:text-gray-400 font-medium">Shelf Life</dt>
-                                    <dd class="font-bold text-gray-900 dark:text-white">12 Months</dd>
+                                    <dd class="font-bold text-gray-900 dark:">12 Months</dd>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700">
                                     <dt class="text-gray-600 dark:text-gray-400 font-medium">Storage</dt>
-                                    <dd class="font-bold text-gray-900 dark:text-white">Cool, dry place away from sunlight</dd>
+                                    <dd class="font-bold text-gray-900 dark:">Cool, dry place away from sunlight</dd>
                                 </div>
                                 <div class="flex justify-between items-center py-3">
                                     <dt class="text-gray-600 dark:text-gray-400 font-medium">Origin</dt>
-                                    <dd class="font-bold text-gray-900 dark:text-white">USA</dd>
+                                    <dd class="font-bold text-gray-900 dark:">USA</dd>
                                 </div>
                             </dl>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Nutrition Facts</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 dark: mb-6">Nutrition Facts</h3>
                             <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6">
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-600 dark:text-gray-400">Calories</span>
-                                        <span class="font-bold text-gray-900 dark:text-white">150 kcal</span>
+                                        <span class="font-bold text-gray-900 dark:">150 kcal</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-600 dark:text-gray-400">Protein</span>
-                                        <span class="font-bold text-gray-900 dark:text-white">6g</span>
+                                        <span class="font-bold text-gray-900 dark:">6g</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-600 dark:text-gray-400">Carbohydrates</span>
-                                        <span class="font-bold text-gray-900 dark:text-white">20g</span>
+                                        <span class="font-bold text-gray-900 dark:">20g</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-600 dark:text-gray-400">Fat</span>
-                                        <span class="font-bold text-gray-900 dark:text-white">8g</span>
+                                        <span class="font-bold text-gray-900 dark:">8g</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-gray-600 dark:text-gray-400">Fiber</span>
-                                        <span class="font-bold text-gray-900 dark:text-white">4g</span>
+                                        <span class="font-bold text-gray-900 dark:">4g</span>
                                     </div>
                                 </div>
                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-6">*Nutritional values are approximate and may vary</p>
@@ -495,7 +495,7 @@
                         <div class="bg-gradient-to-r from-gray-50 to-emerald-50 dark:from-gray-900 dark:to-emerald-900/10 rounded-2xl p-8">
                             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                                 <div class="text-center">
-                                    <div class="text-5xl font-bold text-gray-900 dark:text-white mb-2">{{ number_format($product->average_rating ?? 0, 1) }}</div>
+                                    <div class="text-5xl font-bold text-gray-900 dark: mb-2">{{ number_format($product->average_rating ?? 0, 1) }}</div>
                                     <div class="flex items-center justify-center space-x-1 mb-3">
                                         @for($i = 1; $i <= 5; $i++)
                                             <i class="fas fa-star {{ $i <= floor($product->average_rating ?? 0) ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600' }} text-xl"></i>
@@ -521,18 +521,18 @@
 
                         <!-- Reviews List -->
                         <div>
-                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Customer Reviews</h4>
+                            <h4 class="text-xl font-bold text-gray-900 dark: mb-6">Customer Reviews</h4>
                             @if($product->reviews->count() > 0)
                             <div class="space-y-6">
                                 @foreach($product->reviews as $review)
                                 <div class="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center space-x-4">
-                                            <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold">
+                                            <div class="w-12 h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center  font-bold">
                                                 {{ substr($review->user->name, 0, 1) }}
                                             </div>
                                             <div>
-                                                <h5 class="font-bold text-gray-900 dark:text-white">{{ $review->user->name }}</h5>
+                                                <h5 class="font-bold text-gray-900 dark:">{{ $review->user->name }}</h5>
                                                 <div class="flex items-center space-x-1">
                                                     @for($i = 1; $i <= 5; $i++)
                                                         <i class="fas fa-star {{ $i <= $review->rating ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600' }} text-sm"></i>
@@ -549,7 +549,7 @@
                             @else
                             <div class="text-center py-12">
                                 <i class="fas fa-comments text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
-                                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">No Reviews Yet</h4>
+                                <h4 class="text-xl font-bold text-gray-900 dark: mb-2">No Reviews Yet</h4>
                                 <p class="text-gray-600 dark:text-gray-400">Be the first to review this product!</p>
                             </div>
                             @endif
@@ -562,7 +562,7 @@
                     <div class="space-y-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div class="bg-gradient-to-r from-emerald-50 to-emerald-100 dark:from-emerald-900/10 dark:to-emerald-900/20 rounded-2xl p-6">
-                                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <h4 class="text-xl font-bold text-gray-900 dark: mb-4 flex items-center gap-2">
                                     <i class="fas fa-shipping-fast"></i>Shipping Information
                                 </h4>
                                 <ul class="space-y-3">
@@ -585,7 +585,7 @@
                                 </ul>
                             </div>
                             <div class="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-900/10 dark:to-amber-900/20 rounded-2xl p-6">
-                                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <h4 class="text-xl font-bold text-gray-900 dark: mb-4 flex items-center gap-2">
                                     <i class="fas fa-undo"></i>Return Policy
                                 </h4>
                                 <ul class="space-y-3">
@@ -615,12 +615,12 @@
                 <div id="faq" class="tab-content hidden">
                     <div class="space-y-6">
                         <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-2xl p-6">
-                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                            <h4 class="text-xl font-bold text-gray-900 dark: mb-6 flex items-center gap-2">
                                 <i class="fas fa-question-circle"></i>Frequently Asked Questions
                             </h4>
                             <div class="space-y-4">
                                 <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-                                    <button class="faq-question w-full text-left font-medium text-gray-900 dark:text-white flex items-center justify-between">
+                                    <button class="faq-question w-full text-left font-medium text-gray-900 dark: flex items-center justify-between">
                                         <span>How long does shipping take?</span>
                                         <i class="fas fa-chevron-down transition-transform duration-300"></i>
                                     </button>
@@ -629,7 +629,7 @@
                                     </div>
                                 </div>
                                 <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-                                    <button class="faq-question w-full text-left font-medium text-gray-900 dark:text-white flex items-center justify-between">
+                                    <button class="faq-question w-full text-left font-medium text-gray-900 dark: flex items-center justify-between">
                                         <span>What is your return policy?</span>
                                         <i class="fas fa-chevron-down transition-transform duration-300"></i>
                                     </button>
@@ -638,7 +638,7 @@
                                     </div>
                                 </div>
                                 <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4">
-                                    <button class="faq-question w-full text-left font-medium text-gray-900 dark:text-white flex items-center justify-between">
+                                    <button class="faq-question w-full text-left font-medium text-gray-900 dark: flex items-center justify-between">
                                         <span>Are your products organic?</span>
                                         <i class="fas fa-chevron-down transition-transform duration-300"></i>
                                     </button>
@@ -656,7 +656,7 @@
         <!-- Related Products -->
         @if(isset($relatedProducts) && $relatedProducts->count() > 0)
         <div class="mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">You May Also Like</h2>
+            <h2 class="text-3xl font-bold text-gray-900 dark: mb-8">You May Also Like</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($relatedProducts as $related)
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-gray-900/20 overflow-hidden transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-900/40 hover:-translate-y-1">
@@ -666,13 +666,13 @@
                                  alt="{{ $related->name }}" 
                                  class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
                             @if($related->compare_at_price && $related->compare_at_price > $related->best_price)
-                            <span class="absolute top-2 left-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">
+                            <span class="absolute top-2 left-2 px-2 py-1 bg-red-500  text-xs font-bold rounded">
                                 -{{ $related->discount_percentage }}%
                             </span>
                             @endif
                         </div>
                         <div class="p-4">
-                            <h3 class="font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">{{ $related->name }}</h3>
+                            <h3 class="font-bold text-gray-900 dark: mb-2 line-clamp-1">{{ $related->name }}</h3>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-lg font-bold text-emerald-600 dark:text-emerald-400">{{ config('settings.currency_symbol', '₹') }}{{ number_format($related->best_price, 2) }}</span>
@@ -698,14 +698,14 @@
 <div id="zoomModal" class="fixed inset-0 bg-black/95 z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
     <div class="relative max-w-6xl max-h-[90vh] w-full">
         <img id="zoomedImage" src="" alt="" class="w-full h-full object-contain">
-        <button onclick="closeZoom()" class="absolute top-4 right-4 text-white hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300">
+        <button onclick="closeZoom()" class="absolute top-4 right-4  hover:text-gray-300 bg-black/50 hover:bg-black/70 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300">
             <i class="fas fa-times text-xl"></i>
         </button>
         <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            <button onclick="previousImage()" class="w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-300">
+            <button onclick="previousImage()" class="w-10 h-10 bg-black/50 hover:bg-black/70  rounded-full flex items-center justify-center transition-all duration-300">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button onclick="nextImage()" class="w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-300">
+            <button onclick="nextImage()" class="w-10 h-10 bg-black/50 hover:bg-black/70  rounded-full flex items-center justify-center transition-all duration-300">
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
@@ -719,13 +719,13 @@
             <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-check text-2xl text-emerald-600 dark:text-emerald-400"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Added to Cart!</h3>
+            <h3 class="text-xl font-bold text-gray-900 dark: mb-2">Added to Cart!</h3>
             <p class="text-gray-600 dark:text-gray-400 mb-6">Product has been successfully added to your shopping cart.</p>
             <div class="flex space-x-3">
                 <button onclick="closeAddedToCartModal()" class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     Continue Shopping
                 </button>
-                <a href="{{ route('cart.index') }}" class="flex-1 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white rounded-xl text-center transition-colors">
+                <a href="{{ route('cart.index') }}" class="flex-1 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700  rounded-xl text-center transition-colors">
                     View Cart
                 </a>
             </div>
@@ -863,6 +863,143 @@
     /* Dark mode adjustments */
     .dark .toast-global-content {
         border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Ensure all text is visible in both themes */
+    .text-gray-900 {
+        color: #111827;
+    }
+
+    .dark .text-gray-900 {
+        color: #f9fafb;
+    }
+
+    .text-gray-700 {
+        color: #374151;
+    }
+
+    .dark .text-gray-700 {
+        color: #e5e7eb;
+    }
+
+    .text-gray-600 {
+        color: #4b5563;
+    }
+
+    .dark .text-gray-600 {
+        color: #d1d5db;
+    }
+
+    .text-gray-500 {
+        color: #6b7280;
+    }
+
+    .dark .text-gray-500 {
+        color: #9ca3af;
+    }
+
+    .text-gray-400 {
+        color: #9ca3af;
+    }
+
+    .dark .text-gray-400 {
+        color: #6b7280;
+    }
+
+    .text-gray-300 {
+        color: #d1d5db;
+    }
+
+    .dark .text-gray-300 {
+        color: #4b5563;
+    }
+
+    /* Ensure buttons are visible */
+    .bg-emerald-500 {
+        background-color: #10b981;
+    }
+
+    .dark .bg-emerald-500 {
+        background-color: #059669;
+    }
+
+    .bg-amber-500 {
+        background-color: #f59e0b;
+    }
+
+    .dark .bg-amber-500 {
+        background-color: #d97706;
+    }
+
+    .bg-orange-500 {
+        background-color: #f97316;
+    }
+
+    .dark .bg-orange-500 {
+        background-color: #ea580c;
+    }
+
+    /* Ensure gradients work in dark mode */
+    .dark .from-emerald-600 {
+        --tw-gradient-from: #059669 var(--tw-gradient-from-position);
+        --tw-gradient-to: rgb(5 150 105 / 0) var(--tw-gradient-to-position);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+    }
+
+    .dark .to-emerald-700 {
+        --tw-gradient-to: #047857 var(--tw-gradient-to-position);
+    }
+
+    .dark .from-amber-600 {
+        --tw-gradient-from: #d97706 var(--tw-gradient-from-position);
+        --tw-gradient-to: rgb(217 119 6 / 0) var(--tw-gradient-to-position);
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+    }
+
+    .dark .to-orange-600 {
+        --tw-gradient-to: #ea580c var(--tw-gradient-to-position);
+    }
+
+    /* Ensure borders are visible */
+    .border-gray-200 {
+        border-color: #e5e7eb;
+    }
+
+    .dark .border-gray-200 {
+        border-color: #374151;
+    }
+
+    .border-gray-300 {
+        border-color: #d1d5db;
+    }
+
+    .dark .border-gray-300 {
+        border-color: #4b5563;
+    }
+
+    /* Ensure background colors work */
+    .bg-white {
+        background-color: #ffffff;
+    }
+
+    .dark .bg-white {
+        background-color: #1f2937;
+    }
+
+    .bg-gray-50 {
+        background-color: #f9fafb;
+    }
+
+    .dark .bg-gray-50 {
+        background-color: #111827;
+    }
+
+    .bg-gray-100 {
+        background-color: #f3f4f6;
+    }
+
+    .dark .bg-gray-100 {
+        background-color: #1f2937;
     }
 </style>
 @endpush
