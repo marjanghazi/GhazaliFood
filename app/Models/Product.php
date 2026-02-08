@@ -12,11 +12,18 @@ class Product extends Model
     protected $fillable = [
         'name',
         'slug',
+        'description',
         'category_id',
         'short_description',
         'full_description',
         'best_price',
         'compare_at_price',
+        'cost_price',
+        'stock_quantity',
+        'barcode',
+        'sku',
+        'weight',
+        'dimensions',
         'type',
         'is_featured',
         'is_best_seller',
@@ -24,8 +31,9 @@ class Product extends Model
         'average_rating',
         'total_reviews',
         'status',
-        'seo_title',
-        'seo_description',
+        'meta_title',
+        'meta_description',
+        'created_by',
         'seo_keywords'
     ];
 
@@ -35,12 +43,20 @@ class Product extends Model
         'is_new_arrival' => 'boolean',
         'best_price' => 'decimal:2',
         'compare_at_price' => 'decimal:2',
-        'average_rating' => 'decimal:2'
+        'cost_price' => 'decimal:2',
+        'average_rating' => 'decimal:2',
+        'weight' => 'decimal:2',
+        'stock_quantity' => 'integer'
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductMedia::class)->orderBy('display_order');
     }
 
     public function media()
@@ -81,5 +97,10 @@ class Product extends Model
         return $this->belongsToMany(Order::class, 'order_items')
             ->withPivot('quantity', 'price', 'total')
             ->withTimestamps();
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

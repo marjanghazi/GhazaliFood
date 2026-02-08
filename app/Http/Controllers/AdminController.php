@@ -36,6 +36,7 @@ class AdminController extends Controller
         'failed',
         'refunded'
     ];
+
     public function dashboard()
     {
         // Get low stock threshold from settings
@@ -184,7 +185,9 @@ class AdminController extends Controller
     // Product Management Methods
     public function products()
     {
-        $products = Product::with('category')->latest()->paginate(20);
+        $products = Product::with(['category', 'media' => function ($query) {
+            $query->where('is_primary', true);
+        }])->latest()->paginate(20);
 
         return view('admin.products.index', [
             'title' => 'Product Management',
@@ -192,7 +195,6 @@ class AdminController extends Controller
             'useAdminLayout' => true
         ]);
     }
-
     public function showProduct($id)
     {
         $product = Product::with(['category', 'reviews', 'variants'])->findOrFail($id);
@@ -225,50 +227,62 @@ class AdminController extends Controller
             'compare_at_price' => 'nullable|numeric|min:0',
             'cost_price' => 'nullable|numeric|min:0',
             'barcode' => 'nullable|string|max:100',
-            'quantity' => 'required|integer|min:0', // This maps to stock_quantity in database
+            'quantity' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'weight' => 'nullable|numeric|min:0',
             'dimensions' => 'nullable|string|max:100',
             'status' => 'required|in:draft,published,out_of_stock,discontinued',
             'is_featured' => 'boolean',
-            'is_bestseller' => 'boolean', // Note: database column is 'is_best_seller' (with underscore)
+            'is_bestseller' => 'boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Note: Your database has 'is_best_seller' column (with underscore)
-        // but your form uses 'is_bestseller' (without underscore)
-        // We'll handle this mapping
-
-        Product::create([
+        // Create the product first
+        $product = Product::create([
             'name' => $request->name,
             'slug' => $request->slug,
-            'description' => $request->description, // This will go to description field
-            'short_description' => null, // Set to null since we don't have it in form
-            'full_description' => null, // Set to null since we don't have it in form
+            'description' => $request->description,
+            'short_description' => null,
+            'full_description' => null,
             'best_price' => $request->best_price,
             'compare_at_price' => $request->compare_at_price,
             'cost_price' => $request->cost_price,
             'barcode' => $request->barcode,
-            'stock_quantity' => $request->quantity, // Map 'quantity' to 'stock_quantity'
+            'stock_quantity' => $request->quantity,
             'category_id' => $request->category_id,
             'weight' => $request->weight,
             'dimensions' => $request->dimensions,
             'status' => $request->status,
             'is_featured' => $request->has('is_featured'),
-            'is_best_seller' => $request->has('is_bestseller'), // Map 'is_bestseller' to 'is_best_seller'
-            'is_new_arrival' => false, // Default to false since not in form
+            'is_best_seller' => $request->has('is_bestseller'),
+            'is_new_arrival' => false,
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'created_by' => auth()->id(),
         ]);
+
+        // Handle image uploads - FIXED: Use media() relationship instead of images()
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('products/' . $product->id, 'public');
+
+                // Use media() relationship from Product model
+                $product->media()->create([
+                    'image_path' => $path,
+                    'is_primary' => $index === 0,
+                    'display_order' => $index,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
 
     public function editProduct($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('media')->findOrFail($id);
         $categories = Category::all();
 
         return view('admin.products.edit', [
@@ -300,14 +314,18 @@ class AdminController extends Controller
             'is_bestseller' => 'boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'delete_images' => 'nullable|array',
+            'delete_images.*' => 'exists:media,id',
         ]);
 
+        // Update product data
         $product->update([
             'name' => $request->name,
             'slug' => $request->slug,
             'description' => $request->description,
-            'short_description' => $product->short_description, // Keep existing or null
-            'full_description' => $product->full_description, // Keep existing or null
+            'short_description' => $product->short_description,
+            'full_description' => $product->full_description,
             'best_price' => $request->best_price,
             'compare_at_price' => $request->compare_at_price,
             'cost_price' => $request->cost_price,
@@ -323,7 +341,61 @@ class AdminController extends Controller
             'meta_description' => $request->meta_description,
         ]);
 
+        // Handle deletion of existing images
+        if ($request->has('delete_images')) {
+            foreach ($request->delete_images as $imageId) {
+                $media = $product->media()->find($imageId);
+                if ($media) {
+                    // Delete the file from storage
+                    \Storage::disk('public')->delete($media->image_path);
+                    $media->delete();
+                }
+            }
+
+            // If primary image was deleted, set the first remaining image as primary
+            $remainingImages = $product->media()->orderBy('display_order')->get();
+            if ($remainingImages->count() > 0) {
+                $firstImage = $remainingImages->first();
+                if (!$firstImage->is_primary) {
+                    $firstImage->update(['is_primary' => true]);
+                }
+            }
+        }
+
+        // Handle new image uploads
+        if ($request->hasFile('images')) {
+            // Get the current max display order
+            $currentMaxOrder = $product->media()->max('display_order') ?? -1;
+
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('products/' . $product->id, 'public');
+
+                // Determine if this should be primary (only if no images exist)
+                $shouldBePrimary = ($product->media()->count() === 0 && $index === 0);
+
+                $product->media()->create([
+                    'image_path' => $path,
+                    'is_primary' => $shouldBePrimary,
+                    'display_order' => ++$currentMaxOrder,
+                ]);
+            }
+        }
+
+        // Reorder images if needed (ensure display_order is sequential)
+        $this->reorderProductImages($product);
+
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
+    }
+
+    private function reorderProductImages($product)
+    {
+        $images = $product->media()->orderBy('display_order')->get();
+
+        foreach ($images as $index => $image) {
+            if ($image->display_order !== $index) {
+                $image->update(['display_order' => $index]);
+            }
+        }
     }
 
     public function destroyProduct($id)
@@ -335,11 +407,16 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Cannot delete product that has orders.');
         }
 
+        // Delete associated media files
+        foreach ($product->media as $media) {
+            \Storage::disk('public')->delete($media->image_path);
+            $media->delete();
+        }
+
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully!');
     }
-
     public function toggleProductStatus($id)
     {
         $product = Product::findOrFail($id);
@@ -1414,13 +1491,10 @@ class AdminController extends Controller
     }
 
     // Settings Methods
-    // Update the settings method in AdminController.php
     public function settings()
     {
-        // Get individual setting values for the form
         $settingValues = Setting::all()->pluck('value', 'key')->toArray();
 
-        // Get default values for missing settings
         $defaults = [
             'site_name' => config('app.name', 'Ghazali Food'),
             'site_email' => config('mail.from.address', 'admin@ghazalifood.com'),
@@ -1467,7 +1541,6 @@ class AdminController extends Controller
             'bank_details' => "Bank Name: HBL\nAccount Name: Ghazali Food\nAccount Number: 1234567890\nIBAN: PK00HBL01234567890\nBranch: Main Branch, Karachi"
         ];
 
-        // Merge defaults with actual values
         $settingValues = array_merge($defaults, $settingValues);
 
         return view('admin.settings.index', [
@@ -1666,28 +1739,21 @@ class AdminController extends Controller
 
         return redirect()->route('admin.profile.index')->with('success', 'Profile updated successfully!');
     }
-    // Add these methods to AdminController.php after updateMaintenanceSettings method
 
     public function backupDatabase()
     {
         try {
-            // For now, we'll create a simple backup file
-            // In production, you would use spatie/laravel-backup package
-
             $fileName = 'backup-' . date('Y-m-d-H-i-s') . '.sql';
             $filePath = storage_path('app/backups/' . $fileName);
 
-            // Ensure backup directory exists
             if (!file_exists(storage_path('app/backups'))) {
                 mkdir(storage_path('app/backups'), 0755, true);
             }
 
-            // Create a simple backup file with database structure info
             $content = "-- Database Backup\n";
             $content .= "-- Date: " . date('Y-m-d H:i:s') . "\n";
             $content .= "-- App: " . config('app.name') . "\n\n";
 
-            // Add table counts
             $content .= "-- Table Statistics\n";
             $tables = ['users', 'products', 'categories', 'orders', 'blogs', 'reviews'];
             foreach ($tables as $table) {
@@ -1711,13 +1777,11 @@ class AdminController extends Controller
     public function clearCache()
     {
         try {
-            // Clear various caches
             \Artisan::call('cache:clear');
             \Artisan::call('config:clear');
             \Artisan::call('view:clear');
             \Artisan::call('route:clear');
 
-            // Clear our settings cache
             Cache::forget('settings.all');
             Cache::forget('settings.grouped');
 
@@ -1738,7 +1802,6 @@ class AdminController extends Controller
         try {
             $email = $request->email;
 
-            // Send test email
             \Mail::raw('This is a test email from ' . config('app.name'), function ($message) use ($email) {
                 $message->to($email)
                     ->subject('Test Email from ' . config('app.name'));
