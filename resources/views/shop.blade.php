@@ -257,10 +257,17 @@
                 <div class="product-card">
                     <div class="product-image">
                         <a href="{{ route('shop.show', $product->slug) }}">
-                            <img src="{{ $product->primaryImage->media_url ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80' }}"
+                            @php
+                                // Get image URL from primary image or fallback
+                                $imageUrl = $product->primaryImage ? 
+                                    asset('storage/' . $product->primaryImage->image_path) : 
+                                    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                            @endphp
+                            <img src="{{ $imageUrl }}"
                                 alt="{{ $product->name }}"
                                 class="img-fluid"
-                                loading="lazy">
+                                loading="lazy"
+                                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';">
                         </a>
 
                         @if($product->is_new_arrival)

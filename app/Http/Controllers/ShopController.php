@@ -22,11 +22,8 @@ class ShopController extends Controller
         }
 
         // Filter by price range
-        if ($request->has('min_price') && $request->has('max_price')) {
-            $query->whereBetween('best_price', [
-                $request->min_price,
-                $request->max_price
-            ]);
+        if ($request->has('max_price')) {
+            $query->where('best_price', '<=', $request->max_price);
         }
 
         // Filter by featured
@@ -44,9 +41,20 @@ class ShopController extends Controller
             $query->where('is_new_arrival', true);
         }
 
-        // Search by name
+        // Filter by sale
+        if ($request->has('sale')) {
+            $query->whereNotNull('compare_at_price')
+                  ->whereColumn('compare_at_price', '>', 'best_price');
+        }
+
+        // Search by name or description
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%')
+                  ->orWhere('short_description', 'like', '%' . $search . '%');
+            });
         }
 
         // Sorting
@@ -62,13 +70,20 @@ class ShopController extends Controller
                 $query->orderBy('name', 'asc');
                 break;
             case 'rating':
-                $query->orderBy('average_rating', 'desc');
+                $query->orderBy('average_rating', 'desc')
+                      ->orderBy('total_reviews', 'desc');
+                break;
+            case 'popular':
+                $query->orderBy('total_reviews', 'desc')
+                      ->orderBy('average_rating', 'desc');
                 break;
             default:
                 $query->orderBy('created_at', 'desc');
         }
 
-        $products = $query->paginate(12);
+        $perPage = $request->get('per_page', 12);
+        $products = $query->paginate($perPage);
+        
         $categories = Category::where('status', 'active')
             ->whereNull('parent_id')
             ->withCount(['products' => function($query) {
@@ -78,13 +93,13 @@ class ShopController extends Controller
 
         // Price range for filter
         $maxPrice = Product::where('status', 'published')->max('best_price');
-        $minPrice = Product::where('status', 'published')->min('best_price');
+        $totalProducts = Product::where('status', 'published')->count();
 
         return view('shop', compact(
             'products',
             'categories',
             'maxPrice',
-            'minPrice'
+            'totalProducts'
         ));
     }
 

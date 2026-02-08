@@ -88,10 +88,16 @@
 
                     <!-- Image -->
                     <div class="relative overflow-hidden">
-                        <img src="{{ $product->media->first()->media_url ?? asset('images/placeholder.jpg') }}"
+                        @php
+                            // Get the first media image or use default
+                            $firstMedia = $product->media->first();
+                            $mainImageUrl = $firstMedia ? asset('storage/' . $firstMedia->image_path) : asset('images/placeholder.jpg');
+                        @endphp
+                        <img src="{{ $mainImageUrl }}"
                              id="mainProductImage"
                              alt="{{ $product->name }}"
-                             class="w-full h-[400px] md:h-[500px] object-contain transition-all duration-500 group-hover:scale-110 cursor-zoom-in">
+                             class="w-full h-[400px] md:h-[500px] object-contain transition-all duration-500 group-hover:scale-110 cursor-zoom-in"
+                             onerror="this.onerror=null; this.src='{{ asset('images/placeholder.jpg') }}';">
                         
                         <!-- Loading Overlay -->
                         <div id="imageLoadingOverlay" class="absolute inset-0 bg-white dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-70 flex items-center justify-center hidden">
@@ -120,11 +126,12 @@
                 <div class="flex space-x-3 overflow-x-auto pb-4 scrollbar-hide">
                     @foreach($product->media as $index => $media)
                     <div class="thumbnail-item flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 border-transparent cursor-pointer transition-all duration-300 hover:border-emerald-500 dark:hover:border-emerald-400 {{ $index === 0 ? 'border-emerald-500 dark:border-emerald-400 ring-2 ring-emerald-200 dark:ring-emerald-900' : '' }}"
-                         data-image="{{ $media->media_url }}"
+                         data-image="{{ asset('storage/' . $media->image_path) }}"
                          onclick="changeMainImage(this, {{ $index }})">
-                        <img src="{{ $media->media_url }}"
+                        <img src="{{ asset('storage/' . $media->image_path) }}"
                              alt="{{ $product->name }} - {{ $index + 1 }}"
-                             class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                             class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                             onerror="this.onerror=null; this.src='{{ asset('images/placeholder.jpg') }}';">
                     </div>
                     @endforeach
                 </div>
@@ -140,7 +147,7 @@
                         <i class="fas fa-share-alt text-gray-600 dark:text-gray-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400"></i>
                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Share</span>
                     </button>
-                    <button onclick="downloadImage('{{ $product->media->first()->media_url ?? '' }}')" class="flex items-center justify-center space-x-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 group">
+                    <button onclick="downloadImage('{{ $firstMedia ? asset('storage/' . $firstMedia->image_path) : '' }}')" class="flex items-center justify-center space-x-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 group">
                         <i class="fas fa-download text-gray-600 dark:text-gray-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400"></i>
                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Download</span>
                     </button>
@@ -318,7 +325,7 @@
                             data-id="{{ $product->id }}"
                             data-name="{{ $product->name }}"
                             data-price="{{ $product->best_price }}"
-                            data-image="{{ $product->media->first()->media_url ?? asset('images/placeholder.jpg') }}"
+                            data-image="{{ $firstMedia ? asset('storage/' . $firstMedia->image_path) : asset('images/placeholder.jpg') }}"
                             class="h-14 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 dark:hover:from-emerald-700 dark:hover:to-emerald-800  font-bold rounded-xl flex items-center justify-center space-x-3 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100 dark:hover:shadow-emerald-900/30 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
                             {{ $product->stock_quantity < 1 ? 'disabled' : '' }}>
                         <i class="fas fa-shopping-cart text-lg"></i>
@@ -662,9 +669,14 @@
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm dark:shadow-gray-900/20 overflow-hidden transition-all duration-300 hover:shadow-xl dark:hover:shadow-gray-900/40 hover:-translate-y-1">
                     <a href="{{ route('shop.show', $related->slug) }}" class="block">
                         <div class="relative h-48 overflow-hidden">
-                            <img src="{{ $related->media->first()->media_url ?? asset('images/placeholder.jpg') }}" 
+                            @php
+                                $relatedFirstMedia = $related->media->first();
+                                $relatedImageUrl = $relatedFirstMedia ? asset('storage/' . $relatedFirstMedia->image_path) : asset('images/placeholder.jpg');
+                            @endphp
+                            <img src="{{ $relatedImageUrl }}" 
                                  alt="{{ $related->name }}" 
-                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                                 onerror="this.onerror=null; this.src='{{ asset('images/placeholder.jpg') }}';">
                             @if($related->compare_at_price && $related->compare_at_price > $related->best_price)
                             <span class="absolute top-2 left-2 px-2 py-1 bg-red-500  text-xs font-bold rounded">
                                 -{{ $related->discount_percentage }}%
