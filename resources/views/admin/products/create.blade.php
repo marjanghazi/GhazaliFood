@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Product')
-@section('page_title', 'Edit Product')
+@section('title', 'Add New Product')
+@section('page_title', 'Add New Product')
 @section('breadcrumb', 'Products')
 
 @section('styles')
@@ -95,53 +95,12 @@
         box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
     }
     
-    .existing-images {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 15px;
-    }
-    
-    .existing-img {
-        width: 100px;
-        height: 100px;
-        border: 2px solid #ddd;
-        border-radius: 5px;
-        overflow: hidden;
-        position: relative;
-    }
-    
-    .existing-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .delete-checkbox {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background: rgba(220, 53, 69, 0.9);
-        color: white;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-    
-    .delete-checkbox input {
-        cursor: pointer;
-    }
-    
     @media (max-width: 768px) {
         .form-card {
             padding: 15px;
         }
         
-        .preview-img, .existing-img {
+        .preview-img {
             width: 80px;
             height: 80px;
         }
@@ -161,17 +120,12 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h1 class="h3 mb-1">Edit Product</h1>
-                    <p class="text-muted mb-0">Update product details</p>
+                    <h1 class="h3 mb-1">Add New Product</h1>
+                    <p class="text-muted mb-0">Create a new product for your store</p>
                 </div>
-                <div>
-                    <a href="{{ route('admin.products.create') }}" class="btn btn-outline-primary me-2">
-                        <i class="fas fa-plus"></i> Add New
-                    </a>
-                    <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </a>
-                </div>
+                <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
             </div>
         </div>
     </div>
@@ -189,9 +143,8 @@
     @endif
 
     <!-- Form -->
-    <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
         
         <div class="row">
             <!-- Left Column -->
@@ -204,14 +157,14 @@
                         <div class="col-md-8 mb-3">
                             <label class="form-label">Product Name <span class="required">*</span></label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                                   name="name" value="{{ old('name', $product->name) }}" placeholder="Enter product name" required>
+                                   name="name" value="{{ old('name') }}" placeholder="Enter product name" required>
                             @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         
                         <div class="col-md-4 mb-3">
                             <label class="form-label">URL Slug <span class="required">*</span></label>
                             <input type="text" class="form-control @error('slug') is-invalid @enderror" 
-                                   id="slug" name="slug" value="{{ old('slug', $product->slug) }}" placeholder="auto-generates" required>
+                                   id="slug" name="slug" value="{{ old('slug') }}" placeholder="auto-generates" required>
                             @error('slug')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             <div class="help-text">Leave blank to auto-generate</div>
                         </div>
@@ -220,7 +173,7 @@
                     <div class="mb-3">
                         <label class="form-label">Description <span class="required">*</span></label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
-                                  name="description" rows="4" placeholder="Product description" required>{{ old('description', $product->description) }}</textarea>
+                                  name="description" rows="4" placeholder="Product description" required>{{ old('description') }}</textarea>
                         @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     
@@ -230,7 +183,7 @@
                             <select class="form-select @error('category_id') is-invalid @enderror" name="category_id" required>
                                 <option value="">Select Category</option>
                                 @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                                 @endforeach
@@ -241,7 +194,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Stock Quantity <span class="required">*</span></label>
                             <input type="number" class="form-control @error('quantity') is-invalid @enderror" 
-                                   name="quantity" value="{{ old('quantity', $product->quantity) }}" min="0" required>
+                                   name="quantity" value="{{ old('quantity', 0) }}" min="0" required>
                             @error('quantity')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                     </div>
@@ -258,7 +211,7 @@
                                 <span class="input-group-text">$</span>
                                 <input type="number" step="0.01" min="0" 
                                        class="form-control @error('best_price') is-invalid @enderror" 
-                                       name="best_price" value="{{ old('best_price', $product->best_price) }}" placeholder="0.00" required>
+                                       name="best_price" value="{{ old('best_price') }}" placeholder="0.00" required>
                             </div>
                             @error('best_price')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             <div class="help-text">Selling price</div>
@@ -270,7 +223,7 @@
                                 <span class="input-group-text">$</span>
                                 <input type="number" step="0.01" min="0" 
                                        class="form-control @error('compare_at_price') is-invalid @enderror" 
-                                       name="compare_at_price" value="{{ old('compare_at_price', $product->compare_at_price) }}" placeholder="0.00">
+                                       name="compare_at_price" value="{{ old('compare_at_price') }}" placeholder="0.00">
                             </div>
                             @error('compare_at_price')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             <div class="help-text">Original price (for discount)</div>
@@ -282,7 +235,7 @@
                                 <span class="input-group-text">$</span>
                                 <input type="number" step="0.01" min="0" 
                                        class="form-control @error('cost_price') is-invalid @enderror" 
-                                       name="cost_price" value="{{ old('cost_price', $product->cost_price) }}" placeholder="0.00">
+                                       name="cost_price" value="{{ old('cost_price') }}" placeholder="0.00">
                             </div>
                             @error('cost_price')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             <div class="help-text">Your cost</div>
@@ -294,33 +247,8 @@
                 <div class="form-card">
                     <h6 class="card-title"><i class="fas fa-images me-2"></i>Product Images</h6>
                     
-                    <!-- Existing Images -->
-                    @if($product->images && $product->images->count() > 0)
-                    <div class="mb-4">
-                        <label class="form-label d-block">Existing Images</label>
-                        <div class="existing-images">
-                            @foreach($product->images as $index => $image)
-                            <div class="existing-img">
-                                <img src="{{ asset($image->path) }}" alt="Product Image {{ $index + 1 }}">
-                                <div class="delete-checkbox">
-                                    <input type="checkbox" name="delete_images[]" value="{{ $image->id }}" id="delete_image_{{ $image->id }}">
-                                    <label for="delete_image_{{ $image->id }}" style="margin: 0; cursor: pointer;">
-                                        <i class="fas fa-trash-alt" style="font-size: 10px;"></i>
-                                    </label>
-                                </div>
-                                @if($index === 0)
-                                <span class="primary-badge">Main</span>
-                                @endif
-                            </div>
-                            @endforeach
-                        </div>
-                        <div class="help-text mt-2">Check images to delete</div>
-                    </div>
-                    @endif
-                    
-                    <!-- New Images -->
                     <div class="mb-3">
-                        <label class="form-label">Upload New Images</label>
+                        <label class="form-label">Upload Images</label>
                         <input type="file" class="form-control @error('images.*') is-invalid @enderror" 
                                id="images" name="images[]" multiple accept="image/*">
                         @error('images.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -340,10 +268,10 @@
                     <div class="mb-4">
                         <label class="form-label">Status <span class="required">*</span></label>
                         <select class="form-select @error('status') is-invalid @enderror" name="status" required>
-                            <option value="draft" {{ old('status', $product->status) == 'draft' ? 'selected' : '' }}>Draft</option>
-                            <option value="published" {{ old('status', $product->status) == 'published' ? 'selected' : '' }}>Published</option>
-                            <option value="out_of_stock" {{ old('status', $product->status) == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
-                            <option value="discontinued" {{ old('status', $product->status) == 'discontinued' ? 'selected' : '' }}>Discontinued</option>
+                            <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                            <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+                            <option value="out_of_stock" {{ old('status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
+                            <option value="discontinued" {{ old('status') == 'discontinued' ? 'selected' : '' }}>Discontinued</option>
                         </select>
                         @error('status')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
@@ -352,14 +280,14 @@
                         <label class="form-label d-block">Product Flags</label>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" id="is_featured" 
-                                   name="is_featured" value="1" {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}>
+                                   name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_featured">
                                 <i class="fas fa-star text-warning me-1"></i> Featured
                             </label>
                         </div>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" id="is_bestseller" 
-                                   name="is_bestseller" value="1" {{ old('is_bestseller', $product->is_bestseller) ? 'checked' : '' }}>
+                                   name="is_bestseller" value="1" {{ old('is_bestseller') ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_bestseller">
                                 <i class="fas fa-fire text-danger me-1"></i> Best Seller
                             </label>
@@ -369,14 +297,14 @@
                     <div class="mb-3">
                         <label class="form-label">SKU (Optional)</label>
                         <input type="text" class="form-control @error('sku') is-invalid @enderror" 
-                               name="sku" value="{{ old('sku', $product->sku) }}" placeholder="ABC123">
+                               name="sku" value="{{ old('sku') }}" placeholder="ABC123">
                         @error('sku')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Barcode (Optional)</label>
                         <input type="text" class="form-control @error('barcode') is-invalid @enderror" 
-                               name="barcode" value="{{ old('barcode', $product->barcode) }}" placeholder="123456789012">
+                               name="barcode" value="{{ old('barcode') }}" placeholder="123456789012">
                         @error('barcode')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                 </div>
@@ -389,14 +317,14 @@
                         <label class="form-label">Weight (kg)</label>
                         <input type="number" step="0.01" min="0" 
                                class="form-control @error('weight') is-invalid @enderror" 
-                               name="weight" value="{{ old('weight', $product->weight) }}" placeholder="0.00">
+                               name="weight" value="{{ old('weight') }}" placeholder="0.00">
                         @error('weight')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Dimensions</label>
                         <input type="text" class="form-control @error('dimensions') is-invalid @enderror" 
-                               name="dimensions" value="{{ old('dimensions', $product->dimensions) }}" placeholder="L x W x H">
+                               name="dimensions" value="{{ old('dimensions') }}" placeholder="L x W x H">
                         @error('dimensions')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                 </div>
@@ -408,14 +336,14 @@
                     <div class="mb-3">
                         <label class="form-label">Meta Title</label>
                         <input type="text" class="form-control @error('meta_title') is-invalid @enderror" 
-                               name="meta_title" value="{{ old('meta_title', $product->meta_title) }}">
+                               name="meta_title" value="{{ old('meta_title') }}">
                         @error('meta_title')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Meta Description</label>
                         <textarea class="form-control @error('meta_description') is-invalid @enderror" 
-                                  name="meta_description" rows="3">{{ old('meta_description', $product->meta_description) }}</textarea>
+                                  name="meta_description" rows="3">{{ old('meta_description') }}</textarea>
                         @error('meta_description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                 </div>
@@ -431,43 +359,16 @@
                     </a>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                        <i class="fas fa-trash me-1"></i> Delete
-                    </button>
                     <button type="submit" name="draft" value="1" class="btn btn-outline-primary me-2">
                         <i class="fas fa-save me-1"></i> Save Draft
                     </button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-check me-1"></i> Update Product
+                        <i class="fas fa-check me-1"></i> Save Product
                     </button>
                 </div>
             </div>
         </div>
     </form>
-</div>
-
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this product? This action cannot be undone.</p>
-                <p class="text-danger"><strong>Product: {{ $product->name }}</strong></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete Product</button>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 
@@ -476,7 +377,7 @@
     // Auto-generate slug
     document.querySelector('[name="name"]').addEventListener('input', function() {
         const slugInput = document.getElementById('slug');
-        if (!slugInput.value || slugInput.value === '{{ $product->slug }}') {
+        if (!slugInput.value) {
             const slug = this.value
                 .toLowerCase()
                 .replace(/[^\w\s-]/g, '')
@@ -487,13 +388,12 @@
         }
     });
 
-    // Image preview for new uploads
+    // Image preview
     document.getElementById('images').addEventListener('change', function(e) {
         const preview = document.getElementById('imagePreview');
         preview.innerHTML = '';
         
         const files = Array.from(e.target.files);
-        const existingCount = {{ $product->images ? $product->images->count() : 0 }};
         
         files.forEach((file, index) => {
             if (!file.type.match('image.*')) return;
@@ -508,7 +408,7 @@
                 const div = document.createElement('div');
                 div.className = 'preview-img';
                 div.innerHTML = `
-                    ${existingCount === 0 && index === 0 ? '<span class="primary-badge">Main</span>' : ''}
+                    ${index === 0 ? '<span class="primary-badge">Main</span>' : ''}
                     <img src="${e.target.result}" alt="${file.name}">
                     <div class="remove-btn" onclick="removeImage(${index})">×</div>
                 `;
@@ -518,7 +418,7 @@
         });
     });
 
-    // Remove image from new uploads
+    // Remove image
     window.removeImage = function(index) {
         const input = document.getElementById('images');
         const files = Array.from(input.files);
@@ -536,20 +436,6 @@
     // Auto focus first field
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('[name="name"]').focus();
-    });
-
-    // Confirm before deleting existing images
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteCheckboxes = document.querySelectorAll('input[name="delete_images[]"]');
-        deleteCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    if (!confirm('Are you sure you want to delete this image?')) {
-                        this.checked = false;
-                    }
-                }
-            });
-        });
     });
 </script>
 @endpush
