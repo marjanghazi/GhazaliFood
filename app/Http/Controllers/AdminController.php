@@ -761,39 +761,52 @@ class AdminController extends Controller
         ]);
     }
 
+    // Controller
     public function createBlog()
     {
+        // Pass categories with id and name
+        $categories = Category::where('status', 'active')->pluck('name', 'id');
+
         return view('admin.blogs.create', [
             'title' => 'Create New Blog Post',
+            'categories' => $categories,
             'useAdminLayout' => true
         ]);
     }
-
     public function storeBlog(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:blogs',
+            'excerpt' => 'required|string|max:500',
             'content' => 'required|string',
-            'excerpt' => 'nullable|string|max:500',
+            'category_id' => 'required|exists:categories,id',
             'featured_image' => 'nullable|image|max:2048',
             'status' => 'required|in:published,draft',
-            'is_featured' => 'boolean',
+            'is_featured' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
-            'tags' => 'nullable|array',
+            'tags' => 'nullable|string',
         ]);
+
+        // Process tags: convert comma-separated string to array
+        $tags = null;
+        if ($request->filled('tags')) {
+            $tags = array_map('trim', explode(',', $request->tags));
+            $tags = json_encode($tags);
+        }
 
         Blog::create([
             'title' => $request->title,
             'slug' => $request->slug,
-            'content' => $request->content,
             'excerpt' => $request->excerpt,
+            'content' => $request->content,
+            'category_id' => $request->category_id,
             'status' => $request->status,
             'is_featured' => $request->has('is_featured'),
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
-            'tags' => $request->tags ? json_encode($request->tags) : null,
+            'tags' => $tags,
             'author_id' => auth()->id(),
             'published_at' => $request->status === 'published' ? now() : null,
         ]);
