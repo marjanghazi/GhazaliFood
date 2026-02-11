@@ -1274,55 +1274,97 @@ class AdminController extends Controller
 
     public function createBanner()
     {
+        // Define available positions
+        $positions = [
+            'homepage_top' => 'Homepage Top',
+            'homepage_middle' => 'Homepage Middle',
+            'homepage_bottom' => 'Homepage Bottom',
+            'sidebar' => 'Sidebar',
+            'category_top' => 'Category Page Top',
+            'product_top' => 'Product Page Top',
+            'promo_bar' => 'Promo Bar',
+            'popup' => 'Popup Modal',
+        ];
+
         return view('admin.banners.create', [
             'title' => 'Create New Banner',
+            'positions' => $positions,
             'useAdminLayout' => true
         ]);
     }
+
 
     public function storeBanner(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'button_text' => 'nullable|string|max:50',
-            'button_url' => 'nullable|url|max:255',
-            'image' => 'required|image|max:2048',
-            'status' => 'required|in:active,inactive',
+            'link_url' => 'nullable|url|max:255',
+            'alt_text' => 'nullable|string|max:255',
+            'banner_image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'banner_mobile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'position' => 'required|string',
+            'display_order' => 'required|integer|min:0',
+            'status' => 'required|in:active,inactive,scheduled',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
-            'position' => 'required|in:homepage_top,homepage_middle,sidebar',
         ]);
 
-        $imagePath = $request->file('image')->store('banners', 'public');
-
-        Banner::create([
+        $bannerData = [
             'title' => $request->title,
-            'subtitle' => $request->subtitle,
             'description' => $request->description,
-            'button_text' => $request->button_text,
-            'button_url' => $request->button_url,
-            'image_path' => $imagePath,
+            'link_url' => $request->link_url,
+            'alt_text' => $request->alt_text,
+            'position' => $request->position,
+            'display_order' => $request->display_order,
             'status' => $request->status,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'position' => $request->position,
-        ]);
+            'clicks' => 0,
+            'created_by' => auth()->id(),
+        ];
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner created successfully!');
+        // Handle desktop image
+        if ($request->hasFile('banner_image')) {
+            $bannerData['banner_image'] = $request->file('banner_image')->store('banners/desktop', 'public');
+        }
+
+        // Handle mobile image
+        if ($request->hasFile('banner_mobile_image')) {
+            $bannerData['banner_mobile_image'] = $request->file('banner_mobile_image')->store('banners/mobile', 'public');
+        }
+
+        Banner::create($bannerData);
+
+        return redirect()->route('admin.banners.index')
+            ->with('success', 'Banner created successfully!');
     }
+
 
     public function editBanner($id)
     {
         $banner = Banner::findOrFail($id);
 
+        // Define available positions
+        $positions = [
+            'homepage_top' => 'Homepage Top',
+            'homepage_middle' => 'Homepage Middle',
+            'homepage_bottom' => 'Homepage Bottom',
+            'sidebar' => 'Sidebar',
+            'category_top' => 'Category Page Top',
+            'product_top' => 'Product Page Top',
+            'promo_bar' => 'Promo Bar',
+            'popup' => 'Popup Modal',
+        ];
+
         return view('admin.banners.edit', [
-            'title' => 'Edit Banner',
+            'title' => 'Edit Banner: ' . $banner->title,
             'banner' => $banner,
+            'positions' => $positions,
             'useAdminLayout' => true
         ]);
     }
+
 
     public function updateBanner(Request $request, $id)
     {
@@ -1330,46 +1372,73 @@ class AdminController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'button_text' => 'nullable|string|max:50',
-            'button_url' => 'nullable|url|max:255',
-            'image' => 'nullable|image|max:2048',
-            'status' => 'required|in:active,inactive',
+            'link_url' => 'nullable|url|max:255',
+            'alt_text' => 'nullable|string|max:255',
+            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'banner_mobile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'position' => 'required|string',
+            'display_order' => 'required|integer|min:0',
+            'status' => 'required|in:active,inactive,scheduled',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
-            'position' => 'required|in:homepage_top,homepage_middle,sidebar',
         ]);
 
-        $updateData = [
+        $bannerData = [
             'title' => $request->title,
-            'subtitle' => $request->subtitle,
             'description' => $request->description,
-            'button_text' => $request->button_text,
-            'button_url' => $request->button_url,
+            'link_url' => $request->link_url,
+            'alt_text' => $request->alt_text,
+            'position' => $request->position,
+            'display_order' => $request->display_order,
             'status' => $request->status,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'position' => $request->position,
         ];
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('banners', 'public');
-            $updateData['image_path'] = $imagePath;
+        // Handle desktop image
+        if ($request->hasFile('banner_image')) {
+            // Delete old image
+            if ($banner->banner_image) {
+                \Storage::disk('public')->delete($banner->banner_image);
+            }
+            $bannerData['banner_image'] = $request->file('banner_image')->store('banners/desktop', 'public');
         }
 
-        $banner->update($updateData);
+        // Handle mobile image
+        if ($request->hasFile('banner_mobile_image')) {
+            // Delete old image
+            if ($banner->banner_mobile_image) {
+                \Storage::disk('public')->delete($banner->banner_mobile_image);
+            }
+            $bannerData['banner_mobile_image'] = $request->file('banner_mobile_image')->store('banners/mobile', 'public');
+        }
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner updated successfully!');
+        $banner->update($bannerData);
+
+        return redirect()->route('admin.banners.index')
+            ->with('success', 'Banner updated successfully!');
     }
+
 
     public function destroyBanner($id)
     {
         $banner = Banner::findOrFail($id);
+
+        // Delete images
+        if ($banner->banner_image) {
+            \Storage::disk('public')->delete($banner->banner_image);
+        }
+        if ($banner->banner_mobile_image) {
+            \Storage::disk('public')->delete($banner->banner_mobile_image);
+        }
+
         $banner->delete();
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner deleted successfully!');
+        return redirect()->route('admin.banners.index')
+            ->with('success', 'Banner deleted successfully!');
     }
+
 
     // Announcement Management Methods
     public function announcements()
