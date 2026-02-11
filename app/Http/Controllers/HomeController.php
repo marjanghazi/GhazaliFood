@@ -62,15 +62,18 @@ class HomeController extends Controller
             ->get();
 
         // Get main categories with active subcategories
+        // Get main categories with active subcategories and product counts
         $categories = Category::where('status', 'active')
             ->whereNull('parent_id')
-            ->with(['activeProducts', 'children' => function ($query) {
+            ->with(['children' => function ($query) {
                 $query->where('status', 'active');
+            }])
+            ->withCount(['products' => function ($query) {
+                $query->where('status', 'published');
             }])
             ->orderBy('display_order')
             ->limit(8)
             ->get();
-
         // Get testimonials
         $testimonials = Testimonial::where('status', 'active')
             ->orderBy('display_order')
