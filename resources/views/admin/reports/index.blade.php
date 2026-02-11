@@ -184,71 +184,7 @@
     </div>
 </div>
 
-<div class="row">
-    <!-- Quick Reports -->
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-primary shadow">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="text-primary">Sales Report</h6>
-                        <p class="text-muted mb-0">Detailed sales analysis</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-chart-bar fa-2x text-primary"></i>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <a href="{{ route('admin.reports.sales') }}" class="btn btn-outline-primary w-100">
-                        View Report
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-success shadow">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="text-success">Products Report</h6>
-                        <p class="text-muted mb-0">Product performance</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-box fa-2x text-success"></i>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <a href="{{ route('admin.reports.products') }}" class="btn btn-outline-success w-100">
-                        View Report
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="card border-left-info shadow">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="text-info">Customers Report</h6>
-                        <p class="text-muted mb-0">Customer analytics</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-users fa-2x text-info"></i>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <a href="{{ route('admin.reports.customers') }}" class="btn btn-outline-info w-100">
-                        View Report
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')

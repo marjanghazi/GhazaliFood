@@ -1545,9 +1545,39 @@ class AdminController extends Controller
     // Reports Methods
     public function reports()
     {
+        // Get recent orders (last 5)
+        $recentOrders = Order::with('user')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        // Get top products by order count
+        $topProducts = Product::withCount('orders')
+            ->having('orders_count', '>', 0)
+            ->orderBy('orders_count', 'desc')
+            ->limit(5)
+            ->get();
+
+        // Get monthly sales for last 6 months
+        $monthlySales = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $month = now()->subMonths($i);
+            $sales = Order::whereYear('created_at', $month->year)
+                ->whereMonth('created_at', $month->month)
+                ->sum('total_amount');
+
+            $monthlySales[] = [
+                'month' => $month->format('M Y'),
+                'sales' => $sales
+            ];
+        }
+
         return view('admin.reports.index', [
             'title' => 'Reports Dashboard',
-            'useAdminLayout' => true
+            'useAdminLayout' => true,
+            'recentOrders' => $recentOrders,
+            'topProducts' => $topProducts,
+            'monthlySales' => $monthlySales
         ]);
     }
 
