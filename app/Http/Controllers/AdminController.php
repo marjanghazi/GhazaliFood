@@ -818,9 +818,13 @@ class AdminController extends Controller
     {
         $blog = Blog::findOrFail($id);
 
+        // Fetch categories for the dropdown
+        $categories = Category::where('status', 'active')->pluck('name', 'id');
+
         return view('admin.blogs.edit', [
             'title' => 'Edit Blog Post',
             'blog' => $blog,
+            'categories' => $categories, // Add this line
             'useAdminLayout' => true
         ]);
     }
@@ -832,28 +836,56 @@ class AdminController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:blogs,slug,' . $blog->id,
+            'excerpt' => 'required|string|max:500',
             'content' => 'required|string',
-            'excerpt' => 'nullable|string|max:500',
+            'category_id' => 'required|exists:categories,id',
             'featured_image' => 'nullable|image|max:2048',
             'status' => 'required|in:published,draft',
-            'is_featured' => 'boolean',
+            'is_featured' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
-            'tags' => 'nullable|array',
+            'tags' => 'nullable|string',
+            'remove_image' => 'nullable|boolean',
         ]);
+
+        // Process tags: convert comma-separated string to array
+        $tags = null;
+        if ($request->filled('tags')) {
+            $tags = array_map('trim', explode(',', $request->tags));
+            $tags = json_encode($tags);
+        }
 
         $updateData = [
             'title' => $request->title,
             'slug' => $request->slug,
-            'content' => $request->content,
             'excerpt' => $request->excerpt,
+            'content' => $request->content,
+            'category_id' => $request->category_id,
             'status' => $request->status,
             'is_featured' => $request->has('is_featured'),
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
-            'tags' => $request->tags ? json_encode($request->tags) : null,
+            'tags' => $tags,
         ];
 
+        // Handle featured image
+        if ($request->hasFile('featured_image')) {
+            // Delete old image if exists
+            if ($blog->featured_image) {
+                \Storage::disk('public')->delete($blog->featured_image);
+            }
+            $updateData['featured_image'] = $request->file('featured_image')->store('blogs/' . $blog->id, 'public');
+        }
+
+        // Handle remove image checkbox
+        if ($request->has('remove_image') && $request->remove_image) {
+            if ($blog->featured_image) {
+                \Storage::disk('public')->delete($blog->featured_image);
+            }
+            $updateData['featured_image'] = null;
+        }
+
+        // Handle publish date
         if ($request->status === 'published' && !$blog->published_at) {
             $updateData['published_at'] = now();
         } elseif ($request->status === 'draft') {
